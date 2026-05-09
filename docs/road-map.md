@@ -33,6 +33,23 @@ The project should use Semantic Versioning:
 
 Until the full code test requirements are met, the project should stay in `0.x.y` versions. Version `1.0.0` means the solution is complete and ready to submit.
 
+## Git Flow
+
+The project should use Git Flow as the branching model:
+
+- `main` contains stable, submission-ready versions only.
+- `develop` is the integration branch for ongoing work.
+- `feature/*` branches are used for roadmap items such as `feature/map-parser`, `feature/booking-api`, or `feature/map-view`.
+- `release/*` branches are used to stabilize a planned version before merging it into `main`.
+- `hotfix/*` branches are reserved for urgent fixes based on `main`.
+
+Versioning should follow the Git Flow lifecycle:
+
+- Each roadmap milestone can be developed on one or more `feature/*` branches and merged into `develop`.
+- A release branch, for example `release/1.0.0`, should be created when the implementation is feature-complete for that version.
+- Final fixes, documentation updates, and release checks happen on the release branch.
+- Completed releases are merged into `main`, tagged with the matching SemVer version, and merged back into `develop`.
+
 ## Roadmap
 
 ### `0.1.0` - Project Skeleton
