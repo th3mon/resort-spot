@@ -18,8 +18,8 @@ The implementation should follow the code test expectations: keep the architectu
   - `--map <path>` for the ASCII resort map,
   - `--bookings <path>` for the JSON guest list.
 - Default input files:
-  - `../ResortMapCodeTest/map.ascii`,
-  - `../ResortMapCodeTest/bookings.json`.
+  - `data/map.ascii`,
+  - `data/bookings.json`.
 - No real authentication; knowing the room number and guest name is enough to book.
 - No persistent database, migrations, or admin panel.
 
@@ -129,7 +129,7 @@ Scope:
 
 - Fetch map data from the API.
 - Render the map as a tile grid.
-- Use assets from `../ResortMapCodeTest/assets`.
+- Use map assets from `public/assets/`.
 - Visually distinguish available and booked cabanas.
 - Add a map legend.
 - Handle loading and API error states.
