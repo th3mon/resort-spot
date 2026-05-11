@@ -9,6 +9,7 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "version:bump": "npm version --no-git-tag-version",
     "test": "vitest",
     "test:ci": "vitest run"
   },

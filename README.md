@@ -90,6 +90,14 @@ npm run start
 npm run lint
 npm run format
 npm run format:check
+npm run version:bump -- patch
+npm run version:bump -- 0.1.1
 npm run test
 npm run test:ci
 ```
+
+Use `npm run version:bump -- <version-or-semver-step>` instead of calling
+`npm version` directly. The script always passes `--no-git-tag-version` because
+Git Flow owns release commits and tags. In this project, npm should only update
+the version fields in `package.json` and `package-lock.json`; the release tag is
+created later by `git flow release finish`.

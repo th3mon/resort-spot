@@ -117,3 +117,14 @@ Use Git Flow:
 - `feature/*` branches contain focused implementation work.
 - `release/*` branches stabilize planned versions.
 - `hotfix/*` branches are reserved for urgent fixes from `main`.
+
+When bumping the npm package version, use:
+
+```bash
+npm run version:bump -- <version-or-semver-step>
+```
+
+This wrapper passes `--no-git-tag-version` to `npm version`. Git Flow owns
+release commits and tags in this repository, so npm should only update
+`package.json` and `package-lock.json`; the release tag is created later by
+`git flow release finish`.
