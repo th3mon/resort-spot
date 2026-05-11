@@ -1,5 +1,7 @@
 import { readFile } from "node:fs/promises";
 
+import { errorMessageFor } from "./errors";
+
 export type GuestBooking = {
   room: string;
   guestName: string;
@@ -12,9 +14,9 @@ export async function loadGuestBookings(bookingsPath: string) {
     source = await readFile(bookingsPath, "utf8");
   } catch (error) {
     throw new Error(
-      `Unable to read bookings file at "${bookingsPath}": ${
-        error instanceof Error ? error.message : String(error)
-      }`,
+      `Unable to read bookings file at "${bookingsPath}": ${errorMessageFor(
+        error,
+      )}`,
     );
   }
 
@@ -22,9 +24,7 @@ export async function loadGuestBookings(bookingsPath: string) {
     return parseGuestBookings(source);
   } catch (error) {
     throw new Error(
-      `Invalid bookings file at "${bookingsPath}": ${
-        error instanceof Error ? error.message : String(error)
-      }`,
+      `Invalid bookings file at "${bookingsPath}": ${errorMessageFor(error)}`,
     );
   }
 }
@@ -36,9 +36,7 @@ export function parseGuestBookings(source: string): GuestBooking[] {
     parsed = JSON.parse(source);
   } catch (error) {
     throw new Error(
-      `Bookings file must contain valid JSON: ${
-        error instanceof Error ? error.message : String(error)
-      }`,
+      `Bookings file must contain valid JSON: ${errorMessageFor(error)}`,
     );
   }
 

@@ -1,4 +1,5 @@
 import { loadGuestBookings } from "@/domain/bookings";
+import { errorMessageFor } from "@/domain/errors";
 import { getRuntimeConfig } from "@/domain/runtime-config";
 import { loadResortMap } from "@/domain/resort-map";
 
@@ -42,8 +43,4 @@ export async function GET() {
       { status: 500 },
     );
   }
-}
-
-function errorMessageFor(error: unknown) {
-  return error instanceof Error ? error.message : String(error);
 }

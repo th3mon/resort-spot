@@ -1,5 +1,7 @@
 import { readFile } from "node:fs/promises";
 
+import { errorMessageFor } from "./errors";
+
 export const RESORT_MAP_SYMBOLS = {
   W: "cabana",
   p: "pool",
@@ -32,9 +34,7 @@ export async function loadResortMap(mapPath: string) {
     source = await readFile(mapPath, "utf8");
   } catch (error) {
     throw new Error(
-      `Unable to read map file at "${mapPath}": ${
-        error instanceof Error ? error.message : String(error)
-      }`,
+      `Unable to read map file at "${mapPath}": ${errorMessageFor(error)}`,
     );
   }
 
@@ -42,9 +42,7 @@ export async function loadResortMap(mapPath: string) {
     return parseResortMap(source);
   } catch (error) {
     throw new Error(
-      `Invalid map file at "${mapPath}": ${
-        error instanceof Error ? error.message : String(error)
-      }`,
+      `Invalid map file at "${mapPath}": ${errorMessageFor(error)}`,
     );
   }
 }
