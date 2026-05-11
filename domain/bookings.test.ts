@@ -49,9 +49,29 @@ describe("parseGuestBookings", () => {
     );
   });
 
-  it("rejects records without a string guestName", () => {
+  it("rejects booking records that are not objects", () => {
+    expect(() => parseGuestBookings('["not a booking record"]')).toThrow(
+      "Booking record 1 must be an object.",
+    );
+  });
+
+  it("rejects records with an empty guestName", () => {
     expect(() => parseGuestBookings('[{"room":"101","guestName":""}]')).toThrow(
       "Booking record 1 must include a non-empty string guestName.",
+    );
+  });
+
+  it("rejects records without a guestName", () => {
+    expect(() => parseGuestBookings('[{"room":"101"}]')).toThrow(
+      "Booking record 1 must include a non-empty string guestName.",
+    );
+  });
+
+  it("rejects records with an unsupported room value", () => {
+    expect(() =>
+      parseGuestBookings('[{"room":false,"guestName":"Alice Smith"}]'),
+    ).toThrow(
+      "Booking record 1 must include a non-empty string or number room.",
     );
   });
 

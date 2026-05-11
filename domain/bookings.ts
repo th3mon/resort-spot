@@ -1,10 +1,17 @@
+import { z } from "zod";
+
 import { errorMessageFor } from "./errors";
 import { loadFile } from "./files";
+import { isEmpty, isNumber, isUndefined } from "lodash";
 
-export type GuestBooking = {
-  room: string;
-  guestName: string;
-};
+const guestBookingSchema = z.object({
+  room: z.union([z.string().min(1), z.number()]).transform(String),
+  guestName: z.string().min(1),
+});
+
+const guestBookingsSchema = z.array(guestBookingSchema);
+
+export type GuestBooking = z.output<typeof guestBookingSchema>;
 
 export async function loadGuestBookings(path: string) {
   const source = await loadFile(path, "bookings file");
@@ -23,11 +30,13 @@ export function parseGuestBookings(source: string): GuestBooking[] {
     );
   }
 
-  if (!Array.isArray(parsed)) {
-    throw new Error("Bookings file must contain an array of guest records.");
+  const result = guestBookingsSchema.safeParse(parsed);
+
+  if (!result.success) {
+    throw new Error(formatGuestBookingsError(result.error));
   }
 
-  return parsed.map((booking, index) => assertGuestBooking(booking, index));
+  return result.data;
 }
 
 export function guestMatchesBooking(
@@ -45,45 +54,46 @@ export function guestMatchesBooking(
   );
 }
 
-function assertGuestBooking(value: unknown, index: number): GuestBooking {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error(`Booking record ${index + 1} must be an object.`);
+function formatGuestBookingsError(error: z.ZodError) {
+  const issue = error.issues[0];
+
+  if (!issue) {
+    return "Bookings file has an invalid shape.";
   }
 
-  const candidate = value as Partial<Record<keyof GuestBooking, unknown>>;
-  const room = normalizeRoom(candidate.room);
-
-  if (room === null) {
-    throw new Error(
-      `Booking record ${index + 1} must include a non-empty string room.`,
-    );
+  if (isEmpty(issue.path)) {
+    return "Bookings file must contain an array of guest records.";
   }
 
-  if (
-    typeof candidate.guestName !== "string" ||
-    candidate.guestName.trim() === ""
-  ) {
-    throw new Error(
-      `Booking record ${index + 1} must include a non-empty string guestName.`,
-    );
+  const [recordIndex, field] = issue.path;
+
+  if (!isNumber(recordIndex)) {
+    return `Bookings validation failed at unexpected path "${formatZodPath(
+      issue.path,
+    )}". Expected a numeric booking record index.`;
   }
 
-  return {
-    room,
-    guestName: candidate.guestName,
-  };
+  if (isUndefined(field)) {
+    return `Booking record ${recordIndex + 1} must be an object.`;
+  }
+
+  if (field === "room") {
+    return `Booking record ${
+      recordIndex + 1
+    } must include a non-empty string or number room.`;
+  }
+
+  if (field === "guestName") {
+    return `Booking record ${
+      recordIndex + 1
+    } must include a non-empty string guestName.`;
+  }
+
+  return `Booking record ${recordIndex + 1} has an invalid shape.`;
 }
 
-function normalizeRoom(value: unknown) {
-  if (typeof value === "number") {
-    return String(value);
-  }
-
-  if (typeof value === "string" && value.trim() !== "") {
-    return value;
-  }
-
-  return null;
+function formatZodPath(path: PropertyKey[]) {
+  return path.map(String).join(".");
 }
 
 function normalizeGuestField(value: string) {
