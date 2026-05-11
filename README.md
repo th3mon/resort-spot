@@ -64,6 +64,10 @@ The current runtime input values can be checked at:
 GET /api/runtime
 ```
 
+The runtime endpoint also validates the configured input files. A successful
+response includes the parsed map dimensions, tile count, and guest count. Input
+errors include the affected file path and a short reason.
+
 ## Planned Architecture
 
 ```text

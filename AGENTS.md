@@ -45,6 +45,8 @@ Additional planning notes live in:
 - Keep UI components in `components/` when they are reused or make `app/page.tsx` too large.
 - Do not persist cabana reservations to a database unless the task requirements change.
 - Do not hardcode the map layout in the frontend.
+- Prefer declaring helper functions below the functions or methods that use them,
+  so files read from the primary behavior down into supporting details.
 
 ## Expected API Shape
 
