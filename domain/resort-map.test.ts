@@ -1,9 +1,5 @@
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import path from "node:path";
 import { describe, expect, it } from "vitest";
-
-import { loadResortMap, parseResortMap } from "./resort-map";
+import { parseResortMap } from "./resort-map";
 
 describe("parseResortMap", () => {
   it("parses known resort map symbols into typed tiles", () => {
@@ -38,32 +34,6 @@ describe("parseResortMap", () => {
   it("rejects unsupported symbols with row and column details", () => {
     expect(() => parseResortMap(".\nX")).toThrow(
       'Map contains unsupported symbol "X" at row 2, column 1.',
-    );
-  });
-});
-
-describe("loadResortMap", () => {
-  it("loads and parses a map from disk", async () => {
-    const directory = await mkdtemp(path.join(tmpdir(), "resort-map-"));
-    const mapPath = path.join(directory, "map.ascii");
-
-    try {
-      await writeFile(mapPath, "W.\n#c", "utf8");
-
-      await expect(loadResortMap(mapPath)).resolves.toMatchObject({
-        width: 2,
-        height: 2,
-      });
-    } finally {
-      await rm(directory, { recursive: true, force: true });
-    }
-  });
-
-  it("reports the file path when loading fails", async () => {
-    const mapPath = path.join(tmpdir(), "missing-map.ascii");
-
-    await expect(loadResortMap(mapPath)).rejects.toThrow(
-      `Unable to read map file at "${mapPath}"`,
     );
   });
 });

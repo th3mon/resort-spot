@@ -1,32 +1,15 @@
-import { readFile } from "node:fs/promises";
-
 import { errorMessageFor } from "./errors";
+import { loadFile } from "./files";
 
 export type GuestBooking = {
   room: string;
   guestName: string;
 };
 
-export async function loadGuestBookings(bookingsPath: string) {
-  let source: string;
+export async function loadGuestBookings(path: string) {
+  const source = await loadFile(path);
 
-  try {
-    source = await readFile(bookingsPath, "utf8");
-  } catch (error) {
-    throw new Error(
-      `Unable to read bookings file at "${bookingsPath}": ${errorMessageFor(
-        error,
-      )}`,
-    );
-  }
-
-  try {
-    return parseGuestBookings(source);
-  } catch (error) {
-    throw new Error(
-      `Invalid bookings file at "${bookingsPath}": ${errorMessageFor(error)}`,
-    );
-  }
+  return parseGuestBookings(source);
 }
 
 export function parseGuestBookings(source: string): GuestBooking[] {

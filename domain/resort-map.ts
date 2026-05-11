@@ -1,6 +1,4 @@
-import { readFile } from "node:fs/promises";
-
-import { errorMessageFor } from "./errors";
+import { loadFile } from "./files";
 
 export const RESORT_MAP_SYMBOLS = {
   W: "cabana",
@@ -27,24 +25,10 @@ export type ResortMap = {
   tiles: ResortMapTile[];
 };
 
-export async function loadResortMap(mapPath: string) {
-  let source: string;
+export async function loadResortMap(path: string) {
+  const source = await loadFile(path);
 
-  try {
-    source = await readFile(mapPath, "utf8");
-  } catch (error) {
-    throw new Error(
-      `Unable to read map file at "${mapPath}": ${errorMessageFor(error)}`,
-    );
-  }
-
-  try {
-    return parseResortMap(source);
-  } catch (error) {
-    throw new Error(
-      `Invalid map file at "${mapPath}": ${errorMessageFor(error)}`,
-    );
-  }
+  return parseResortMap(source);
 }
 
 export function parseResortMap(source: string): ResortMap {
