@@ -70,8 +70,9 @@ function assertGuestBooking(value: unknown, index: number): GuestBooking {
   }
 
   const candidate = value as Partial<Record<keyof GuestBooking, unknown>>;
+  const room = normalizeRoom(candidate.room);
 
-  if (typeof candidate.room !== "string" || candidate.room.trim() === "") {
+  if (room === null) {
     throw new Error(
       `Booking record ${index + 1} must include a non-empty string room.`,
     );
@@ -87,9 +88,21 @@ function assertGuestBooking(value: unknown, index: number): GuestBooking {
   }
 
   return {
-    room: candidate.room,
+    room,
     guestName: candidate.guestName,
   };
+}
+
+function normalizeRoom(value: unknown) {
+  if (typeof value === "number") {
+    return String(value);
+  }
+
+  if (typeof value === "string" && value.trim() !== "") {
+    return value;
+  }
+
+  return null;
 }
 
 function normalizeGuestField(value: string) {

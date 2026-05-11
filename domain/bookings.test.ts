@@ -38,16 +38,18 @@ describe("parseGuestBookings", () => {
     ).toEqual([{ room: "101", guestName: "Alice Smith" }]);
   });
 
+  it("normalizes numeric room values to strings", () => {
+    expect(
+      parseGuestBookings(
+        JSON.stringify([{ room: 101, guestName: "Alice Smith" }]),
+      ),
+    ).toEqual([{ room: "101", guestName: "Alice Smith" }]);
+  });
+
   it("rejects JSON that is not an array", () => {
     expect(() => parseGuestBookings("{}")).toThrow(
       "Bookings file must contain an array of guest records.",
     );
-  });
-
-  it("rejects records without a string room", () => {
-    expect(() =>
-      parseGuestBookings('[{"room":101,"guestName":"Alice"}]'),
-    ).toThrow("Booking record 1 must include a non-empty string room.");
   });
 
   it("rejects records without a string guestName", () => {
