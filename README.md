@@ -88,6 +88,8 @@ npm run dev
 npm run build
 npm run start
 npm run lint
+npm run format
+npm run format:check
 npm run test
 npm run test:ci
 ```

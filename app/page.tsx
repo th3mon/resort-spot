@@ -25,7 +25,9 @@ export default function Home() {
           </div>
           <div className="rounded border border-[#d5ddcf] bg-white p-4">
             <p className="font-semibold text-[#172018]">Next step</p>
-            <p className="mt-2">Implement ASCII map and booking data parsing.</p>
+            <p className="mt-2">
+              Implement ASCII map and booking data parsing.
+            </p>
           </div>
         </section>
       </main>
