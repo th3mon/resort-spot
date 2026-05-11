@@ -1,8 +1,8 @@
+import { isEmpty, isNumber, isUndefined } from "lodash";
 import { z } from "zod";
 
 import { errorMessageFor } from "./errors";
 import { loadFile } from "./files";
-import { isEmpty, isNumber, isUndefined } from "lodash";
 
 const guestBookingSchema = z.object({
   room: z.union([z.string().min(1), z.number()]).transform(String),
