@@ -39,21 +39,6 @@ export function parseGuestBookings(source: string): GuestBooking[] {
   return result.data;
 }
 
-export function guestMatchesBooking(
-  bookings: GuestBooking[],
-  room: string,
-  guestName: string,
-) {
-  const normalizedRoom = normalizeGuestField(room);
-  const normalizedGuestName = normalizeGuestField(guestName);
-
-  return bookings.some(
-    booking =>
-      normalizeGuestField(booking.room) === normalizedRoom &&
-      normalizeGuestField(booking.guestName) === normalizedGuestName,
-  );
-}
-
 function formatGuestBookingsError(error: z.ZodError) {
   const issue = error.issues[0];
 
@@ -94,8 +79,4 @@ function formatGuestBookingsError(error: z.ZodError) {
 
 function formatZodPath(path: PropertyKey[]) {
   return path.map(String).join(".");
-}
-
-function normalizeGuestField(value: string) {
-  return value.trim().toLowerCase();
 }
