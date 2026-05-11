@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   guestMatchesBooking,
+  loadGuestBookings,
   parseGuestBookings,
   type GuestBooking,
 } from "./bookings";
@@ -57,6 +58,16 @@ describe("parseGuestBookings", () => {
   it("reports invalid JSON clearly", () => {
     expect(() => parseGuestBookings("{")).toThrow(
       "Bookings file must contain valid JSON",
+    );
+  });
+});
+
+describe("loadGuestBookings", () => {
+  it("reports missing files as bookings file errors", async () => {
+    const bookingsPath = "/tmp/missing-bookings.json";
+
+    await expect(loadGuestBookings(bookingsPath)).rejects.toThrow(
+      `Unable to read bookings file at "${bookingsPath}"`,
     );
   });
 });

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { parseResortMap } from "./resort-map";
+
+import { loadResortMap, parseResortMap } from "./resort-map";
 
 describe("parseResortMap", () => {
   it("parses known resort map symbols into typed tiles", () => {
@@ -34,6 +35,16 @@ describe("parseResortMap", () => {
   it("rejects unsupported symbols with row and column details", () => {
     expect(() => parseResortMap(".\nX")).toThrow(
       'Map contains unsupported symbol "X" at row 2, column 1.',
+    );
+  });
+});
+
+describe("loadResortMap", () => {
+  it("reports missing files as map file errors", async () => {
+    const mapPath = "/tmp/missing-map.ascii";
+
+    await expect(loadResortMap(mapPath)).rejects.toThrow(
+      `Unable to read map file at "${mapPath}"`,
     );
   });
 });

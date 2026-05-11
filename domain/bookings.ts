@@ -7,7 +7,7 @@ export type GuestBooking = {
 };
 
 export async function loadGuestBookings(path: string) {
-  const source = await loadFile(path);
+  const source = await loadFile(path, "bookings file");
 
   return parseGuestBookings(source);
 }

@@ -26,7 +26,7 @@ export type ResortMap = {
 };
 
 export async function loadResortMap(path: string) {
-  const source = await loadFile(path);
+  const source = await loadFile(path, "map file");
 
   return parseResortMap(source);
 }
