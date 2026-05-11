@@ -14,7 +14,7 @@ export function guestMatchesBooking(
   const normalizedGuestName = normalizeGuestField(guestName);
 
   return bookings.some(
-    (booking) =>
+    booking =>
       normalizeGuestField(booking.room) === normalizedRoom &&
       normalizeGuestField(booking.guestName) === normalizedGuestName,
   );
