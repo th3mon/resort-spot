@@ -16,7 +16,8 @@ public/assets/
 
 ## Current Status
 
-The project has been scaffolded with `create-next-app` and is currently in the early implementation phase.
+The project has a Next.js + TypeScript skeleton, basic lint/test scripts, and
+a CLI-aware start layer for the input file paths required by the code test.
 
 See [docs/road-map.md](docs/road-map.md) for the implementation roadmap, Semantic Versioning plan, and Git Flow notes.
 
@@ -36,20 +37,31 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Planned Run Contract
+## Run Contract
 
-The final submission must provide one command from the project root that starts the full app and accepts:
+The app provides one root-level start command. It accepts map and bookings file
+paths and passes them to the server runtime:
 
-```text
---map <path>
---bookings <path>
+```bash
+npm run build
+npm run start -- --map data/map.ascii --bookings data/bookings.json
 ```
 
-Default paths should point to:
+The same flags also work in development:
+
+```bash
+npm run dev -- --map data/map.ascii --bookings data/bookings.json
+```
+
+If the flags are omitted, the defaults are:
+
+- `data/map.ascii`
+- `data/bookings.json`
+
+The current runtime input values can be checked at:
 
 ```text
-data/map.ascii
-data/bookings.json
+GET /api/runtime
 ```
 
 ## Planned Architecture
@@ -76,4 +88,6 @@ npm run dev
 npm run build
 npm run start
 npm run lint
+npm run test
+npm run test:ci
 ```
