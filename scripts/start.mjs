@@ -8,7 +8,7 @@ const DEFAULT_MAP_PATH = "data/map.ascii";
 const DEFAULT_BOOKINGS_PATH = "data/bookings.json";
 
 function printUsage() {
-  console.error(`
+  console.log(`
 Usage:
   npm run start -- [--map <path>] [--bookings <path>] [next options]
   npm run dev -- [--map <path>] [--bookings <path>] [next options]
@@ -96,6 +96,7 @@ function run() {
   child.on("exit", (code, signal) => {
     if (signal) {
       process.kill(process.pid, signal);
+
       return;
     }
 
@@ -108,5 +109,6 @@ try {
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));
   printUsage();
+
   process.exit(1);
 }
