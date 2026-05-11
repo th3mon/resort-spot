@@ -5,7 +5,7 @@ import { getRuntimeConfig } from "./runtime-config";
 
 describe("getRuntimeConfig", () => {
   it("uses default data files when no CLI-derived environment is set", () => {
-    expect(getRuntimeConfig({})).toEqual({
+    expect(getRuntimeConfig({} as NodeJS.ProcessEnv)).toEqual({
       mapPath: path.resolve(process.cwd(), "data/map.ascii"),
       bookingsPath: path.resolve(process.cwd(), "data/bookings.json"),
     });
@@ -16,7 +16,7 @@ describe("getRuntimeConfig", () => {
       getRuntimeConfig({
         RESORT_SPOT_MAP_PATH: "/tmp/custom-map.ascii",
         RESORT_SPOT_BOOKINGS_PATH: "/tmp/custom-bookings.json",
-      }),
+      } as unknown as NodeJS.ProcessEnv),
     ).toEqual({
       mapPath: "/tmp/custom-map.ascii",
       bookingsPath: "/tmp/custom-bookings.json",

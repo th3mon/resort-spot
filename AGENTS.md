@@ -45,6 +45,8 @@ Additional planning notes live in:
 - Keep UI components in `components/` when they are reused or make `app/page.tsx` too large.
 - Do not persist cabana reservations to a database unless the task requirements change.
 - Do not hardcode the map layout in the frontend.
+- Prefer declaring helper functions below the functions or methods that use them,
+  so files read from the primary behavior down into supporting details.
 
 ## Expected API Shape
 
@@ -117,3 +119,14 @@ Use Git Flow:
 - `feature/*` branches contain focused implementation work.
 - `release/*` branches stabilize planned versions.
 - `hotfix/*` branches are reserved for urgent fixes from `main`.
+
+When bumping the npm package version, use:
+
+```bash
+npm run version:bump -- <version-or-semver-step>
+```
+
+This wrapper passes `--no-git-tag-version` to `npm version`. Git Flow owns
+release commits and tags in this repository, so npm should only update
+`package.json` and `package-lock.json`; the release tag is created later by
+`git flow release finish`.

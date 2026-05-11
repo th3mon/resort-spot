@@ -1,11 +1,46 @@
+import { loadGuestBookings } from "@/domain/bookings";
+import { errorMessageFor } from "@/domain/errors";
 import { getRuntimeConfig } from "@/domain/runtime-config";
+import { loadResortMap } from "@/domain/resort-map";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export function GET() {
-  return Response.json({
-    name: "Resort Spot",
-    inputs: getRuntimeConfig(),
-  });
+export async function GET() {
+  const inputs = getRuntimeConfig();
+
+  try {
+    const [map, bookings] = await Promise.all([
+      loadResortMap(inputs.mapPath),
+      loadGuestBookings(inputs.bookingsPath),
+    ]);
+
+    return Response.json({
+      name: "Resort Spot",
+      inputs,
+      status: {
+        ok: true,
+        map: {
+          width: map.width,
+          height: map.height,
+          tileCount: map.tiles.length,
+        },
+        bookings: {
+          guestCount: bookings.length,
+        },
+      },
+    });
+  } catch (error) {
+    return Response.json(
+      {
+        name: "Resort Spot",
+        inputs,
+        status: {
+          ok: false,
+          error: errorMessageFor(error),
+        },
+      },
+      { status: 500 },
+    );
+  }
 }
