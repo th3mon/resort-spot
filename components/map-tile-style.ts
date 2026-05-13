@@ -85,7 +85,7 @@ export function tileClassName(
   isSelected: boolean,
 ): string {
   const base =
-    "grid aspect-square h-9 w-9 place-items-center rounded border transition sm:h-10 sm:w-10";
+    "grid aspect-square h-10 w-10 place-items-center rounded border transition";
 
   if (tile.type !== "cabana") {
     return `${base} ${tileSurfaceClassName(tile.type)}`;

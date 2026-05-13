@@ -17,11 +17,12 @@ export function MapGrid({
   const tilesByCoordinate = tilesByCoordinateFor(map.tiles);
 
   return (
-    <div className="overflow-auto rounded border border-[#c9d5ca] bg-[#e3eadf] p-3 shadow-sm">
+    <div className="overflow-auto rounded border border-[#c9d5ca] bg-[#e3eadf] p-3 shadow-sm justify-items-center">
       <div
         className="grid min-w-max gap-1"
         style={{
-          gridTemplateColumns: `repeat(${map.width}, minmax(2.25rem, 1fr))`,
+          gridAutoRows: "2.5rem",
+          gridTemplateColumns: `repeat(${map.width}, 2.5rem)`,
         }}
       >
         {map.tiles.map(tile => (
