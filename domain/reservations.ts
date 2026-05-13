@@ -26,13 +26,11 @@ export type CabanaReservation = {
 
 const reservedCabanaIds = new Set<string>();
 
-export function getMapWithAvailability(map: ResortMap): PublicResortMap {
-  return {
-    width: map.width,
-    height: map.height,
-    tiles: map.tiles.map(tile => tileWithAvailability(tile)),
-  };
-}
+export const getMapWithAvailability = (map: ResortMap): PublicResortMap => ({
+  width: map.width,
+  height: map.height,
+  tiles: map.tiles.map(tile => tileWithAvailability(tile)),
+});
 
 export function bookCabana(
   map: ResortMap,
@@ -70,9 +68,9 @@ export function bookCabana(
   };
 }
 
-export function resetReservations(): void {
+export const resetReservations = (): void => {
   reservedCabanaIds.clear();
-}
+};
 
 function tileWithAvailability(tile: ResortMapTile): PublicResortMapTile {
   if (tile.type !== "cabana") {
