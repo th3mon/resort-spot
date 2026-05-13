@@ -6,7 +6,12 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { POST as bookCabana } from "../app/api/cabanas/[id]/book/route";
 import { GET as getMap } from "../app/api/map/route";
-import { resetReservations } from "../domain/reservations";
+import {
+  CabanaReservation,
+  type PublicResortMap,
+  type PublicResortMapTile,
+  resetReservations,
+} from "../domain/reservations";
 
 const originalMapPath = process.env.RESORT_SPOT_MAP_PATH;
 const originalBookingsPath = process.env.RESORT_SPOT_BOOKINGS_PATH;
@@ -20,14 +25,14 @@ describe("booking API routes", () => {
   it("returns map data with cabana availability", async () => {
     await withInputFiles(async () => {
       const response = await getMap();
-      const body = await response.json();
+      const body: PublicResortMap = await response.json();
 
       expect(response.status).toBe(200);
-      expect(body).toMatchObject({
+      expect(body).toMatchObject<Partial<PublicResortMap>>({
         width: 2,
         height: 2,
       });
-      expect(body.tiles).toContainEqual({
+      expect(body.tiles).toContainEqual<PublicResortMapTile>({
         id: "cabana-0-0",
         x: 0,
         y: 0,
@@ -44,10 +49,10 @@ describe("booking API routes", () => {
         room: "101",
         guestName: "Alice Smith",
       });
-      const bookingBody = await bookingResponse.json();
+      const bookingBody: CabanaReservation = await bookingResponse.json();
 
       expect(bookingResponse.status).toBe(200);
-      expect(bookingBody).toEqual({
+      expect(bookingBody).toEqual<{ reservation: CabanaReservation }>({
         reservation: {
           cabanaId: "cabana-0-0",
           availability: "reserved",
@@ -55,9 +60,9 @@ describe("booking API routes", () => {
       });
 
       const mapResponse = await getMap();
-      const mapBody = await mapResponse.json();
+      const mapBody: PublicResortMap = await mapResponse.json();
 
-      expect(mapBody.tiles).toContainEqual({
+      expect(mapBody.tiles).toContainEqual<PublicResortMapTile>({
         id: "cabana-0-0",
         x: 0,
         y: 0,
@@ -164,6 +169,7 @@ function restoreRuntimeEnv(): void {
 function restoreEnvValue(name: string, value: string | undefined): void {
   if (value === undefined) {
     delete process.env[name];
+
     return;
   }
 
