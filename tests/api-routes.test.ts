@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { POST as bookCabana } from "../app/api/cabanas/[id]/book/route";
 import { GET as getMap } from "../app/api/map/route";
 import {
-  CabanaReservation,
+  type CabanaReservation,
   type PublicResortMap,
   type PublicResortMapTile,
   resetReservations,
@@ -49,7 +49,8 @@ describe("booking API routes", () => {
         room: "101",
         guestName: "Alice Smith",
       });
-      const bookingBody: CabanaReservation = await bookingResponse.json();
+      const bookingBody: { reservation: CabanaReservation } =
+        await bookingResponse.json();
 
       expect(bookingResponse.status).toBe(200);
       expect(bookingBody).toEqual<{ reservation: CabanaReservation }>({
@@ -69,6 +70,32 @@ describe("booking API routes", () => {
         symbol: "W",
         type: "cabana",
         availability: "reserved",
+      });
+    });
+  });
+
+  it("rejects malformed booking request JSON", async () => {
+    await withInputFiles(async () => {
+      const response = await postRawBooking("cabana-0-0", "{");
+      const body = await response.json();
+
+      expect(response.status).toBe(400);
+      expect(body).toEqual({
+        error: "Booking request body must contain valid JSON.",
+      });
+    });
+  });
+
+  it("rejects invalid booking request shape", async () => {
+    await withInputFiles(async () => {
+      const response = await postBooking("cabana-0-0", {
+        room: "101",
+      });
+      const body = await response.json();
+
+      expect(response.status).toBe(400);
+      expect(body).toEqual({
+        error: "Booking request requires room and guestName.",
       });
     });
   });
@@ -124,14 +151,15 @@ describe("booking API routes", () => {
   });
 });
 
-async function postBooking(
-  cabanaId: string,
-  body: { room: string; guestName: string },
-) {
+async function postBooking(cabanaId: string, body: unknown) {
+  return postRawBooking(cabanaId, JSON.stringify(body));
+}
+
+async function postRawBooking(cabanaId: string, body: BodyInit) {
   return bookCabana(
     new NextRequest(`http://localhost/api/cabanas/${cabanaId}/book`, {
       method: "POST",
-      body: JSON.stringify(body),
+      body,
     }),
     {
       params: Promise.resolve({ id: cabanaId }),

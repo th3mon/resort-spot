@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { Booking, bookingSchema, loadBookings } from "@/domain/bookings";
-import { errorMessageFor, statusForBookingError } from "@/domain/errors";
+import { bookingSchema, loadBookings, type Booking } from "@/domain/bookings";
+import {
+  errorMessageFor,
+  RequestValidationError,
+  statusForApiError,
+} from "@/domain/errors";
 import { loadResortMap } from "@/domain/resort-map";
 import { getRuntimeConfig } from "@/domain/runtime-config";
-import { bookCabana, CabanaReservation } from "@/domain/reservations";
+import { bookCabana, type CabanaReservation } from "@/domain/reservations";
 
 export async function POST(
   request: NextRequest,
@@ -36,18 +40,29 @@ export async function POST(
     return NextResponse.json(
       { error: errorMessageFor(error) },
       {
-        status: statusForBookingError(error),
+        status: statusForApiError(error),
       },
     );
   }
 }
 
 async function parseBookingRequest(request: NextRequest): Promise<Booking> {
-  const body = await request.json();
+  let body: unknown;
+
+  try {
+    body = await request.json();
+  } catch {
+    throw new RequestValidationError(
+      "Booking request body must contain valid JSON.",
+    );
+  }
+
   const result = bookingSchema.safeParse(body);
 
   if (!result.success) {
-    throw new Error("Booking request requires room and guestName.");
+    throw new RequestValidationError(
+      "Booking request requires room and guestName.",
+    );
   }
 
   return result.data;

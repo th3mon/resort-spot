@@ -13,7 +13,18 @@ export class BookingError extends Error {
   }
 }
 
-export function statusForBookingError(error: unknown) {
+export class RequestValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "RequestValidationError";
+  }
+}
+
+export function statusForApiError(error: unknown) {
+  if (error instanceof RequestValidationError) {
+    return 400;
+  }
+
   if (!(error instanceof BookingError)) {
     return 500;
   }
