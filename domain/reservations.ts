@@ -19,6 +19,11 @@ export type BookingRequest = {
   guestName: string;
 };
 
+export type CabanaReservation = {
+  cabanaId: string;
+  available: boolean;
+};
+
 const reservedCabanaIds = new Set<string>();
 
 export function getMapWithAvailability(map: ResortMap): PublicResortMap {
@@ -33,7 +38,7 @@ export function bookCabana(
   map: ResortMap,
   bookings: Booking[],
   request: BookingRequest,
-) {
+): CabanaReservation {
   const tile = map.tiles.find(candidate => candidate.id === request.cabanaId);
 
   if (!tile || tile.type !== "cabana") {
