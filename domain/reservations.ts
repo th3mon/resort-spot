@@ -35,35 +35,38 @@ export const getMapWithAvailability = (map: ResortMap): PublicResortMap => ({
 export function bookCabana(
   map: ResortMap,
   bookings: Booking[],
-  request: BookingRequest,
+  { cabanaId, room, guestName }: BookingRequest,
 ): CabanaReservation {
-  const tile = map.tiles.find(candidate => candidate.id === request.cabanaId);
+  const tile: ResortMapTile | undefined = map.tiles.find(
+    candidate => candidate.id === cabanaId,
+  );
+  const isNotBookableCabana = !tile || tile.type !== "cabana";
 
-  if (!tile || tile.type !== "cabana") {
+  if (isNotBookableCabana) {
     throw new BookingError(
       "not-cabana",
-      `Cabana "${request.cabanaId}" does not exist.`,
+      `"${cabanaId}" is not a bookable cabana.`,
     );
   }
 
-  if (reservedCabanaIds.has(request.cabanaId)) {
+  if (reservedCabanaIds.has(cabanaId)) {
     throw new BookingError(
       "already-booked",
-      `Cabana "${request.cabanaId}" is already booked.`,
+      `Cabana "${cabanaId}" is already booked.`,
     );
   }
 
-  if (!bookingExists(bookings, request.room, request.guestName)) {
+  if (!bookingExists(bookings, room, guestName)) {
     throw new BookingError(
       "invalid-guest",
       "Room number and guest name do not match an active booking.",
     );
   }
 
-  reservedCabanaIds.add(request.cabanaId);
+  reservedCabanaIds.add(cabanaId);
 
   return {
-    cabanaId: request.cabanaId,
+    cabanaId,
     available: false,
   };
 }

@@ -115,7 +115,7 @@ describe("booking API routes", () => {
 
       expect(response.status).toBe(404);
       expect(body).toEqual({
-        error: 'Cabana "tile-1-0" does not exist.',
+        error: '"tile-1-0" is not a bookable cabana.',
       });
     });
   });
