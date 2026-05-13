@@ -1,6 +1,7 @@
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { NextRequest } from "next/server";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { POST as bookCabana } from "../app/api/cabanas/[id]/book/route";
@@ -125,7 +126,7 @@ async function postBooking(
   body: { room: string; guestName: string },
 ) {
   return bookCabana(
-    new Request(`http://localhost/api/cabanas/${cabanaId}/book`, {
+    new NextRequest(`http://localhost/api/cabanas/${cabanaId}/book`, {
       method: "POST",
       body: JSON.stringify(body),
     }),

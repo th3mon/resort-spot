@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 import { loadResortMap } from "@/domain/resort-map";
 import { getRuntimeConfig } from "@/domain/runtime-config";
 import { getMapWithAvailability } from "@/domain/reservations";
@@ -11,9 +13,9 @@ export async function GET() {
   try {
     const map = await loadResortMap(inputs.mapPath);
 
-    return Response.json(getMapWithAvailability(map));
+    return NextResponse.json(getMapWithAvailability(map));
   } catch (error) {
-    return Response.json(
+    return NextResponse.json(
       { error: errorMessageFor(error) },
       {
         status: 500,

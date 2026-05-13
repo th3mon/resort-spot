@@ -1,3 +1,5 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { bookingSchema, loadBookings } from "@/domain/bookings";
 import { errorMessageFor, statusForBookingError } from "@/domain/errors";
 import { loadResortMap } from "@/domain/resort-map";
@@ -5,7 +7,7 @@ import { getRuntimeConfig } from "@/domain/runtime-config";
 import { bookCabana } from "@/domain/reservations";
 
 export async function POST(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
@@ -24,11 +26,11 @@ export async function POST(
       guestName: body.guestName,
     });
 
-    return Response.json({
+    return NextResponse.json({
       reservation,
     });
   } catch (error) {
-    return Response.json(
+    return NextResponse.json(
       { error: errorMessageFor(error) },
       {
         status: statusForBookingError(error),
@@ -37,15 +39,8 @@ export async function POST(
   }
 }
 
-async function parseBookingRequest(request: Request) {
-  let body: unknown;
-
-  try {
-    body = await request.json();
-  } catch {
-    throw new Error("Booking request body must be valid JSON.");
-  }
-
+async function parseBookingRequest(request: NextRequest) {
+  const body = await request.json();
   const result = bookingSchema.safeParse(body);
 
   if (!result.success) {

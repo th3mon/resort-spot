@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 import { loadBookings } from "@/domain/bookings";
 import { errorMessageFor } from "@/domain/errors";
 import { getRuntimeConfig } from "@/domain/runtime-config";
@@ -14,7 +16,7 @@ export async function GET() {
       loadBookings(inputs.bookingsPath),
     ]);
 
-    return Response.json({
+    return NextResponse.json({
       name: "Resort Spot",
       inputs,
       status: {
@@ -30,7 +32,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    return Response.json(
+    return NextResponse.json(
       {
         name: "Resort Spot",
         inputs,
