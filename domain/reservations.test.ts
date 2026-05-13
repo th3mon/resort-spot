@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach } from "vitest";
 
-import type { GuestBooking } from "./bookings";
+import type { Booking } from "./bookings";
 import { parseResortMap } from "./resort-map";
 import {
   BookingError,
@@ -9,7 +9,7 @@ import {
   resetReservations,
 } from "./reservations";
 
-const bookings: GuestBooking[] = [{ room: "101", guestName: "Alice Smith" }];
+const bookings: Booking[] = [{ room: "101", guestName: "Alice Smith" }];
 
 describe("reservations", () => {
   beforeEach(() => {

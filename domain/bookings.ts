@@ -4,22 +4,22 @@ import { z } from "zod";
 import { errorMessageFor } from "./errors";
 import { loadFile } from "./files";
 
-const guestBookingSchema = z.object({
+export const bookingSchema = z.object({
   room: z.union([z.string().min(1), z.number()]).transform(String),
   guestName: z.string().min(1),
 });
 
-const guestBookingsSchema = z.array(guestBookingSchema);
+const bookingsSchema = z.array(bookingSchema);
 
-export type GuestBooking = z.output<typeof guestBookingSchema>;
+export type Booking = z.output<typeof bookingSchema>;
 
-export async function loadGuestBookings(path: string) {
+export async function loadBookings(path: string) {
   const source = await loadFile(path, "bookings file");
 
-  return parseGuestBookings(source);
+  return parseBookings(source);
 }
 
-export function parseGuestBookings(source: string): GuestBooking[] {
+export function parseBookings(source: string): Booking[] {
   let parsed: unknown;
 
   try {
@@ -30,17 +30,17 @@ export function parseGuestBookings(source: string): GuestBooking[] {
     );
   }
 
-  const result = guestBookingsSchema.safeParse(parsed);
+  const result = bookingsSchema.safeParse(parsed);
 
   if (!result.success) {
-    throw new Error(formatGuestBookingsError(result.error));
+    throw new Error(formatBookingsError(result.error));
   }
 
   return result.data;
 }
 
-export function guestBookingExists(
-  bookings: GuestBooking[],
+export function bookingExists(
+  bookings: Booking[],
   room: string,
   guestName: string,
 ) {
@@ -54,7 +54,7 @@ export function guestBookingExists(
   );
 }
 
-function formatGuestBookingsError(error: z.ZodError) {
+function formatBookingsError(error: z.ZodError) {
   const issue = error.issues[0];
 
   if (!issue) {

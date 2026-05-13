@@ -1,4 +1,4 @@
-import { guestBookingExists, type GuestBooking } from "./bookings";
+import { bookingExists, type Booking } from "./bookings";
 import type { ResortMap, ResortMapTile } from "./resort-map";
 
 export type PublicResortMapTile = ResortMapTile & {
@@ -45,7 +45,7 @@ export function getMapWithAvailability(map: ResortMap): PublicResortMap {
 
 export function bookCabana(
   map: ResortMap,
-  bookings: GuestBooking[],
+  bookings: Booking[],
   request: BookingRequest,
 ) {
   const tile = map.tiles.find(candidate => candidate.id === request.cabanaId);
@@ -64,7 +64,7 @@ export function bookCabana(
     );
   }
 
-  if (!guestBookingExists(bookings, request.room, request.guestName)) {
+  if (!bookingExists(bookings, request.room, request.guestName)) {
     throw new BookingError(
       "invalid-guest",
       "Room number and guest name do not match an active booking.",

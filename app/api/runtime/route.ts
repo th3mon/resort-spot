@@ -1,4 +1,4 @@
-import { loadGuestBookings } from "@/domain/bookings";
+import { loadBookings } from "@/domain/bookings";
 import { errorMessageFor } from "@/domain/errors";
 import { getRuntimeConfig } from "@/domain/runtime-config";
 import { loadResortMap } from "@/domain/resort-map";
@@ -11,7 +11,7 @@ export async function GET() {
   try {
     const [map, bookings] = await Promise.all([
       loadResortMap(inputs.mapPath),
-      loadGuestBookings(inputs.bookingsPath),
+      loadBookings(inputs.bookingsPath),
     ]);
 
     return Response.json({

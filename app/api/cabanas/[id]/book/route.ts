@@ -1,15 +1,8 @@
-import { z } from "zod";
-
-import { loadGuestBookings } from "@/domain/bookings";
+import { bookingSchema, loadBookings } from "@/domain/bookings";
 import { errorMessageFor } from "@/domain/errors";
 import { loadResortMap } from "@/domain/resort-map";
 import { getRuntimeConfig } from "@/domain/runtime-config";
 import { BookingError, bookCabana } from "@/domain/reservations";
-
-const bookingRequestSchema = z.object({
-  room: z.union([z.string().min(1), z.number()]).transform(String),
-  guestName: z.string().min(1),
-});
 
 export async function POST(
   request: Request,
@@ -22,8 +15,9 @@ export async function POST(
     const body = await parseBookingRequest(request);
     const [map, bookings] = await Promise.all([
       loadResortMap(inputs.mapPath),
-      loadGuestBookings(inputs.bookingsPath),
+      loadBookings(inputs.bookingsPath),
     ]);
+
     const reservation = bookCabana(map, bookings, {
       cabanaId: id,
       room: body.room,
@@ -52,7 +46,7 @@ async function parseBookingRequest(request: Request) {
     throw new Error("Booking request body must be valid JSON.");
   }
 
-  const result = bookingRequestSchema.safeParse(body);
+  const result = bookingSchema.safeParse(body);
 
   if (!result.success) {
     throw new Error("Booking request requires room and guestName.");
