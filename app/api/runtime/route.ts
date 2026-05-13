@@ -1,9 +1,10 @@
-import { loadGuestBookings } from "@/domain/bookings";
+import { NextResponse } from "next/server";
+
+import { loadBookings } from "@/domain/bookings";
 import { errorMessageFor } from "@/domain/errors";
 import { getRuntimeConfig } from "@/domain/runtime-config";
 import { loadResortMap } from "@/domain/resort-map";
 
-export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
@@ -12,10 +13,10 @@ export async function GET() {
   try {
     const [map, bookings] = await Promise.all([
       loadResortMap(inputs.mapPath),
-      loadGuestBookings(inputs.bookingsPath),
+      loadBookings(inputs.bookingsPath),
     ]);
 
-    return Response.json({
+    return NextResponse.json({
       name: "Resort Spot",
       inputs,
       status: {
@@ -31,7 +32,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    return Response.json(
+    return NextResponse.json(
       {
         name: "Resort Spot",
         inputs,

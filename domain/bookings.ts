@@ -4,22 +4,22 @@ import { z } from "zod";
 import { errorMessageFor } from "./errors";
 import { loadFile } from "./files";
 
-const guestBookingSchema = z.object({
+export const bookingSchema = z.object({
   room: z.union([z.string().min(1), z.number()]).transform(String),
   guestName: z.string().min(1),
 });
 
-const guestBookingsSchema = z.array(guestBookingSchema);
+const bookingsSchema = z.array(bookingSchema);
 
-export type GuestBooking = z.output<typeof guestBookingSchema>;
+export type Booking = z.output<typeof bookingSchema>;
 
-export async function loadGuestBookings(path: string) {
+export async function loadBookings(path: string): Promise<Booking[]> {
   const source = await loadFile(path, "bookings file");
 
-  return parseGuestBookings(source);
+  return parseBookings(source);
 }
 
-export function parseGuestBookings(source: string): GuestBooking[] {
+export function parseBookings(source: string): Booking[] {
   let parsed: unknown;
 
   try {
@@ -30,16 +30,31 @@ export function parseGuestBookings(source: string): GuestBooking[] {
     );
   }
 
-  const result = guestBookingsSchema.safeParse(parsed);
+  const result = bookingsSchema.safeParse(parsed);
 
   if (!result.success) {
-    throw new Error(formatGuestBookingsError(result.error));
+    throw new Error(formatBookingsError(result.error));
   }
 
   return result.data;
 }
 
-function formatGuestBookingsError(error: z.ZodError) {
+export function bookingExists(
+  bookings: Booking[],
+  room: string,
+  guestName: string,
+): boolean {
+  const normalizedRoom = normalizeField(room);
+  const normalizedGuestName = normalizeField(guestName);
+
+  return bookings.some(
+    booking =>
+      normalizeField(booking.room) === normalizedRoom &&
+      normalizeField(booking.guestName) === normalizedGuestName,
+  );
+}
+
+function formatBookingsError(error: z.ZodError): string {
   const issue = error.issues[0];
 
   if (!issue) {
@@ -77,6 +92,7 @@ function formatGuestBookingsError(error: z.ZodError) {
   return `Booking record ${recordIndex + 1} has an invalid shape.`;
 }
 
-function formatZodPath(path: PropertyKey[]) {
-  return path.map(String).join(".");
-}
+const formatZodPath = (path: PropertyKey[]): string =>
+  path.map(String).join(".");
+
+const normalizeField = (value: string): string => value.trim().toLowerCase();
