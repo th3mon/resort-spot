@@ -4,7 +4,9 @@ import type { Booking } from "./bookings";
 import { BookingError } from "./errors";
 import {
   bookCabana,
+  type CabanaReservation,
   getMapWithAvailability,
+  type PublicResortMapTile,
   resetReservations,
 } from "./reservations";
 import { parseResortMap } from "./resort-map";
@@ -19,7 +21,9 @@ describe("reservations", () => {
   it("marks cabanas as available before booking", () => {
     const map = parseResortMap("W.");
 
-    expect(getMapWithAvailability(map).tiles[0]).toMatchObject({
+    expect(getMapWithAvailability(map).tiles[0]).toMatchObject<
+      Partial<PublicResortMapTile>
+    >({
       id: "cabana-0-0",
       availability: "available",
     });
@@ -34,12 +38,14 @@ describe("reservations", () => {
         room: "101",
         guestName: "Alice Smith",
       }),
-    ).toEqual({
+    ).toEqual<Partial<CabanaReservation>>({
       cabanaId: "cabana-0-0",
       availability: "reserved",
     });
 
-    expect(getMapWithAvailability(map).tiles[0]).toMatchObject({
+    expect(getMapWithAvailability(map).tiles[0]).toMatchObject<
+      Partial<PublicResortMapTile>
+    >({
       availability: "reserved",
     });
   });
