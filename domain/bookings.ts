@@ -1,6 +1,7 @@
 import { isEmpty, isNumber, isUndefined } from "lodash";
 import { z } from "zod";
 
+import { errorMessageFor } from "./errors";
 import { loadFile } from "./files";
 
 export const bookingSchema = z.object({
@@ -19,7 +20,16 @@ export async function loadBookings(path: string): Promise<Booking[]> {
 }
 
 export function parseBookings(source: string): Booking[] {
-  const parsed = JSON.parse(source);
+  let parsed: unknown;
+
+  try {
+    parsed = JSON.parse(source);
+  } catch (error) {
+    throw new Error(
+      `Bookings file must contain valid JSON: ${errorMessageFor(error)}`,
+    );
+  }
+
   const result = bookingsSchema.safeParse(parsed);
 
   if (!result.success) {
