@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 
 import { loadResortMap } from "@/domain/resort-map";
 import { getRuntimeConfig } from "@/domain/runtime-config";
-import { getMapWithAvailability } from "@/domain/reservations";
+import { getMapWithAvailability, PublicResortMap } from "@/domain/reservations";
 import { errorMessageFor } from "@/domain/errors";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(): Promise<
+  NextResponse<PublicResortMap> | NextResponse<{ error: string }>
+> {
   const inputs = getRuntimeConfig();
 
   try {

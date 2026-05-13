@@ -70,7 +70,7 @@ export function bookCabana(
   };
 }
 
-export function resetReservations() {
+export function resetReservations(): void {
   reservedCabanaIds.clear();
 }
 

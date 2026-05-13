@@ -12,7 +12,7 @@ const bookingsSchema = z.array(bookingSchema);
 
 export type Booking = z.output<typeof bookingSchema>;
 
-export async function loadBookings(path: string) {
+export async function loadBookings(path: string): Promise<Booking[]> {
   const source = await loadFile(path, "bookings file");
 
   return parseBookings(source);
@@ -33,7 +33,7 @@ export function bookingExists(
   bookings: Booking[],
   room: string,
   guestName: string,
-) {
+): boolean {
   const normalizedRoom = normalizeField(room);
   const normalizedGuestName = normalizeField(guestName);
 
@@ -44,7 +44,7 @@ export function bookingExists(
   );
 }
 
-function formatBookingsError(error: z.ZodError) {
+function formatBookingsError(error: z.ZodError): string {
   const issue = error.issues[0];
 
   if (!issue) {

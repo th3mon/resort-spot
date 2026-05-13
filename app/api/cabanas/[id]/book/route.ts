@@ -1,15 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { bookingSchema, loadBookings } from "@/domain/bookings";
+import { Booking, bookingSchema, loadBookings } from "@/domain/bookings";
 import { errorMessageFor, statusForBookingError } from "@/domain/errors";
 import { loadResortMap } from "@/domain/resort-map";
 import { getRuntimeConfig } from "@/domain/runtime-config";
-import { bookCabana } from "@/domain/reservations";
+import { bookCabana, CabanaReservation } from "@/domain/reservations";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
-) {
+): Promise<
+  | NextResponse<{ reservation: CabanaReservation }>
+  | NextResponse<{ error: string }>
+> {
   const { id } = await params;
   const inputs = getRuntimeConfig();
 
@@ -39,7 +42,7 @@ export async function POST(
   }
 }
 
-async function parseBookingRequest(request: NextRequest) {
+async function parseBookingRequest(request: NextRequest): Promise<Booking> {
   const body = await request.json();
   const result = bookingSchema.safeParse(body);
 

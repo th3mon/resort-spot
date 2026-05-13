@@ -136,7 +136,7 @@ async function postBooking(
   );
 }
 
-async function withInputFiles(runTest: () => Promise<void>) {
+async function withInputFiles(runTest: () => Promise<void>): Promise<void> {
   const directory = await mkdtemp(path.join(tmpdir(), "resort-api-"));
   const mapPath = path.join(directory, "map.ascii");
   const bookingsPath = path.join(directory, "bookings.json");
@@ -158,12 +158,12 @@ async function withInputFiles(runTest: () => Promise<void>) {
   }
 }
 
-function restoreRuntimeEnv() {
+function restoreRuntimeEnv(): void {
   restoreEnvValue("RESORT_SPOT_MAP_PATH", originalMapPath);
   restoreEnvValue("RESORT_SPOT_BOOKINGS_PATH", originalBookingsPath);
 }
 
-function restoreEnvValue(name: string, value: string | undefined) {
+function restoreEnvValue(name: string, value: string | undefined): void {
   if (value === undefined) {
     delete process.env[name];
     return;
