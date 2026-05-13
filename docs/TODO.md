@@ -17,3 +17,24 @@ Things to evaluate:
   codes in addition to human-readable messages.
 - How to keep unexpected operational errors separate from expected user errors,
   such as invalid guests or already booked cabanas.
+
+## Consider a Resort Map Class
+
+The current map model is a plain object with a `tiles` array. Code that needs a
+specific tile or cabana has to search through that array directly, for example:
+
+```ts
+getMapWithAvailability(map).tiles[0];
+```
+
+Consider turning the parsed resort map, or the public map with availability, into
+a class with lookup methods. That would allow call sites to express intent more
+clearly:
+
+```ts
+getMapWithAvailability(map).getTile(tileId);
+getMapWithAvailability(map).getCabana(cabanaId);
+```
+
+This could also centralize tile/cabana validation and reduce repeated
+array-search logic as the API and frontend grow.
