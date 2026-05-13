@@ -44,13 +44,13 @@ export function bookingExists(
   room: string,
   guestName: string,
 ) {
-  const normalizedRoom = normalizeGuestField(room);
-  const normalizedGuestName = normalizeGuestField(guestName);
+  const normalizedRoom = normalizeField(room);
+  const normalizedGuestName = normalizeField(guestName);
 
   return bookings.some(
     booking =>
-      normalizeGuestField(booking.room) === normalizedRoom &&
-      normalizeGuestField(booking.guestName) === normalizedGuestName,
+      normalizeField(booking.room) === normalizedRoom &&
+      normalizeField(booking.guestName) === normalizedGuestName,
   );
 }
 
@@ -92,10 +92,7 @@ function formatBookingsError(error: z.ZodError) {
   return `Booking record ${recordIndex + 1} has an invalid shape.`;
 }
 
-function formatZodPath(path: PropertyKey[]) {
-  return path.map(String).join(".");
-}
+const formatZodPath = (path: PropertyKey[]): string =>
+  path.map(String).join(".");
 
-function normalizeGuestField(value: string) {
-  return value.trim().toLowerCase();
-}
+const normalizeField = (value: string): string => value.trim().toLowerCase();
