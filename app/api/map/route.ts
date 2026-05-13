@@ -3,7 +3,6 @@ import { getRuntimeConfig } from "@/domain/runtime-config";
 import { getMapWithAvailability } from "@/domain/reservations";
 import { errorMessageFor } from "@/domain/errors";
 
-export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {

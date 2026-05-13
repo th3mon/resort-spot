@@ -6,9 +6,6 @@ import { loadResortMap } from "@/domain/resort-map";
 import { getRuntimeConfig } from "@/domain/runtime-config";
 import { BookingError, bookCabana } from "@/domain/reservations";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-
 const bookingRequestSchema = z.object({
   room: z.union([z.string().min(1), z.number()]).transform(String),
   guestName: z.string().min(1),

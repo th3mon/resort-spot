@@ -3,7 +3,6 @@ import { errorMessageFor } from "@/domain/errors";
 import { getRuntimeConfig } from "@/domain/runtime-config";
 import { loadResortMap } from "@/domain/resort-map";
 
-export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
