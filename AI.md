@@ -54,13 +54,21 @@ The assistant helped implement and stabilize the `0.2.0` input parsing feature:
   reporting.
 - Created and finished the `0.2.0` release through Git Flow.
 
-The assistant started the `0.3.0` booking API feature:
+The assistant helped implement and review the `0.3.0` booking API feature:
 
 - Added `GET /api/map` to return parsed map data with cabana availability.
 - Added `POST /api/cabanas/:id/book` to reserve a cabana for a validated guest.
 - Added `domain/reservations.ts` for in-memory reservation state.
 - Kept route handlers thin by delegating booking rules to the domain layer.
 - Added tests for reservation behavior and API route handlers.
+- Replaced separate boolean availability flags with a single `availability`
+  state, avoiding contradictory `available` and `reserved` values.
+- Used `NextRequest` and `NextResponse` in the new route handler code.
+- Centralized booking errors and request validation errors in `domain/errors.ts`.
+- Added request validation tests for malformed JSON and invalid booking request
+  bodies.
+- Performed final code reviews of the latest commit and the full feature branch
+  against `develop`.
 - Confirmed through a local smoke test that booking a cabana changes its
   availability in subsequent `GET /api/map` responses.
 
@@ -85,6 +93,12 @@ The user clarified several preferences during implementation:
   to specific cabanas.
 - Keep the ASCII resort map parser hand-written rather than forcing Zod into
   text parsing where it adds little value.
+- Keep route handlers that read local files on the Node.js runtime. Node.js is
+  the default runtime for the current Next.js version, so explicit
+  `runtime = "nodejs"` exports are optional, but these endpoints must not move to
+  Edge.
+- Prefer one explicit cabana availability state over multiple booleans that can
+  contradict each other.
 
 These conventions were either applied directly or documented in `AGENTS.md`.
 
@@ -113,6 +127,17 @@ For the booking API feature, the assistant also smoke-tested:
 - `POST /api/cabanas/:id/book`
 - a follow-up `GET /api/map` confirming the booked cabana became unavailable
 
+The final booking API review was checked with the full verification set:
+
+```bash
+npm run format:check
+npm run lint
+npm run test:ci
+npm run build
+```
+
+At that point, the suite passed with 6 test files and 31 tests.
+
 ## Human Oversight
 
 The user made or requested several corrections that shaped the final direction:
@@ -125,6 +150,14 @@ The user made or requested several corrections that shaped the final direction:
 - Requested deterministic cleanup for test-created temporary files.
 - Asked whether cabana reservations should expose the reserving guest; the
   current implementation does not, and that trade-off is now explicit.
+- Asked to remove redundant explicit Node.js runtime declarations after checking
+  the Next.js documentation, while preserving the rule that file-based endpoints
+  must not move to Edge.
+- Reviewed and refined naming around booking and guest concepts.
+- Requested a TODO note to revisit broad `try`/`catch` blocks, thrown exceptions,
+  and the current API error model before the final submission.
+- Asked to document a future refactor toward a richer Resort Map class with
+  lookup APIs such as `getTile()` or `getCabana()`.
 
 The AI assistance was therefore used as an implementation accelerator, while the
 project owner retained architectural and process control.
