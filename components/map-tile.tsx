@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import {
+  type PathTileAsset,
   tileClassName,
   tileImageClassName,
   TILE_ASSETS,
@@ -9,14 +10,16 @@ import type { PublicResortMapTile } from "@/domain/reservations";
 
 export function MapTile({
   tile,
+  pathAsset,
   isSelected,
   onSelectCabana,
 }: {
   tile: PublicResortMapTile;
+  pathAsset?: PathTileAsset;
   isSelected: boolean;
   onSelectCabana: (cabanaId: string) => void;
 }) {
-  const asset = TILE_ASSETS[tile.type];
+  const asset = pathAsset ?? TILE_ASSETS[tile.type];
   const label = tileLabel(tile);
 
   if (tile.type === "cabana") {
@@ -43,19 +46,31 @@ export function MapTile({
       aria-label={label}
       title={label}
     >
-      <TileImage src={asset.src} tile={tile} />
+      <TileImage
+        src={asset.src}
+        tile={tile}
+        rotationClassName={pathAsset?.rotationClassName}
+      />
     </div>
   );
 }
 
-function TileImage({ src, tile }: { src: string; tile: PublicResortMapTile }) {
+function TileImage({
+  src,
+  tile,
+  rotationClassName = "",
+}: {
+  src: string;
+  tile: PublicResortMapTile;
+  rotationClassName?: string;
+}) {
   return (
     <Image
       src={src}
       alt=""
       width={64}
       height={64}
-      className={tileImageClassName(tile)}
+      className={`${tileImageClassName(tile)} ${rotationClassName}`}
     />
   );
 }
