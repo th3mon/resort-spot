@@ -1,13 +1,13 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import type { Booking } from "./bookings";
-import { parseResortMap } from "./resort-map";
+import { BookingError } from "./errors";
 import {
-  BookingError,
   bookCabana,
   getMapWithAvailability,
   resetReservations,
 } from "./reservations";
+import { parseResortMap } from "./resort-map";
 
 const bookings: Booking[] = [{ room: "101", guestName: "Alice Smith" }];
 
@@ -21,8 +21,7 @@ describe("reservations", () => {
 
     expect(getMapWithAvailability(map).tiles[0]).toMatchObject({
       id: "cabana-0-0",
-      available: true,
-      reserved: false,
+      availability: "available",
     });
   });
 
@@ -37,12 +36,11 @@ describe("reservations", () => {
       }),
     ).toEqual({
       cabanaId: "cabana-0-0",
-      available: false,
+      availability: "reserved",
     });
 
     expect(getMapWithAvailability(map).tiles[0]).toMatchObject({
-      available: false,
-      reserved: true,
+      availability: "reserved",
     });
   });
 

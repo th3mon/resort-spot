@@ -2,9 +2,10 @@ import { bookingExists, type Booking } from "./bookings";
 import { BookingError } from "./errors";
 import type { ResortMap, ResortMapTile } from "./resort-map";
 
+export type CabanaAvailability = "available" | "reserved";
+
 export type PublicResortMapTile = ResortMapTile & {
-  available?: boolean;
-  reserved?: boolean;
+  availability?: CabanaAvailability;
 };
 
 export type PublicResortMap = {
@@ -21,7 +22,7 @@ export type BookingRequest = {
 
 export type CabanaReservation = {
   cabanaId: string;
-  available: boolean;
+  availability: CabanaAvailability;
 };
 
 const reservedCabanaIds = new Set<string>();
@@ -67,7 +68,7 @@ export function bookCabana(
 
   return {
     cabanaId,
-    available: false,
+    availability: "reserved",
   };
 }
 
@@ -80,11 +81,8 @@ function tileWithAvailability(tile: ResortMapTile): PublicResortMapTile {
     return tile;
   }
 
-  const reserved = reservedCabanaIds.has(tile.id);
-
   return {
     ...tile,
-    reserved,
-    available: !reserved,
+    availability: reservedCabanaIds.has(tile.id) ? "reserved" : "available",
   };
 }

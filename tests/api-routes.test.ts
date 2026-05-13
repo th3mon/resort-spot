@@ -33,8 +33,7 @@ describe("booking API routes", () => {
         y: 0,
         symbol: "W",
         type: "cabana",
-        available: true,
-        reserved: false,
+        availability: "available",
       });
     });
   });
@@ -51,7 +50,7 @@ describe("booking API routes", () => {
       expect(bookingBody).toEqual({
         reservation: {
           cabanaId: "cabana-0-0",
-          available: false,
+          availability: "reserved",
         },
       });
 
@@ -64,8 +63,7 @@ describe("booking API routes", () => {
         y: 0,
         symbol: "W",
         type: "cabana",
-        available: false,
-        reserved: true,
+        availability: "reserved",
       });
     });
   });
