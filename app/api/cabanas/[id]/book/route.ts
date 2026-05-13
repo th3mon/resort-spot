@@ -1,8 +1,8 @@
 import { bookingSchema, loadBookings } from "@/domain/bookings";
-import { errorMessageFor } from "@/domain/errors";
+import { errorMessageFor, statusForBookingError } from "@/domain/errors";
 import { loadResortMap } from "@/domain/resort-map";
 import { getRuntimeConfig } from "@/domain/runtime-config";
-import { BookingError, bookCabana } from "@/domain/reservations";
+import { bookCabana } from "@/domain/reservations";
 
 export async function POST(
   request: Request,
@@ -53,20 +53,4 @@ async function parseBookingRequest(request: Request) {
   }
 
   return result.data;
-}
-
-function statusForBookingError(error: unknown) {
-  if (!(error instanceof BookingError)) {
-    return 500;
-  }
-
-  if (error.code === "already-booked") {
-    return 409;
-  }
-
-  if (error.code === "invalid-guest") {
-    return 403;
-  }
-
-  return 404;
 }

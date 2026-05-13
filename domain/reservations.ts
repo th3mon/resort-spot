@@ -1,4 +1,5 @@
 import { bookingExists, type Booking } from "./bookings";
+import { BookingError } from "./errors";
 import type { ResortMap, ResortMapTile } from "./resort-map";
 
 export type PublicResortMapTile = ResortMapTile & {
@@ -18,22 +19,7 @@ export type BookingRequest = {
   guestName: string;
 };
 
-export type BookingErrorCode =
-  | "not-cabana"
-  | "already-booked"
-  | "invalid-guest";
-
 const reservedCabanaIds = new Set<string>();
-
-export class BookingError extends Error {
-  constructor(
-    public readonly code: BookingErrorCode,
-    message: string,
-  ) {
-    super(message);
-    this.name = "BookingError";
-  }
-}
 
 export function getMapWithAvailability(map: ResortMap): PublicResortMap {
   return {
