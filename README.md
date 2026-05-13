@@ -68,6 +68,28 @@ The runtime endpoint also validates the configured input files. A successful
 response includes the parsed map dimensions, tile count, and guest count. Input
 errors include the affected file path and a short reason.
 
+## API
+
+Read the parsed map and current cabana availability:
+
+```text
+GET /api/map
+```
+
+Book an available cabana:
+
+```text
+POST /api/cabanas/:id/book
+Content-Type: application/json
+
+{
+  "room": "101",
+  "guestName": "Alice Smith"
+}
+```
+
+Reservations are kept in memory and reset when the app process restarts.
+
 ## Planned Architecture
 
 ```text

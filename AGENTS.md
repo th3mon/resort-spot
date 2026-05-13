@@ -79,7 +79,10 @@ data/map.ascii
 data/bookings.json
 ```
 
-Route Handlers must run in the Node.js runtime because they need access to local files.
+Route Handlers that read local files must stay in the Node.js runtime because
+they need access to Node filesystem APIs. Node.js is the default runtime in
+Next.js, so an explicit `runtime = "nodejs"` export is optional, but these
+endpoints must not be moved to the Edge runtime.
 
 ## Testing Expectations
 
