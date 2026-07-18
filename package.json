@@ -11,7 +11,8 @@
     "format:check": "prettier --check .",
     "version:bump": "npm version --no-git-tag-version",
     "test": "vitest",
-    "test:ci": "vitest run"
+    "test:ci": "vitest run",
+    "check:all": "npm run lint && npm run format && npm run test:ci && npm run build"
   },
   "dependencies": {
     "lodash": "^4.18.1",
