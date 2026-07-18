@@ -1,5 +1,6 @@
 import { MapTile } from "@/components/map-tile";
 import { pathTileAssetFor } from "@/components/map-tile-style";
+import type { PathConnections } from "@/components/map-tile-style";
 import type {
   PublicResortMap,
   PublicResortMapTile,
@@ -48,11 +49,10 @@ const tilesByCoordinateFor = (
 ): Map<string, PublicResortMapTile> =>
   new Map(tiles.map(tile => [coordinateKey(tile.x, tile.y), tile]));
 
-// TODO: Create or use existing return type
 const pathConnectionsFor = (
   tile: PublicResortMapTile,
   tilesByCoordinate: Map<string, PublicResortMapTile>,
-) => ({
+): PathConnections => ({
   north: isPathAt(tile.x, tile.y - 1, tilesByCoordinate),
   east: isPathAt(tile.x + 1, tile.y, tilesByCoordinate),
   south: isPathAt(tile.x, tile.y + 1, tilesByCoordinate),
