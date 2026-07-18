@@ -43,32 +43,26 @@ export function MapGrid({
   );
 }
 
-function tilesByCoordinateFor(
+const tilesByCoordinateFor = (
   tiles: PublicResortMapTile[],
-): Map<string, PublicResortMapTile> {
-  return new Map(tiles.map(tile => [coordinateKey(tile.x, tile.y), tile]));
-}
+): Map<string, PublicResortMapTile> =>
+  new Map(tiles.map(tile => [coordinateKey(tile.x, tile.y), tile]));
 
-function pathConnectionsFor(
+// TODO: Create or use existing return type
+const pathConnectionsFor = (
   tile: PublicResortMapTile,
   tilesByCoordinate: Map<string, PublicResortMapTile>,
-) {
-  return {
-    north: isPathAt(tile.x, tile.y - 1, tilesByCoordinate),
-    east: isPathAt(tile.x + 1, tile.y, tilesByCoordinate),
-    south: isPathAt(tile.x, tile.y + 1, tilesByCoordinate),
-    west: isPathAt(tile.x - 1, tile.y, tilesByCoordinate),
-  };
-}
+) => ({
+  north: isPathAt(tile.x, tile.y - 1, tilesByCoordinate),
+  east: isPathAt(tile.x + 1, tile.y, tilesByCoordinate),
+  south: isPathAt(tile.x, tile.y + 1, tilesByCoordinate),
+  west: isPathAt(tile.x - 1, tile.y, tilesByCoordinate),
+});
 
-function isPathAt(
+const isPathAt = (
   x: number,
   y: number,
   tilesByCoordinate: Map<string, PublicResortMapTile>,
-): boolean {
-  return tilesByCoordinate.get(coordinateKey(x, y))?.type === "path";
-}
+): boolean => tilesByCoordinate.get(coordinateKey(x, y))?.type === "path";
 
-function coordinateKey(x: number, y: number): string {
-  return `${x}:${y}`;
-}
+const coordinateKey = (x: number, y: number): string => `${x}:${y}`;
