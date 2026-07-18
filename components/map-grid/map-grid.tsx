@@ -1,10 +1,11 @@
 import { MapTile } from "@/components/map-tile";
 import { pathTileAssetFor } from "@/components/map-tile-style";
-import type { PathConnections } from "@/components/map-tile-style";
-import type {
-  PublicResortMap,
-  PublicResortMapTile,
-} from "@/domain/reservations";
+import type { PublicResortMap } from "@/domain/reservations";
+
+import {
+  tilesByCoordinateFor,
+  pathConnectionsFor,
+} from "@/components/map-grid";
 
 export function MapGrid({
   map,
@@ -43,26 +44,3 @@ export function MapGrid({
     </div>
   );
 }
-
-const tilesByCoordinateFor = (
-  tiles: PublicResortMapTile[],
-): Map<string, PublicResortMapTile> =>
-  new Map(tiles.map(tile => [coordinateKey(tile.x, tile.y), tile]));
-
-const pathConnectionsFor = (
-  tile: PublicResortMapTile,
-  tilesByCoordinate: Map<string, PublicResortMapTile>,
-): PathConnections => ({
-  north: isPathAt(tile.x, tile.y - 1, tilesByCoordinate),
-  east: isPathAt(tile.x + 1, tile.y, tilesByCoordinate),
-  south: isPathAt(tile.x, tile.y + 1, tilesByCoordinate),
-  west: isPathAt(tile.x - 1, tile.y, tilesByCoordinate),
-});
-
-const isPathAt = (
-  x: number,
-  y: number,
-  tilesByCoordinate: Map<string, PublicResortMapTile>,
-): boolean => tilesByCoordinate.get(coordinateKey(x, y))?.type === "path";
-
-const coordinateKey = (x: number, y: number): string => `${x}:${y}`;

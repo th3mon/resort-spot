@@ -1,5 +1,6 @@
 import type { PublicResortMapTile } from "@/domain/reservations";
 import type { ResortMapTileType } from "@/domain/resort-map";
+import { PathConnections } from "./map-grid";
 
 type TileAsset = {
   src: string;
@@ -10,13 +11,6 @@ type Direction = "north" | "east" | "south" | "west";
 
 export type PathTileAsset = TileAsset & {
   rotationClassName: string;
-};
-
-export type PathConnections = {
-  north: boolean;
-  east: boolean;
-  south: boolean;
-  west: boolean;
 };
 
 export const TILE_ASSETS: Record<ResortMapTileType, TileAsset> = {
