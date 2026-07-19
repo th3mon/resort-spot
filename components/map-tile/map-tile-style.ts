@@ -103,15 +103,17 @@ export function tileClassName(
 }
 
 export function tileImageClassName(tile: PublicResortMapTile): string {
+  const baseImageClassName = "object-cover";
+
   if (tile.type === "pool") {
-    return "h-8 w-9 object-cover sm:h-9 sm:w-10";
+    return `h-8 w-9 ${baseImageClassName} sm:h-9 sm:w-10`;
   }
 
   if (tile.type === "path") {
-    return "h-8 w-8 object-contain sm:h-9 sm:w-9";
+    return `h-8 w-8 ${baseImageClassName} sm:h-9 sm:w-9`;
   }
 
-  return "h-7 w-7 object-contain sm:h-8 sm:w-8";
+  return `h-7 w-7 ${baseImageClassName} sm:h-8 sm:w-8`;
 }
 
 const connectedDirectionsFor = (connections: PathConnections): Direction[] =>
