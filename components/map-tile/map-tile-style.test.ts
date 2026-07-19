@@ -45,6 +45,42 @@ describe("map tile style helpers", () => {
       src: "/assets/arrowCornerSquare.png",
       rotationClassName: "",
     });
+
+    expect(
+      pathTileAssetFor({
+        north: false,
+        east: true,
+        south: true,
+        west: false,
+      }),
+    ).toMatchObject({
+      src: "/assets/arrowCornerSquare.png",
+      rotationClassName: "rotate-90",
+    });
+
+    expect(
+      pathTileAssetFor({
+        north: false,
+        east: false,
+        south: true,
+        west: true,
+      }),
+    ).toMatchObject({
+      src: "/assets/arrowCornerSquare.png",
+      rotationClassName: "rotate-180",
+    });
+
+    expect(
+      pathTileAssetFor({
+        north: true,
+        east: false,
+        south: false,
+        west: true,
+      }),
+    ).toMatchObject({
+      src: "/assets/arrowCornerSquare.png",
+      rotationClassName: "-rotate-90",
+    });
   });
 
   it("returns distinct path assets for ends, splits, crossings, and isolated paths", () => {
