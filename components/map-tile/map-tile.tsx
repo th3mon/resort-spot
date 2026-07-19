@@ -22,24 +22,65 @@ export function MapTile({
   const asset = pathAsset ?? TILE_ASSETS[tile.type];
   const label = tileLabel(tile);
 
-  if (tile.type === "cabana") {
-    const isAvailable = tile.availability === "available";
+  return tile.type === "cabana" ? (
+    <CabanaTile
+      tile={tile}
+      assetSrc={asset.src}
+      isSelected={isSelected}
+      label={label}
+      onSelectCabana={onSelectCabana}
+    />
+  ) : (
+    <StaticMapTile
+      tile={tile}
+      assetSrc={asset.src}
+      label={label}
+      rotationClassName={pathAsset?.rotationClassName}
+    />
+  );
+}
 
-    return (
-      <button
-        type="button"
-        className={tileClassName(tile, isSelected)}
-        disabled={!isAvailable}
-        onClick={() => onSelectCabana(tile.id)}
-        aria-pressed={isSelected}
-        aria-label={label}
-        title={label}
-      >
-        <TileImage src={asset.src} tile={tile} />
-      </button>
-    );
-  }
+function CabanaTile({
+  tile,
+  assetSrc,
+  isSelected,
+  label,
+  onSelectCabana,
+}: {
+  tile: PublicResortMapTile;
+  assetSrc: string;
+  isSelected: boolean;
+  label: string;
+  onSelectCabana: (cabanaId: string) => void;
+}) {
+  const isAvailable = tile.availability === "available";
 
+  return (
+    <button
+      type="button"
+      className={tileClassName(tile, isSelected)}
+      disabled={!isAvailable}
+      onClick={() => onSelectCabana(tile.id)}
+      aria-pressed={isSelected}
+      aria-label={label}
+      title={label}
+    >
+      <TileImage src={assetSrc} tile={tile} />
+    </button>
+  );
+}
+
+function StaticMapTile({
+  tile,
+  assetSrc,
+  label,
+  rotationClassName,
+}: {
+  tile: PublicResortMapTile;
+  assetSrc: string;
+  label: string;
+  rotationClassName?: string;
+}) {
   return (
     <div
       className={tileClassName(tile, false)}
@@ -47,9 +88,9 @@ export function MapTile({
       title={label}
     >
       <TileImage
-        src={asset.src}
+        src={assetSrc}
         tile={tile}
-        rotationClassName={pathAsset?.rotationClassName}
+        rotationClassName={rotationClassName}
       />
     </div>
   );
