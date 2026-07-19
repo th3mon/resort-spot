@@ -15,7 +15,7 @@ export function MapTile({
   onSelectCabana,
 }: {
   tile: PublicResortMapTile;
-  pathAsset?: PathTileAsset;
+  pathAsset: PathTileAsset | null;
   isSelected: boolean;
   onSelectCabana: (cabanaId: string) => void;
 }) {

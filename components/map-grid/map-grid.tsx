@@ -34,7 +34,7 @@ export function MapGrid({
             pathAsset={
               tile.type === "path"
                 ? pathTileAssetFor(pathConnectionsFor(tile, tilesByCoordinate))
-                : undefined
+                : null
             }
             isSelected={selectedCabanaId === tile.id}
             onSelectCabana={onSelectCabana}
