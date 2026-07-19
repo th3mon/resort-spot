@@ -8,17 +8,19 @@ import {
 } from "@/components/map-tile";
 import type { PublicResortMapTile } from "@/domain/reservations";
 
+type MapTileProps = {
+  tile: PublicResortMapTile;
+  pathAsset: PathTileAsset | null;
+  isSelected: boolean;
+  onSelectCabana: (cabanaId: string) => void;
+};
+
 export function MapTile({
   tile,
   pathAsset,
   isSelected,
   onSelectCabana,
-}: {
-  tile: PublicResortMapTile;
-  pathAsset: PathTileAsset | null;
-  isSelected: boolean;
-  onSelectCabana: (cabanaId: string) => void;
-}) {
+}: MapTileProps) {
   const asset = pathAsset ?? TILE_ASSETS[tile.type];
   const label = tileLabel(tile);
 
@@ -40,19 +42,21 @@ export function MapTile({
   );
 }
 
+type CabanaTileProps = {
+  tile: PublicResortMapTile;
+  assetSrc: string;
+  isSelected: boolean;
+  label: string;
+  onSelectCabana: (cabanaId: string) => void;
+};
+
 function CabanaTile({
   tile,
   assetSrc,
   isSelected,
   label,
   onSelectCabana,
-}: {
-  tile: PublicResortMapTile;
-  assetSrc: string;
-  isSelected: boolean;
-  label: string;
-  onSelectCabana: (cabanaId: string) => void;
-}) {
+}: CabanaTileProps) {
   const isAvailable = tile.availability === "available";
 
   return (
@@ -70,17 +74,19 @@ function CabanaTile({
   );
 }
 
+type StaticMapTileProps = {
+  tile: PublicResortMapTile;
+  assetSrc: string;
+  label: string;
+  rotationClassName?: string;
+};
+
 function StaticMapTile({
   tile,
   assetSrc,
   label,
   rotationClassName,
-}: {
-  tile: PublicResortMapTile;
-  assetSrc: string;
-  label: string;
-  rotationClassName?: string;
-}) {
+}: StaticMapTileProps) {
   return (
     <div
       className={tileClassName(tile, false)}
@@ -96,15 +102,13 @@ function StaticMapTile({
   );
 }
 
-function TileImage({
-  src,
-  tile,
-  rotationClassName = "",
-}: {
+type TileImageProps = {
   src: string;
   tile: PublicResortMapTile;
   rotationClassName?: string;
-}) {
+};
+
+function TileImage({ src, tile, rotationClassName = "" }: TileImageProps) {
   return (
     <Image
       src={src}

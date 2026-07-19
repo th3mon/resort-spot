@@ -1,4 +1,8 @@
-export function MapErrorState({ message }: { message: string }) {
+type MapErrorStateProps = {
+  message: string;
+};
+
+export function MapErrorState({ message }: MapErrorStateProps) {
   return (
     <div className="rounded border border-[#d7aaa1] bg-[#fff7f4] p-5 text-[#6d2c21]">
       <h2 className="text-base font-semibold">Map unavailable</h2>

@@ -7,15 +7,17 @@ import {
   pathConnectionsFor,
 } from "@/components/map-grid";
 
+type MapGridProps = {
+  map: PublicResortMap;
+  selectedCabanaId: string | null;
+  onSelectCabana: (cabanaId: string) => void;
+};
+
 export function MapGrid({
   map,
   selectedCabanaId,
   onSelectCabana,
-}: {
-  map: PublicResortMap;
-  selectedCabanaId: string | null;
-  onSelectCabana: (cabanaId: string) => void;
-}) {
+}: MapGridProps) {
   const tilesByCoordinate = tilesByCoordinateFor(map.tiles);
 
   return (
