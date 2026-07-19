@@ -4,7 +4,7 @@ import {
   pathTileAssetFor,
   tileClassName,
   TILE_ASSETS,
-} from "@/components/map-tile-style";
+} from "@/components/map-tile";
 import type {
   CabanaAvailability,
   PublicResortMapTile,

@@ -5,7 +5,7 @@ import {
   tileClassName,
   tileImageClassName,
   TILE_ASSETS,
-} from "@/components/map-tile-style";
+} from "@/components/map-tile";
 import type { PublicResortMapTile } from "@/domain/reservations";
 
 export function MapTile({

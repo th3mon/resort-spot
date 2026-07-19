@@ -1,5 +1,5 @@
 import { MapTile } from "@/components/map-tile";
-import { pathTileAssetFor } from "@/components/map-tile-style";
+import { pathTileAssetFor } from "@/components/map-tile/map-tile-style";
 import type { PublicResortMap } from "@/domain/reservations";
 
 import {
