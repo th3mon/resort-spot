@@ -78,20 +78,28 @@ export function tileClassName(
   tile: PublicResortMapTile,
   isSelected: boolean,
 ): string {
-  const base =
+  const baseTileClassName =
     "grid aspect-square h-10 w-10 place-items-center rounded border transition";
 
   if (tile.type !== "cabana") {
-    return `${base} ${tileSurfaceClassName(tile.type)}`;
+    const nonCabanaTileClassName = `${baseTileClassName} ${tileSurfaceClassName(
+      tile.type,
+    )}`;
+
+    return nonCabanaTileClassName;
   }
 
   if (tile.availability === "reserved") {
-    return `${base} cursor-not-allowed border-[#9c8075] bg-[#d7c5bc] opacity-75 grayscale`;
+    const reservedCabanaTileClassName = `${baseTileClassName} cursor-not-allowed border-[#9c8075] bg-[#d7c5bc] opacity-75 grayscale`;
+
+    return reservedCabanaTileClassName;
   }
 
-  return `${base} border-[#4d8d63] bg-[#edf8ee] hover:border-[#235c37] hover:bg-[#dff2e3] focus:outline-none focus:ring-2 focus:ring-[#235c37] ${
+  const availableCabanaTileClassName = `${baseTileClassName} border-[#4d8d63] bg-[#edf8ee] hover:border-[#235c37] hover:bg-[#dff2e3] focus:outline-none focus:ring-2 focus:ring-[#235c37] ${
     isSelected ? "ring-2 ring-[#235c37]" : ""
   }`;
+
+  return availableCabanaTileClassName;
 }
 
 export function tileImageClassName(tile: PublicResortMapTile): string {
