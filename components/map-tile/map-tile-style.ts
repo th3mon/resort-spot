@@ -106,11 +106,10 @@ export function tileImageClassName(tile: PublicResortMapTile): string {
   return "h-7 w-7 object-contain sm:h-8 sm:w-8";
 }
 
-function connectedDirectionsFor(connections: PathConnections): Direction[] {
-  return (["north", "east", "south", "west"] as const).filter(
+const connectedDirectionsFor = (connections: PathConnections): Direction[] =>
+  (["north", "east", "south", "west"] as const).filter(
     direction => connections[direction],
   );
-}
 
 function pathAssetForTwoConnections(
   connections: PathConnections,
