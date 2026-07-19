@@ -36,6 +36,39 @@ export const TILE_ASSETS: Record<ResortMapTileType, TileAsset> = {
   },
 };
 
+const TILE_COLOR_CLASS_NAMES = {
+  availableCabana: {
+    border: "border-[#4d8d63]",
+    background: "bg-[#edf8ee]",
+    hoverBorder: "hover:border-[#235c37]",
+    hoverBackground: "hover:bg-[#dff2e3]",
+    focusRing: "focus:ring-[#235c37]",
+    selectedRing: "ring-[#235c37]",
+  },
+  reservedCabana: {
+    border: "border-[#9c8075]",
+    background: "bg-[#d7c5bc]",
+  },
+  surfaces: {
+    pool: {
+      border: "border-[#6fa8bd]",
+      background: "bg-[#cfeaf1]",
+    },
+    path: {
+      border: "border-[#d5c28a]",
+      background: "bg-[#f4e8bb]",
+    },
+    chalet: {
+      border: "border-[#b58d6c]",
+      background: "bg-[#f1dfcd]",
+    },
+    empty: {
+      border: "border-[#d8dfd3]",
+      background: "bg-[#f7f4df]",
+    },
+  },
+} as const;
+
 export function pathTileAssetFor(connections: PathConnections): PathTileAsset {
   const connectedDirections = connectedDirectionsFor(connections);
 
@@ -90,13 +123,15 @@ export function tileClassName(
   }
 
   if (tile.availability === "reserved") {
-    const reservedCabanaTileClassName = `${baseTileClassName} cursor-not-allowed border-[#9c8075] bg-[#d7c5bc] opacity-75 grayscale`;
+    const reservedCabanaTileClassName = `${baseTileClassName} cursor-not-allowed ${TILE_COLOR_CLASS_NAMES.reservedCabana.border} ${TILE_COLOR_CLASS_NAMES.reservedCabana.background} opacity-75 grayscale`;
 
     return reservedCabanaTileClassName;
   }
 
-  const availableCabanaTileClassName = `${baseTileClassName} border-[#4d8d63] bg-[#edf8ee] hover:border-[#235c37] hover:bg-[#dff2e3] focus:outline-none focus:ring-2 focus:ring-[#235c37] ${
-    isSelected ? "ring-2 ring-[#235c37]" : ""
+  const availableCabanaTileClassName = `${baseTileClassName} ${TILE_COLOR_CLASS_NAMES.availableCabana.border} ${TILE_COLOR_CLASS_NAMES.availableCabana.background} ${TILE_COLOR_CLASS_NAMES.availableCabana.hoverBorder} ${TILE_COLOR_CLASS_NAMES.availableCabana.hoverBackground} focus:outline-none focus:ring-2 ${TILE_COLOR_CLASS_NAMES.availableCabana.focusRing} ${
+    isSelected
+      ? `ring-2 ${TILE_COLOR_CLASS_NAMES.availableCabana.selectedRing}`
+      : ""
   }`;
 
   return availableCabanaTileClassName;
@@ -197,16 +232,16 @@ function pathSplitRotationClassName(connections: PathConnections): string {
 
 function tileSurfaceClassName(type: ResortMapTileType): string {
   if (type === "pool") {
-    return "border-[#6fa8bd] bg-[#cfeaf1]";
+    return `${TILE_COLOR_CLASS_NAMES.surfaces.pool.border} ${TILE_COLOR_CLASS_NAMES.surfaces.pool.background}`;
   }
 
   if (type === "path") {
-    return "border-[#d5c28a] bg-[#f4e8bb]";
+    return `${TILE_COLOR_CLASS_NAMES.surfaces.path.border} ${TILE_COLOR_CLASS_NAMES.surfaces.path.background}`;
   }
 
   if (type === "chalet") {
-    return "border-[#b58d6c] bg-[#f1dfcd]";
+    return `${TILE_COLOR_CLASS_NAMES.surfaces.chalet.border} ${TILE_COLOR_CLASS_NAMES.surfaces.chalet.background}`;
   }
 
-  return "border-[#d8dfd3] bg-[#f7f4df]";
+  return `${TILE_COLOR_CLASS_NAMES.surfaces.empty.border} ${TILE_COLOR_CLASS_NAMES.surfaces.empty.background}`;
 }
