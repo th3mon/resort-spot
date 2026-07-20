@@ -19,16 +19,15 @@ export function MapGrid({
   onSelectCabana,
 }: MapGridProps) {
   const tilesByCoordinate = tilesByCoordinateFor(map.tiles);
+  const tileSize = "2.5rem";
+  const mapGridStyle: React.CSSProperties = {
+    gridAutoRows: tileSize,
+    gridTemplateColumns: `repeat(${map.width}, ${tileSize})`,
+  };
 
   return (
     <div className="overflow-auto rounded border border-[#c9d5ca] bg-[#e3eadf] p-3 shadow-sm justify-items-center">
-      <div
-        className="grid min-w-max gap-1"
-        style={{
-          gridAutoRows: "2.5rem",
-          gridTemplateColumns: `repeat(${map.width}, 2.5rem)`,
-        }}
-      >
+      <div className="grid min-w-max gap-1" style={mapGridStyle}>
         {map.tiles.map(tile => (
           <MapTile
             key={tile.id}
