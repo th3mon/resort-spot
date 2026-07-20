@@ -23,10 +23,28 @@ const LEGEND_ITEMS: Array<{
   { label: "Chalet", type: "chalet" },
 ];
 
+const LEGEND_COLOR_CLASS_NAMES = {
+  container: {
+    border: "border-[#d5dfd6]",
+  },
+  heading: {
+    text: "text-[#54705d]",
+  },
+  item: {
+    text: "text-[#28382d]",
+  },
+} as const;
+
 export function MapLegend() {
   return (
-    <aside className="shrink-0 border-t border-[#d5dfd6] pt-4 lg:w-64 lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0">
-      <h2 className="text-sm font-semibold uppercase text-[#54705d]">Legend</h2>
+    <aside
+      className={`shrink-0 border-t ${LEGEND_COLOR_CLASS_NAMES.container.border} pt-4 lg:w-64 lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0`}
+    >
+      <h2
+        className={`text-sm font-semibold uppercase ${LEGEND_COLOR_CLASS_NAMES.heading.text}`}
+      >
+        Legend
+      </h2>
       <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
         {LEGEND_ITEMS.map(item => {
           const asset = legendAssetFor(item.type);
@@ -34,7 +52,7 @@ export function MapLegend() {
           return (
             <li
               key={`${item.type}-${item.availability ?? "default"}`}
-              className="flex items-center gap-3 text-sm text-[#28382d]"
+              className={`flex items-center gap-3 text-sm ${LEGEND_COLOR_CLASS_NAMES.item.text}`}
             >
               <span
                 className={tileLegendClassName(item.type, item.availability)}
