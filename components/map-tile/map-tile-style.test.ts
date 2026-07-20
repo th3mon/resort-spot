@@ -134,24 +134,6 @@ describe("map tile style helpers", () => {
   });
 
   it("adds cabana state classes", () => {
-    const availableCabana: PublicResortMapTile = {
-      id: "cabana-0-0",
-      x: 0,
-      y: 0,
-      symbol: "W",
-      type: "cabana",
-      availability: "available",
-    };
-
-    const reservedCabana: PublicResortMapTile = {
-      id: "cabana-1-0",
-      x: 1,
-      y: 0,
-      symbol: "W",
-      type: "cabana",
-      availability: "reserved",
-    };
-
     expect(tileClassName(availableCabana, true)).toContain(
       "ring-2 ring-[#235c37]",
     );
@@ -161,32 +143,50 @@ describe("map tile style helpers", () => {
   });
 
   it("returns image sizing classes by tile type", () => {
-    const poolTile: PublicResortMapTile = {
-      id: "tile-0-1",
-      x: 0,
-      y: 1,
-      symbol: "p",
-      type: "pool",
-    };
-
-    const pathTile: PublicResortMapTile = {
-      id: "tile-1-1",
-      x: 1,
-      y: 1,
-      symbol: "#",
-      type: "path",
-    };
-
-    const chaletTile: PublicResortMapTile = {
-      id: "tile-2-1",
-      x: 2,
-      y: 1,
-      symbol: "c",
-      type: "chalet",
-    };
-
     expect(tileImageClassName(poolTile)).toContain("object-cover");
     expect(tileImageClassName(pathTile)).toContain("h-8 w-8");
     expect(tileImageClassName(chaletTile)).toContain("h-7 w-7");
   });
 });
+
+const availableCabana: PublicResortMapTile = Object.freeze({
+  id: "cabana-0-0",
+  x: 0,
+  y: 0,
+  symbol: "W",
+  type: "cabana",
+  availability: "available",
+} satisfies PublicResortMapTile);
+
+const reservedCabana: PublicResortMapTile = Object.freeze({
+  id: "cabana-1-0",
+  x: 1,
+  y: 0,
+  symbol: "W",
+  type: "cabana",
+  availability: "reserved",
+} satisfies PublicResortMapTile);
+
+const poolTile: PublicResortMapTile = Object.freeze({
+  id: "tile-0-1",
+  x: 0,
+  y: 1,
+  symbol: "p",
+  type: "pool",
+} satisfies PublicResortMapTile);
+
+const pathTile: PublicResortMapTile = Object.freeze({
+  id: "tile-1-1",
+  x: 1,
+  y: 1,
+  symbol: "#",
+  type: "path",
+} satisfies PublicResortMapTile);
+
+const chaletTile: PublicResortMapTile = Object.freeze({
+  id: "tile-2-1",
+  x: 2,
+  y: 1,
+  symbol: "c",
+  type: "chalet",
+} satisfies PublicResortMapTile);

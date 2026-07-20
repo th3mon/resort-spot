@@ -16,7 +16,7 @@ export const isPathAt = (
 ): boolean => tilesByCoordinate.get(coordinateKey(x, y))?.type === "path";
 
 export const tilesByCoordinateFor = (
-  tiles: PublicResortMapTile[],
+  tiles: readonly PublicResortMapTile[],
 ): Map<string, PublicResortMapTile> =>
   new Map(tiles.map(tile => [coordinateKey(tile.x, tile.y), tile]));
 

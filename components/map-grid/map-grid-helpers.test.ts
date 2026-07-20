@@ -10,14 +10,6 @@ import {
 } from "@/components/map-grid";
 
 describe("map grid helpers", () => {
-  const pathConnectionTiles: PublicResortMapTile[] = [
-    { id: "tile-1-0", x: 1, y: 0, symbol: "#", type: "path" },
-    { id: "tile-0-1", x: 0, y: 1, symbol: "#", type: "path" },
-    { id: "tile-1-1", x: 1, y: 1, symbol: "#", type: "path" },
-    { id: "tile-2-1", x: 2, y: 1, symbol: "#", type: "path" },
-    { id: "tile-1-2", x: 1, y: 2, symbol: "p", type: "pool" },
-  ];
-
   it("creates stable coordinate keys", () => {
     expect(coordinateKey(3, 7)).toBe("3:7");
   });
@@ -59,3 +51,45 @@ describe("map grid helpers", () => {
     });
   });
 });
+
+const pathConnectionTiles: readonly PublicResortMapTile[] = Object.freeze([
+  Object.freeze({
+    id: "tile-1-0",
+    x: 1,
+    y: 0,
+    symbol: "#",
+    type: "path",
+  } satisfies PublicResortMapTile),
+
+  Object.freeze({
+    id: "tile-0-1",
+    x: 0,
+    y: 1,
+    symbol: "#",
+    type: "path",
+  } satisfies PublicResortMapTile),
+
+  Object.freeze({
+    id: "tile-1-1",
+    x: 1,
+    y: 1,
+    symbol: "#",
+    type: "path",
+  } satisfies PublicResortMapTile),
+
+  Object.freeze({
+    id: "tile-2-1",
+    x: 2,
+    y: 1,
+    symbol: "#",
+    type: "path",
+  } satisfies PublicResortMapTile),
+
+  Object.freeze({
+    id: "tile-1-2",
+    x: 1,
+    y: 2,
+    symbol: "p",
+    type: "pool",
+  } satisfies PublicResortMapTile),
+] satisfies readonly PublicResortMapTile[]);

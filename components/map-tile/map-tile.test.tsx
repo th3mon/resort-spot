@@ -78,34 +78,34 @@ describe("MapTile", () => {
   });
 });
 
-const availableCabana: PublicResortMapTile = {
+const availableCabana: PublicResortMapTile = Object.freeze({
   id: "cabana-2-3",
   x: 2,
   y: 3,
   symbol: "W",
   type: "cabana",
   availability: "available",
-};
+} satisfies PublicResortMapTile);
 
-const reservedCabana: PublicResortMapTile = {
+const reservedCabana: PublicResortMapTile = Object.freeze({
   id: "cabana-4-1",
   x: 4,
   y: 1,
   symbol: "W",
   type: "cabana",
   availability: "reserved",
-};
+} satisfies PublicResortMapTile);
 
-const pathTile: PublicResortMapTile = {
+const pathTile: PublicResortMapTile = Object.freeze({
   id: "tile-2-1",
   x: 2,
   y: 1,
   symbol: "#",
   type: "path",
-};
+} satisfies PublicResortMapTile);
 
-const rotatedPathAsset: PathTileAsset = {
+const rotatedPathAsset: PathTileAsset = Object.freeze({
   src: "/assets/arrowStraight.png",
   alt: "Straight path",
   rotationClassName: "rotate-90",
-};
+} satisfies PathTileAsset);
