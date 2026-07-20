@@ -76,6 +76,21 @@ describe("MapTile", () => {
     expect(path).toHaveAttribute("title", "path at row 2, column 3");
     expect(image).toHaveClass("rotate-90");
   });
+
+  it("renders empty tile with coordinate labels", () => {
+    render(
+      <MapTile
+        tile={emptyTile}
+        pathAsset={null}
+        isSelected={false}
+        onSelectCabana={vi.fn()}
+      />,
+    );
+
+    const path = screen.getByLabelText("empty at row 8, column 10");
+
+    expect(path).toHaveAttribute("title", "empty at row 8, column 10");
+  });
 });
 
 const availableCabanaTile: PublicResortMapTile = Object.freeze({
@@ -109,3 +124,11 @@ const rotatedPathAsset: PathTileAsset = Object.freeze({
   alt: "Straight path",
   rotationClassName: "rotate-90",
 } satisfies PathTileAsset);
+
+const emptyTile: PublicResortMapTile = Object.freeze({
+  id: "tile-9-7",
+  x: 9,
+  y: 7,
+  symbol: ".",
+  type: "empty",
+} satisfies PublicResortMapTile);
