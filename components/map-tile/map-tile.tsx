@@ -125,5 +125,5 @@ function tileLabel(tile: PublicResortMapTile): string {
     return `${tile.id}, ${tile.availability ?? "unknown"}`;
   }
 
-  return `${tile.type} at row ${tile.y + 1}, column ${tile.x + 1}`;
+  return `${tile.type} at row ${tile.y}, column ${tile.x}`;
 }

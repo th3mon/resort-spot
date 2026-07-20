@@ -70,10 +70,10 @@ describe("MapTile", () => {
       />,
     );
 
-    const path = screen.getByLabelText("path at row 2, column 3");
+    const path = screen.getByLabelText("path at row 1, column 2");
     const image = path.querySelector("img");
 
-    expect(path).toHaveAttribute("title", "path at row 2, column 3");
+    expect(path).toHaveAttribute("title", "path at row 1, column 2");
     expect(image).toHaveClass("rotate-90");
   });
 
@@ -87,9 +87,9 @@ describe("MapTile", () => {
       />,
     );
 
-    const path = screen.getByLabelText("empty at row 8, column 10");
+    const path = screen.getByLabelText("empty at row 7, column 9");
 
-    expect(path).toHaveAttribute("title", "empty at row 8, column 10");
+    expect(path).toHaveAttribute("title", "empty at row 7, column 9");
   });
 });
 
