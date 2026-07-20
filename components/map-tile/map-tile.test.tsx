@@ -14,7 +14,7 @@ describe("MapTile", () => {
 
     render(
       <MapTile
-        tile={availableCabana}
+        tile={availableCabanaTile}
         pathAsset={null}
         isSelected={true}
         onSelectCabana={onSelectCabana}
@@ -41,7 +41,7 @@ describe("MapTile", () => {
 
     render(
       <MapTile
-        tile={reservedCabana}
+        tile={reservedCabanaTile}
         pathAsset={null}
         isSelected={false}
         onSelectCabana={onSelectCabana}
@@ -78,7 +78,7 @@ describe("MapTile", () => {
   });
 });
 
-const availableCabana: PublicResortMapTile = Object.freeze({
+const availableCabanaTile: PublicResortMapTile = Object.freeze({
   id: "cabana-2-3",
   x: 2,
   y: 3,
@@ -87,7 +87,7 @@ const availableCabana: PublicResortMapTile = Object.freeze({
   availability: "available",
 } satisfies PublicResortMapTile);
 
-const reservedCabana: PublicResortMapTile = Object.freeze({
+const reservedCabanaTile: PublicResortMapTile = Object.freeze({
   id: "cabana-4-1",
   x: 4,
   y: 1,
