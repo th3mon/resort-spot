@@ -1,6 +1,7 @@
 import type { PublicResortMapTile } from "@/domain/reservations";
 import type { ResortMapTileType } from "@/domain/resort-map";
 import type { PathConnections } from "../map-grid";
+import { LegendItem } from "../map-legend";
 
 type TileAsset = {
   src: string;
@@ -137,7 +138,9 @@ export function tileClassName(
   return availableCabanaTileClassName;
 }
 
-export function tileImageClassName(tile: PublicResortMapTile): string {
+export function tileImageClassName(
+  tile: PublicResortMapTile | LegendItem,
+): string {
   const baseImageClassName = "object-cover";
 
   if (tile.type === "pool") {

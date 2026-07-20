@@ -5,6 +5,7 @@ import {
   tileClassName,
   TILE_ASSETS,
   PathTileAsset,
+  tileImageClassName,
 } from "@/components/map-tile";
 import type {
   CabanaAvailability,
@@ -12,16 +13,17 @@ import type {
 } from "@/domain/reservations";
 import type { ResortMapTileType } from "@/domain/resort-map";
 
-const LEGEND_ITEMS: Array<{
+export type LegendItem = Pick<PublicResortMapTile, "availability" | "type"> & {
   label: string;
-  type: ResortMapTileType;
-  availability?: CabanaAvailability;
-}> = [
+};
+
+const LEGEND_ITEMS: LegendItem[] = [
   { label: "Available cabana", type: "cabana", availability: "available" },
   { label: "Booked cabana", type: "cabana", availability: "reserved" },
   { label: "Pool", type: "pool" },
   { label: "Path", type: "path" },
   { label: "Chalet", type: "chalet" },
+  { label: "Empty", type: "empty" },
 ];
 
 const LEGEND_COLOR_CLASS_NAMES = {
@@ -63,7 +65,7 @@ export function MapLegend() {
                   alt=""
                   width={32}
                   height={32}
-                  className={`h-6 w-6 object-contain ${asset.rotationClassName}`}
+                  className={`${tileImageClassName(item)} ${asset.rotationClassName}`}
                 />
               </span>
               <span>{item.label}</span>
