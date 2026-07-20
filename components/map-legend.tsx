@@ -4,6 +4,7 @@ import {
   pathTileAssetFor,
   tileClassName,
   TILE_ASSETS,
+  PathTileAsset,
 } from "@/components/map-tile";
 import type {
   CabanaAvailability,
@@ -74,7 +75,7 @@ export function MapLegend() {
   );
 }
 
-function legendAssetFor(type: ResortMapTileType) {
+function legendAssetFor(type: ResortMapTileType): PathTileAsset {
   if (type === "path") {
     return pathTileAssetFor({
       north: true,
