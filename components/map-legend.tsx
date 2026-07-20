@@ -13,11 +13,11 @@ import type {
 } from "@/domain/reservations";
 import type { ResortMapTileType } from "@/domain/resort-map";
 
-export type LegendItem = Pick<PublicResortMapTile, "availability" | "type"> & {
+export type LegendTile = Pick<PublicResortMapTile, "availability" | "type"> & {
   label: string;
 };
 
-const LEGEND_ITEMS: LegendItem[] = [
+const LEGEND_TILES: LegendTile[] = [
   { label: "Available cabana", type: "cabana", availability: "available" },
   { label: "Booked cabana", type: "cabana", availability: "reserved" },
   { label: "Pool", type: "pool" },
@@ -49,26 +49,26 @@ export function MapLegend() {
         Legend
       </h2>
       <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
-        {LEGEND_ITEMS.map(item => {
-          const asset = legendAssetFor(item.type);
+        {LEGEND_TILES.map(tile => {
+          const asset = legendAssetFor(tile.type);
 
           return (
             <li
-              key={`${item.type}-${item.availability ?? "default"}`}
+              key={`${tile.type}-${tile.availability ?? "default"}`}
               className={`flex items-center gap-3 text-sm ${LEGEND_COLOR_CLASS_NAMES.item.text}`}
             >
               <span
-                className={tileLegendClassName(item.type, item.availability)}
+                className={tileLegendClassName(tile.type, tile.availability)}
               >
                 <Image
                   src={asset.src}
                   alt=""
                   width={32}
                   height={32}
-                  className={`${tileImageClassName(item)} ${asset.rotationClassName}`}
+                  className={`${tileImageClassName(tile)} ${asset.rotationClassName}`}
                 />
               </span>
-              <span>{item.label}</span>
+              <span>{tile.label}</span>
             </li>
           );
         })}

@@ -1,7 +1,7 @@
 import type { PublicResortMapTile } from "@/domain/reservations";
 import type { ResortMapTileType } from "@/domain/resort-map";
 import type { PathConnections } from "../map-grid";
-import { LegendItem } from "../map-legend";
+import { LegendTile } from "../map-legend";
 
 type TileAsset = {
   src: string;
@@ -139,7 +139,7 @@ export function tileClassName(
 }
 
 export function tileImageClassName(
-  tile: PublicResortMapTile | LegendItem,
+  tile: PublicResortMapTile | LegendTile,
 ): string {
   const baseImageClassName = "object-cover";
 
