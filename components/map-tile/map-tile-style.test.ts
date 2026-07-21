@@ -86,18 +86,6 @@ describe("map tile style helpers", () => {
   it("returns distinct path assets for ends, splits, crossings, and isolated paths", () => {
     expect(
       pathTileAssetFor({
-        north: false,
-        east: false,
-        south: true,
-        west: false,
-      }),
-    ).toMatchObject({
-      src: "/assets/arrowEnd.png",
-      rotationClassName: "",
-    });
-
-    expect(
-      pathTileAssetFor({
         north: true,
         east: true,
         south: true,
@@ -130,6 +118,56 @@ describe("map tile style helpers", () => {
     ).toMatchObject({
       src: "/assets/arrowStraight.png",
       rotationClassName: "",
+    });
+  });
+
+  it("returns distinct path assets for ends paths", () => {
+    expect(
+      pathTileAssetFor({
+        north: true,
+        east: false,
+        south: false,
+        west: false,
+      }),
+    ).toMatchObject({
+      src: "/assets/arrowEnd.png",
+      rotationClassName: "rotate-180",
+    });
+
+    expect(
+      pathTileAssetFor({
+        north: false,
+        east: true,
+        south: false,
+        west: false,
+      }),
+    ).toMatchObject({
+      src: "/assets/arrowEnd.png",
+      rotationClassName: "-rotate-90",
+    });
+
+    expect(
+      pathTileAssetFor({
+        north: false,
+        east: false,
+        south: true,
+        west: false,
+      }),
+    ).toMatchObject({
+      src: "/assets/arrowEnd.png",
+      rotationClassName: "",
+    });
+
+    expect(
+      pathTileAssetFor({
+        north: false,
+        east: false,
+        south: false,
+        west: true,
+      }),
+    ).toMatchObject({
+      src: "/assets/arrowEnd.png",
+      rotationClassName: "rotate-90",
     });
   });
 
