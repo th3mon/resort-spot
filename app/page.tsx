@@ -1,4 +1,4 @@
-import { ResortMapView } from "@/components/map/resort-map-view";
+import { ResortMapView } from "@/components/map";
 
 export default function Home() {
   return <ResortMapView />;
