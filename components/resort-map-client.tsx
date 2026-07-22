@@ -77,19 +77,11 @@ async function loadMap(signal: AbortSignal): Promise<PublicResortMap> {
   return body;
 }
 
-function errorMessageFrom(body: unknown): string {
-  if (hasErrorMessage(body)) {
-    return body.error;
-  }
+const errorMessageFrom = (body: unknown): string =>
+  hasErrorMessage(body) ? body.error : "Unable to load the resort map.";
 
-  return "Unable to load the resort map.";
-}
-
-function hasErrorMessage(value: unknown): value is { error: string } {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "error" in value &&
-    typeof value.error === "string"
-  );
-}
+const hasErrorMessage = (value: unknown): value is { error: string } =>
+  typeof value === "object" &&
+  value !== null &&
+  "error" in value &&
+  typeof value.error === "string";
