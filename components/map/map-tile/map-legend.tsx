@@ -1,17 +1,17 @@
 import Image from "next/image";
 
-import {
-  PathTileAsset,
-  pathTileAssetFor,
-  TILE_ASSETS,
-  tileClassName,
-  tileImageClassName,
-} from "@/components/map";
 import type {
   CabanaAvailability,
   PublicResortMapTile,
 } from "@/domain/reservations";
 import type { ResortMapTileType } from "@/domain/resort-map";
+import type { PathTileAsset } from "./map-tile-style";
+import {
+  pathTileAssetFor,
+  TILE_ASSETS,
+  tileClassName,
+  tileImageClassName,
+} from "./map-tile-style";
 
 export type LegendTile = Pick<PublicResortMapTile, "availability" | "type"> & {
   label: string;

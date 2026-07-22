@@ -1,12 +1,12 @@
 import Image from "next/image";
 
+import type { PublicResortMapTile } from "@/domain/reservations";
+import type { PathTileAsset } from "./map-tile-style";
 import {
-  type PathTileAsset,
   TILE_ASSETS,
   tileClassName,
   tileImageClassName,
-} from "@/components/map";
-import type { PublicResortMapTile } from "@/domain/reservations";
+} from "./map-tile-style";
 
 type MapTileProps = {
   tile: PublicResortMapTile;

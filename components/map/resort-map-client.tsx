@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-import { MapErrorState, MapGrid, MapLoadingState } from "@/components/map";
+import { MapErrorState } from "@/components/map/map-error-state";
+import { MapGrid } from "@/components/map/map-grid";
+import { MapLoadingState } from "@/components/map/map-loading-state";
 import type { PublicResortMap } from "@/domain/reservations";
 
 type MapState =
