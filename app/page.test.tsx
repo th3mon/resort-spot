@@ -4,17 +4,18 @@ import { describe, expect, it } from "vitest";
 import Home from "./page";
 
 describe("Home", () => {
-  it("renders the project skeleton landing content", () => {
+  it("renders the resort map shell", () => {
     render(<Home />);
 
     expect(
       screen.getByRole("heading", {
-        name: /interactive resort map and cabana booking app/i,
+        name: /cabana map/i,
       }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByText(/accepted through --map and --bookings/i),
+      screen.getByRole("heading", { name: /legend/i }),
     ).toBeInTheDocument();
+    expect(screen.getByText(/loading map/i)).toBeInTheDocument();
   });
 });
