@@ -4,8 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import type { PublicResortMapTile } from "@/domain/reservations";
 
-import { MapTile } from "./map-tile";
-import type { PathTileAsset } from "./map-tile-style";
+import { MapTile, type PathTileAsset } from "@/components/map";
 
 describe("MapTile", () => {
   it("renders an available cabana as a selectable button", async () => {

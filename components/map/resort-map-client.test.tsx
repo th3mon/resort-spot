@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { PublicResortMap } from "@/domain/reservations";
 
-import { ResortMapClient } from "./resort-map-client";
+import { ResortMapClient } from "@/components/map";
 
 describe("ResortMapClient", () => {
   afterEach(() => {

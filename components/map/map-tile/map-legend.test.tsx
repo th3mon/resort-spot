@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { MapLegend } from "./map-legend";
+import { MapLegend } from "@/components/map";
 
 describe("MapLegend", () => {
   it("renders every legend item including empty tiles", () => {

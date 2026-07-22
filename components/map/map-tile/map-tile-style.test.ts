@@ -6,7 +6,7 @@ import {
   pathTileAssetFor,
   tileClassName,
   tileImageClassName,
-} from "./map-tile-style";
+} from "@/components/map";
 
 describe("map tile style helpers", () => {
   it("selects path assets from connection shape", () => {
