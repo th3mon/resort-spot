@@ -37,6 +37,10 @@ Additional planning notes live in:
 ## Implementation Guidelines
 
 - Prefer simple, readable code over clever abstractions.
+- Prefer arrow functions for small one-line helpers and callbacks when they stay
+  readable. Use `function` declarations for React components, exported route
+  handlers, or functions that benefit from hoisting or a clearer named
+  declaration.
 - Use Next.js Route Handlers for REST API endpoints.
 - Keep route handlers thin; put domain behavior in `domain/`.
 - Use `domain/resort-map.ts` for parsing and representing the ASCII map.
