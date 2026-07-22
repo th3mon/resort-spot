@@ -4,13 +4,13 @@ import {
   pathTileAssetFor,
   tileClassName,
   TILE_ASSETS,
-  PathTileAsset,
   tileImageClassName,
-} from "@/components/map-tile";
+} from "@/components/map/map-tile";
 import type {
   CabanaAvailability,
   PublicResortMapTile,
 } from "@/domain/reservations";
+import type { PathTileAsset } from "@/components/map/map-tile";
 import type { ResortMapTileType } from "@/domain/resort-map";
 
 export type LegendTile = Pick<PublicResortMapTile, "availability" | "type"> & {

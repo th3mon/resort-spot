@@ -1,11 +1,8 @@
-import { MapTile } from "@/components/map-tile";
-import { pathTileAssetFor } from "@/components/map-tile/map-tile-style";
+import { MapTile } from "@/components/map/map-tile";
+import { pathTileAssetFor } from "@/components/map/map-tile/map-tile-style";
 import type { PublicResortMap } from "@/domain/reservations";
 
-import {
-  tilesByCoordinateFor,
-  pathConnectionsFor,
-} from "@/components/map-grid";
+import { pathConnectionsFor, tilesByCoordinateFor } from "./map-grid-helpers";
 
 type MapGridProps = {
   map: PublicResortMap;

@@ -1,5 +1,5 @@
-import { MapLegend } from "@/components/map-legend";
-import { ResortMapClient } from "@/components/resort-map-client";
+import { MapLegend } from "@/components/map/map-legend";
+import { ResortMapClient } from "@/components/map/resort-map-client";
 
 export function ResortMapView() {
   return (

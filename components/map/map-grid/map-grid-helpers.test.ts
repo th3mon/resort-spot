@@ -7,7 +7,7 @@ import {
   isPathAt,
   pathConnectionsFor,
   tilesByCoordinateFor,
-} from "@/components/map-grid";
+} from "@/components/map/map-grid";
 
 describe("map grid helpers", () => {
   it("creates stable coordinate keys", () => {
