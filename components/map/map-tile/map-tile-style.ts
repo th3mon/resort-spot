@@ -1,7 +1,7 @@
 import type { PublicResortMapTile } from "@/domain/reservations";
 import type { ResortMapTileType } from "@/domain/resort-map";
 import type { PathConnections } from "../map-grid";
-import { LegendTile } from "../map-legend";
+import type { LegendTile } from "../map-legend";
 
 type TileAsset = {
   src: string;
