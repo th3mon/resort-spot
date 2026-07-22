@@ -18,6 +18,7 @@ describe("MapTile", () => {
         pathAsset={null}
         isSelected={true}
         onSelectCabana={onSelectCabana}
+        onUnavailableCabana={vi.fn()}
       />,
     );
 
@@ -35,9 +36,10 @@ describe("MapTile", () => {
     expect(onSelectCabana).toHaveBeenCalledWith("cabana-2-3");
   });
 
-  it("renders a reserved cabana as disabled and does not select it", async () => {
+  it("reports a reserved cabana without selecting it", async () => {
     const user = userEvent.setup();
     const onSelectCabana = vi.fn();
+    const onUnavailableCabana = vi.fn();
 
     render(
       <MapTile
@@ -45,6 +47,7 @@ describe("MapTile", () => {
         pathAsset={null}
         isSelected={false}
         onSelectCabana={onSelectCabana}
+        onUnavailableCabana={onUnavailableCabana}
       />,
     );
 
@@ -52,12 +55,14 @@ describe("MapTile", () => {
       name: "cabana-4-1, reserved",
     });
 
-    expect(cabana).toBeDisabled();
+    expect(cabana).toBeEnabled();
+    expect(cabana).toHaveAttribute("aria-disabled", "true");
     expect(cabana).toHaveAttribute("aria-pressed", "false");
 
     await user.click(cabana);
 
     expect(onSelectCabana).not.toHaveBeenCalled();
+    expect(onUnavailableCabana).toHaveBeenCalledWith("cabana-4-1");
   });
 
   it("renders non-cabana tiles with coordinate labels and path asset rotation", () => {
@@ -67,6 +72,7 @@ describe("MapTile", () => {
         pathAsset={rotatedPathAsset}
         isSelected={false}
         onSelectCabana={vi.fn()}
+        onUnavailableCabana={vi.fn()}
       />,
     );
 
@@ -84,6 +90,7 @@ describe("MapTile", () => {
         pathAsset={null}
         isSelected={false}
         onSelectCabana={vi.fn()}
+        onUnavailableCabana={vi.fn()}
       />,
     );
 

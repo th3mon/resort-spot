@@ -23,9 +23,20 @@ describe("ResortMapClient", () => {
     expect(screen.getByText("Loading map")).toBeInTheDocument();
   });
 
-  it("loads the map and lets the user select an available cabana", async () => {
+  it("completes a successful booking and refreshes map availability", async () => {
     const user = userEvent.setup();
-    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(mapFixture));
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse(mapFixture))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          reservation: {
+            cabanaId: "cabana-0-0",
+            availability: "reserved",
+          },
+        }),
+      )
+      .mockResolvedValueOnce(jsonResponse(bookedMapFixture));
     vi.stubGlobal("fetch", fetchMock);
 
     render(<ResortMapClient />);
@@ -44,8 +55,80 @@ describe("ResortMapClient", () => {
     expect(screen.queryByText("Loading map")).not.toBeInTheDocument();
 
     await user.click(cabana);
+    await user.type(screen.getByLabelText("Room number"), "101");
+    await user.type(screen.getByLabelText("Guest name"), "Alice Smith");
+    await user.click(screen.getByRole("button", { name: "Book cabana" }));
 
-    expect(screen.getByText("Selected: cabana-0-0")).toBeInTheDocument();
+    expect(
+      await screen.findByText("cabana-0-0 is booked."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: "cabana-0-0, reserved",
+      }),
+    ).toHaveAttribute("aria-disabled", "true");
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/cabanas/cabana-0-0/book",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({
+          room: "101",
+          guestName: "Alice Smith",
+        }),
+      }),
+    );
+  });
+
+  it("shows a readable validation message for an invalid guest", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse(mapFixture))
+      .mockResolvedValueOnce(
+        jsonResponse(
+          {
+            error: "Room number and guest name do not match an active booking.",
+          },
+          false,
+          403,
+        ),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<ResortMapClient />);
+
+    await user.click(
+      await screen.findByRole("button", {
+        name: "cabana-0-0, available",
+      }),
+    );
+    await user.type(screen.getByLabelText("Room number"), "999");
+    await user.type(screen.getByLabelText("Guest name"), "Unknown Guest");
+    await user.click(screen.getByRole("button", { name: "Book cabana" }));
+
+    expect(
+      await screen.findByText(
+        "Room number and guest name do not match an active booking.",
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("shows an availability message when the user clicks an unavailable cabana", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(mapFixture));
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<ResortMapClient />);
+
+    await user.click(
+      await screen.findByRole("button", {
+        name: "cabana-1-1, reserved",
+      }),
+    );
+
+    expect(
+      screen.getByText("cabana-1-1 is already booked. Choose another cabana."),
+    ).toBeInTheDocument();
   });
 
   it("shows a readable API error message", async () => {
@@ -68,8 +151,10 @@ describe("ResortMapClient", () => {
 const jsonResponse = <ResponseBody,>(
   body: ResponseBody,
   ok = true,
-): Pick<Response, "json" | "ok"> => ({
+  status = ok ? 200 : 500,
+): Pick<Response, "json" | "ok" | "status"> => ({
   ok,
+  status,
   json: () => Promise.resolve(body),
 });
 
@@ -108,4 +193,16 @@ const mapFixture: PublicResortMap = {
       availability: "reserved",
     },
   ],
+};
+
+const bookedMapFixture: PublicResortMap = {
+  ...mapFixture,
+  tiles: mapFixture.tiles.map(tile =>
+    tile.id === "cabana-0-0"
+      ? {
+          ...tile,
+          availability: "reserved",
+        }
+      : tile,
+  ),
 };

@@ -1,4 +1,8 @@
-type TypedHeaders = RequestInit["headers"] & PreparedHeaders;
+type TypedHeaders =
+  | Headers
+  | [string, string][]
+  | PreparedHeaders
+  | Record<string, string>;
 
 type PreparedHeaders = Partial<{
   "Content-Type": MimeType;
@@ -26,7 +30,7 @@ type MethodBodyCombination =
   | { method?: WithBody; body?: RequestInit["body"] }
   | { method?: NonBody; body?: never };
 
-type TypedRequestInit = RequestInit &
+type TypedRequestInit = Omit<RequestInit, "body" | "headers" | "method"> &
   MethodBodyCombination & { headers?: TypedHeaders };
 
 interface TypedResponse<ResponseType> extends Response {

@@ -8,12 +8,14 @@ type MapGridProps = {
   map: PublicResortMap;
   selectedCabanaId: string | null;
   onSelectCabana: (cabanaId: string) => void;
+  onUnavailableCabana: (cabanaId: string) => void;
 };
 
 export function MapGrid({
   map,
   selectedCabanaId,
   onSelectCabana,
+  onUnavailableCabana,
 }: MapGridProps) {
   const tilesByCoordinate = tilesByCoordinateFor(map.tiles);
   const tileSize = "2.5rem";
@@ -36,6 +38,7 @@ export function MapGrid({
             }
             isSelected={selectedCabanaId === tile.id}
             onSelectCabana={onSelectCabana}
+            onUnavailableCabana={onUnavailableCabana}
           />
         ))}
       </div>

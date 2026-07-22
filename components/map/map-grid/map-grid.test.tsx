@@ -13,12 +13,14 @@ describe("MapGrid", () => {
   it("renders cabanas with availability and calls the selection handler for available cabanas", async () => {
     const user = userEvent.setup();
     const onSelectCabana = vi.fn();
+    const onUnavailableCabana = vi.fn();
 
     render(
       <MapGrid
         map={mapFixture}
         selectedCabanaId="cabana-0-0"
         onSelectCabana={onSelectCabana}
+        onUnavailableCabana={onUnavailableCabana}
       />,
     );
 
@@ -31,12 +33,15 @@ describe("MapGrid", () => {
 
     expect(availableCabana).toBeEnabled();
     expect(availableCabana).toHaveAttribute("aria-pressed", "true");
-    expect(reservedCabana).toBeDisabled();
+    expect(reservedCabana).toBeEnabled();
+    expect(reservedCabana).toHaveAttribute("aria-disabled", "true");
 
     await user.click(availableCabana);
+    await user.click(reservedCabana);
 
     expect(onSelectCabana).toHaveBeenCalledTimes(1);
     expect(onSelectCabana).toHaveBeenCalledWith("cabana-0-0");
+    expect(onUnavailableCabana).toHaveBeenCalledWith("cabana-2-0");
   });
 });
 
