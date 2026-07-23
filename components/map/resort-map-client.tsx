@@ -6,7 +6,7 @@ import z from "zod";
 import {
   BookingPanel,
   bookingFormSchema,
-  type BookingFormData,
+  type BookingFormErrors,
   type BookingState,
   type BookingSubmitHandler,
 } from "@/components/map/booking-panel";
@@ -91,7 +91,7 @@ export function ResortMapClient() {
         },
       } = z.flattenError(validationResult.error);
 
-      const errors: BookingFormData = {
+      const errors: BookingFormErrors = {
         room: roomErrorMessages.join(","),
         guestName: guestNameErrorMessages.join(","),
       };
