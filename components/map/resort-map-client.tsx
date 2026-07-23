@@ -69,6 +69,11 @@ export function ResortMapClient() {
     setBookingState({ status: "idle" });
   };
 
+  const handleBookingClose = (): void => {
+    setSelectedCabanaId(null);
+    setBookingState({ status: "idle" });
+  };
+
   const handleBookingSubmit: BookingSubmitHandler = async event => {
     event.preventDefault();
 
@@ -134,6 +139,7 @@ export function ResortMapClient() {
       <BookingPanel
         selectedCabanaId={selectedCabanaId}
         bookingState={bookingState}
+        onClose={handleBookingClose}
         onSubmit={handleBookingSubmit}
       />
 

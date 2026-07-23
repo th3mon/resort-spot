@@ -1,3 +1,4 @@
+import { BookingPanelCloseButton } from "./booking-panel-close-button";
 import { BookingPanelFeedback } from "./booking-panel-feedback";
 import { BookingPanelForm } from "./booking-panel-form";
 import type {
@@ -9,12 +10,14 @@ import type {
 type BookingPanelProps = {
   selectedCabanaId: string | null;
   bookingState: BookingState;
+  onClose: () => void;
   onSubmit: BookingSubmitHandler;
 };
 
 export function BookingPanel({
   selectedCabanaId,
   bookingState,
+  onClose,
   onSubmit,
 }: BookingPanelProps) {
   if (!selectedCabanaId && bookingState.status === "idle") {
@@ -22,7 +25,9 @@ export function BookingPanel({
   }
 
   return (
-    <section className="booking-panel mb-4 rounded border border-[#c9d5ca] bg-white p-4 text-sm text-[#28382d] shadow-sm">
+    <section className="booking-panel relative mb-4 rounded border border-[#c9d5ca] bg-white p-4 pr-12 text-sm text-[#28382d] shadow-sm">
+      <BookingPanelCloseButton onClose={onClose} />
+
       {selectedCabanaId ? (
         <BookingPanelForm
           selectedCabanaId={selectedCabanaId}

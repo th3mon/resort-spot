@@ -139,6 +139,32 @@ describe("ResortMapClient", () => {
     );
   });
 
+  it("closes the booking panel when requested", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(mapFixture));
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<ResortMapClient />);
+
+    await user.click(
+      await screen.findByRole("button", {
+        name: "cabana-0-0, available",
+      }),
+    );
+
+    expect(
+      screen.getByRole("heading", { name: "Book cabana-0-0" }),
+    ).toBeInTheDocument();
+
+    await user.click(
+      screen.getByRole("button", { name: "Close booking panel" }),
+    );
+
+    expect(
+      screen.queryByRole("heading", { name: "Book cabana-0-0" }),
+    ).not.toBeInTheDocument();
+  });
+
   it("shows an availability message when the user clicks an unavailable cabana", async () => {
     const user = userEvent.setup();
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse(mapFixture));

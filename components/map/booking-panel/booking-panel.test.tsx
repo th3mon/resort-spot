@@ -29,7 +29,27 @@ describe("BookingPanel", () => {
     ).toBeInTheDocument();
     expect(screen.getByLabelText("Room number")).toBeInTheDocument();
     expect(screen.getByLabelText("Guest name")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Close booking panel" }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Book cabana" })).toBeEnabled();
+  });
+
+  it("calls the close handler when the close button is clicked", async () => {
+    const user = userEvent.setup();
+    const handleClose = vi.fn();
+
+    renderPanel({
+      selectedCabanaId: "cabana-0-0",
+      bookingState: { status: "idle" },
+      onClose: handleClose,
+    });
+
+    await user.click(
+      screen.getByRole("button", { name: "Close booking panel" }),
+    );
+
+    expect(handleClose).toHaveBeenCalledTimes(1);
   });
 
   it("calls the submit handler when the form is submitted", async () => {
@@ -111,12 +131,14 @@ describe("BookingPanel", () => {
 type RenderPanelOptions = {
   selectedCabanaId: string | null;
   bookingState: BookingState;
+  onClose?: () => void;
   onSubmit?: BookingSubmitHandler;
 };
 
 const renderPanel = ({
   selectedCabanaId,
   bookingState,
+  onClose = () => undefined,
   onSubmit = event => {
     event.preventDefault();
   },
@@ -125,6 +147,7 @@ const renderPanel = ({
     <BookingPanel
       selectedCabanaId={selectedCabanaId}
       bookingState={bookingState}
+      onClose={onClose}
       onSubmit={onSubmit}
     />,
   );
