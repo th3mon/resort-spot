@@ -1,6 +1,8 @@
 import { isEmpty, isNumber, isUndefined } from "lodash";
 import { z } from "zod";
 
+import { normalizeField } from "@/utils";
+
 import { errorMessageFor } from "./errors";
 import { loadFile } from "./files";
 
@@ -94,5 +96,3 @@ function formatBookingsError(error: z.ZodError): string {
 
 const formatZodPath = (path: PropertyKey[]): string =>
   path.map(String).join(".");
-
-const normalizeField = (value: string): string => value.trim().toLowerCase();

@@ -15,7 +15,7 @@ import type {
   PublicResortMap,
   PublicResortMapTile,
 } from "@/domain/reservations";
-import { getTrimmedOrEmptyString } from "@/types/utils";
+import { getTrimmedOrEmptyString } from "@/utils";
 
 type MapState =
   | { status: "loading" }
