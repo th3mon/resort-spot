@@ -16,6 +16,8 @@ import type {
   PublicResortMapTile,
 } from "@/domain/reservations";
 import { getTrimmedOrEmptyString } from "@/utils";
+import { BookingFormData, bookingFormSchema } from "./booking-form-schema";
+import z from "zod";
 
 type MapState =
   | { status: "loading" }
@@ -75,17 +77,30 @@ export function ResortMapClient() {
     }
 
     const formData = new FormData(event.currentTarget);
-    const room = getTrimmedOrEmptyString(formData.get("room"));
-    const guestName = getTrimmedOrEmptyString(formData.get("guestName"));
 
-    if (!room || !guestName) {
+    const validationResult = bookingFormSchema.safeParse({
+      room: formData.get("room"),
+      guestName: formData.get("guestName"),
+    });
+
+    if (!validationResult.success) {
+      const errorTree = z.treeifyError(validationResult.error);
+      const toMessage = (value: { errors: string[] } | undefined): string =>
+        value?.errors[0] ?? "";
+      const errors: BookingFormData = {
+        room: toMessage(errorTree.properties?.room),
+        guestName: toMessage(errorTree.properties?.guestName),
+      };
+
       setBookingState({
         status: "error",
-        message: "Enter a room number and guest name.",
+        errors,
       });
 
       return;
     }
+
+    const { room, guestName } = validationResult.data;
 
     setBookingState({ status: "submitting" });
 

@@ -1,10 +1,11 @@
 import type { SubmitEventHandler } from "react";
+import { BookingFormData } from "./booking-form-schema";
 
 export type BookingState =
   | { status: "idle" }
   | { status: "submitting" }
   | { status: "success"; message: string }
-  | { status: "error"; message: string }
+  | { status: "error"; message?: string; errors?: BookingFormData }
   | { status: "unavailable"; message: string };
 
 export type BookingSubmitHandler = SubmitEventHandler<HTMLFormElement>;
@@ -43,6 +44,9 @@ export function BookingPanel({
               className="booking-panel__input rounded border border-[#b8c9b6] px-3 py-2 font-normal"
               autoComplete="off"
             />
+            {bookingState.status === "error" && bookingState.errors?.room ? (
+              <ErrorMessage message={bookingState.errors.room} />
+            ) : null}
           </label>
           <label className="booking-panel__field grid gap-1 font-medium">
             Guest name
@@ -51,14 +55,13 @@ export function BookingPanel({
               className="booking-panel__input rounded border border-[#b8c9b6] px-3 py-2 font-normal"
               autoComplete="name"
             />
+            {bookingState.status === "error" &&
+            bookingState.errors?.guestName ? (
+              <ErrorMessage message={bookingState.errors.guestName} />
+            ) : null}
           </label>
-          {bookingState.status === "error" ? (
-            <p
-              className="booking-panel__message booking-panel__message--error text-[#6d2c21]"
-              role="alert"
-            >
-              {bookingState.message}
-            </p>
+          {bookingState.status === "error" && bookingState.message ? (
+            <ErrorMessage message={bookingState.message} />
           ) : null}
           <button
             type="submit"
@@ -88,3 +91,12 @@ export function BookingPanel({
     </section>
   );
 }
+
+const ErrorMessage = ({ message }: { message: string }) => (
+  <p
+    className="booking-panel__message booking-panel__message--error text-[#6d2c21]"
+    role="alert"
+  >
+    {message}
+  </p>
+);
