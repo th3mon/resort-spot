@@ -1,8 +1,12 @@
-type TypedHeaders = RequestInit["headers"] & PreparedHeaders;
+type TypedHeaders =
+  | Headers
+  | [string, string][]
+  | PreparedHeaders
+  | Record<string, string>;
 
 type PreparedHeaders = Partial<{
-  "Content-Type": MimeType;
-  Accept: MimeType;
+  "Content-Type": MimeTypeLocal;
+  Accept: MimeTypeLocal;
   Authorization: `Bearer ${string}`;
 }>;
 
@@ -26,7 +30,7 @@ type MethodBodyCombination =
   | { method?: WithBody; body?: RequestInit["body"] }
   | { method?: NonBody; body?: never };
 
-type TypedRequestInit = RequestInit &
+type TypedRequestInit = Omit<RequestInit, "body" | "headers" | "method"> &
   MethodBodyCombination & { headers?: TypedHeaders };
 
 interface TypedResponse<ResponseType> extends Response {
@@ -38,7 +42,7 @@ declare function fetch<ResponseType = unknown>(
   init?: TypedRequestInit,
 ): Promise<TypedResponse<ResponseType>>;
 
-type MimeType =
+type MimeTypeLocal =
   | ".jpg"
   | ".midi"
   | "XML"

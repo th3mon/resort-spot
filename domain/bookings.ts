@@ -1,6 +1,8 @@
 import { isEmpty, isNumber, isUndefined } from "lodash";
 import { z } from "zod";
 
+import { formatZodPath, normalizeField } from "@/utils";
+
 import { errorMessageFor } from "./errors";
 import { loadFile } from "./files";
 
@@ -91,8 +93,3 @@ function formatBookingsError(error: z.ZodError): string {
 
   return `Booking record ${recordIndex + 1} has an invalid shape.`;
 }
-
-const formatZodPath = (path: PropertyKey[]): string =>
-  path.map(String).join(".");
-
-const normalizeField = (value: string): string => value.trim().toLowerCase();

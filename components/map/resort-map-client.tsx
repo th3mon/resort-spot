@@ -1,11 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import z from "zod";
 
+import {
+  BookingPanel,
+  bookingFormSchema,
+  type BookingFormErrors,
+  type BookingState,
+  type BookingSubmitHandler,
+} from "@/components/map/booking-panel";
 import { MapErrorState } from "@/components/map/map-error-state";
 import { MapGrid } from "@/components/map/map-grid";
 import { MapLoadingState } from "@/components/map/map-loading-state";
-import type { PublicResortMap } from "@/domain/reservations";
+import { bookSelectedCabana, loadMap } from "@/components/map/resort-map-api";
+import type {
+  PublicResortMap,
+  PublicResortMapTile,
+} from "@/domain/reservations";
 
 type MapState =
   | { status: "loading" }
@@ -15,6 +27,9 @@ type MapState =
 export function ResortMapClient() {
   const [mapState, setMapState] = useState<MapState>({ status: "loading" });
   const [selectedCabanaId, setSelectedCabanaId] = useState<string | null>(null);
+  const [bookingState, setBookingState] = useState<BookingState>({
+    status: "idle",
+  });
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -39,13 +54,94 @@ export function ResortMapClient() {
     };
   }, []);
 
+  const handleCabanaClick = (tile: PublicResortMapTile): void => {
+    if (tile.availability !== "available") {
+      setSelectedCabanaId(null);
+      setBookingState({
+        status: "unavailable",
+        message: `${tile.id} is already booked. Choose another cabana.`,
+      });
+
+      return;
+    }
+
+    setSelectedCabanaId(tile.id);
+    setBookingState({ status: "idle" });
+  };
+
+  const handleBookingClose = (): void => {
+    setSelectedCabanaId(null);
+    setBookingState({ status: "idle" });
+  };
+
+  const handleBookingSubmit: BookingSubmitHandler = async event => {
+    event.preventDefault();
+
+    if (!selectedCabanaId) {
+      return;
+    }
+
+    const formData = new FormData(event.currentTarget);
+
+    const validationResult = bookingFormSchema.safeParse({
+      room: formData.get("room"),
+      guestName: formData.get("guestName"),
+    });
+
+    if (!validationResult.success) {
+      const {
+        fieldErrors: {
+          room: roomErrorMessages = [],
+          guestName: guestNameErrorMessages = [],
+        },
+      } = z.flattenError(validationResult.error);
+
+      const errors: BookingFormErrors = {
+        room: roomErrorMessages.join(","),
+        guestName: guestNameErrorMessages.join(","),
+      };
+
+      setBookingState({
+        status: "error",
+        errors,
+      });
+
+      return;
+    }
+
+    const { room, guestName } = validationResult.data;
+
+    setBookingState({ status: "submitting" });
+
+    try {
+      await bookSelectedCabana(selectedCabanaId, { room, guestName });
+      const refreshedMap = await loadMap();
+
+      setMapState({ status: "ready", map: refreshedMap });
+      setSelectedCabanaId(null);
+      setBookingState({
+        status: "success",
+        message: `${selectedCabanaId} is booked.`,
+      });
+    } catch (error) {
+      setBookingState({
+        status: "error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Unable to complete booking. Please try again.",
+      });
+    }
+  };
+
   return (
-    <div className="min-w-0 flex-1">
-      {selectedCabanaId ? (
-        <p className="mb-3 w-fit rounded border border-[#b8c9b6] bg-white px-3 py-2 text-sm font-medium text-[#28382d]">
-          Selected: {selectedCabanaId}
-        </p>
-      ) : null}
+    <div className="resort-map-client min-w-0 flex-1">
+      <BookingPanel
+        selectedCabanaId={selectedCabanaId}
+        bookingState={bookingState}
+        onClose={handleBookingClose}
+        onSubmit={handleBookingSubmit}
+      />
 
       {mapState.status === "loading" ? <MapLoadingState /> : null}
       {mapState.status === "error" ? (
@@ -55,33 +151,9 @@ export function ResortMapClient() {
         <MapGrid
           map={mapState.map}
           selectedCabanaId={selectedCabanaId}
-          onSelectCabana={setSelectedCabanaId}
+          onCabanaClick={handleCabanaClick}
         />
       ) : null}
     </div>
   );
 }
-
-async function loadMap(signal: AbortSignal): Promise<PublicResortMap> {
-  const response = await fetch<PublicResortMap>("/api/map", {
-    cache: "no-store",
-    signal,
-  });
-
-  const body = await response.json();
-
-  if (!response.ok) {
-    throw new Error(errorMessageFrom(body));
-  }
-
-  return body;
-}
-
-const errorMessageFrom = (body: unknown): string =>
-  hasErrorMessage(body) ? body.error : "Unable to load the resort map.";
-
-const hasErrorMessage = (value: unknown): value is { error: string } =>
-  typeof value === "object" &&
-  value !== null &&
-  "error" in value &&
-  typeof value.error === "string";
