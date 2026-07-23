@@ -28,11 +28,6 @@ type BookingResponseBody =
   | { reservation: CabanaReservation }
   | { error: string };
 
-const JSON_HEADERS = {
-  Accept: "application/json",
-  "Content-Type": "application/json",
-} as const;
-
 export function ResortMapClient() {
   const [mapState, setMapState] = useState<MapState>({ status: "loading" });
   const [selectedCabanaId, setSelectedCabanaId] = useState<string | null>(null);
@@ -240,7 +235,10 @@ async function bookSelectedCabana(
     `/api/cabanas/${encodeURIComponent(cabanaId)}/book`,
     {
       method: "POST",
-      headers: JSON_HEADERS,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(body),
     },
   );
