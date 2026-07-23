@@ -32,10 +32,22 @@ describe("BookingPanelForm", () => {
     expect(handleSubmit).toHaveBeenCalledTimes(1);
   });
 
+  it("calls the cancel handler when canceled", async () => {
+    const user = userEvent.setup();
+    const handleCancel = vi.fn();
+
+    renderForm({ onCancel: handleCancel });
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+    expect(handleCancel).toHaveBeenCalledTimes(1);
+  });
+
   it("disables the action while submitting", () => {
     renderForm({ bookingState: { status: "submitting" } });
 
     expect(screen.getByRole("button", { name: "Booking..." })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled();
   });
 
   it("renders field and form errors", () => {
@@ -65,6 +77,7 @@ type RenderFormOptions = Partial<
 
 const renderForm = ({
   bookingState = { status: "idle" },
+  onCancel = () => undefined,
   onSubmit = event => {
     event.preventDefault();
   },
@@ -73,6 +86,7 @@ const renderForm = ({
     <BookingPanelForm
       selectedCabanaId="cabana-0-0"
       bookingState={bookingState}
+      onCancel={onCancel}
       onSubmit={onSubmit}
     />,
   );

@@ -4,12 +4,14 @@ import type { BookingState, BookingSubmitHandler } from "./booking-panel-types";
 type BookingPanelFormProps = {
   selectedCabanaId: string;
   bookingState: BookingState;
+  onCancel: () => void;
   onSubmit: BookingSubmitHandler;
 };
 
 export const BookingPanelForm = ({
   selectedCabanaId,
   bookingState,
+  onCancel,
   onSubmit,
 }: BookingPanelFormProps) => (
   <form
@@ -52,12 +54,23 @@ export const BookingPanelForm = ({
       <BookingPanelErrorMessage message={bookingState.message} />
     ) : null}
 
-    <button
-      type="submit"
-      className="booking-panel__action w-fit rounded border border-[#235c37] bg-[#235c37] px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-[#1d4d2f] focus:outline-none focus:ring-2 focus:ring-[#235c37] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
-      disabled={bookingState.status === "submitting"}
-    >
-      {bookingState.status === "submitting" ? "Booking..." : "Book cabana"}
-    </button>
+    <div className="booking-panel__actions flex flex-wrap gap-2">
+      <button
+        type="submit"
+        className="booking-panel__action booking-panel__action--submit w-fit rounded border border-[#235c37] bg-[#235c37] px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-[#1d4d2f] focus:outline-none focus:ring-2 focus:ring-[#235c37] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
+        disabled={bookingState.status === "submitting"}
+      >
+        {bookingState.status === "submitting" ? "Booking..." : "Book cabana"}
+      </button>
+
+      <button
+        type="button"
+        className="booking-panel__action booking-panel__action--cancel w-fit rounded border border-[#b8c9b6] bg-white px-4 py-2 font-semibold text-[#28382d] shadow-sm transition hover:border-[#54705d] hover:bg-[#f4f7f2] focus:outline-none focus:ring-2 focus:ring-[#235c37] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        disabled={bookingState.status === "submitting"}
+        onClick={onCancel}
+      >
+        Cancel
+      </button>
+    </div>
   </form>
 );

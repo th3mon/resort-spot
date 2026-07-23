@@ -30,6 +30,7 @@ export function BookingPanel({
         <BookingPanelForm
           selectedCabanaId={selectedCabanaId}
           bookingState={bookingState}
+          onCancel={onClose}
           onSubmit={onSubmit}
         />
       ) : null}
