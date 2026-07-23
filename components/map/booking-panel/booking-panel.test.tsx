@@ -2,11 +2,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import {
-  BookingPanel,
-  type BookingState,
-  type BookingSubmitHandler,
-} from "./booking-panel";
+import { BookingPanel, type BookingState, type BookingSubmitHandler } from ".";
 
 describe("BookingPanel", () => {
   afterEach(() => {

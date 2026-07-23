@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import z from "zod";
 
 import {
   BookingPanel,
+  bookingFormSchema,
+  type BookingFormData,
   type BookingState,
   type BookingSubmitHandler,
 } from "@/components/map/booking-panel";
@@ -15,8 +18,6 @@ import type {
   PublicResortMap,
   PublicResortMapTile,
 } from "@/domain/reservations";
-import { BookingFormData, bookingFormSchema } from "./booking-form-schema";
-import z from "zod";
 
 type MapState =
   | { status: "loading" }
