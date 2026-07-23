@@ -159,7 +159,14 @@ Acceptance criteria:
 - The form does not expose technical API errors.
 - UI tests cover a successful booking, an invalid guest, and an unavailable cabana.
 
-### `0.6.0` - End-To-End Tests And Stabilization
+### `0.6.0` - Polish UI/UX
+
+Scope:
+
+- Look for good UI/UX solutions and UI libraries
+- Level up UI/UX
+
+### `0.7.0` - End-To-End Tests And Stabilization
 
 Scope:
 
@@ -175,7 +182,7 @@ Acceptance criteria:
 - Tests cover Route Handlers, domain logic, and the most important UI behavior.
 - README documents running, testing, structure, and trade-offs.
 
-### `0.7.0` - Submission Documentation
+### `0.8.0` - Submission Documentation
 
 Scope:
 
