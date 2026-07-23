@@ -1,40 +1,15 @@
 # TODO
 
-## Review Error Handling
+## UI/UX
 
-The current API and domain code uses `try`/`catch` blocks and thrown exceptions
-for file loading, parsing, validation, and booking failures. This works for the
-current roadmap stage, but it should be revisited before the final submission.
+- [ ] Nie wiem jak jeszcze zrobić układ w UI
 
-Things to evaluate:
+## Mozliwosc zamkniecia BookingPanel
 
-- Whether route handlers should avoid broad `try`/`catch` blocks.
-- Whether domain functions should return explicit result objects instead of
-  throwing for expected validation failures.
-- Whether API errors should use a shared response helper or typed error/result
-  model.
-- Whether parsing and booking errors should expose stable frontend-facing error
-  codes in addition to human-readable messages.
-- How to keep unexpected operational errors separate from expected user errors,
-  such as invalid guests or already booked cabanas.
+- [x] Chcę by była możliwość zamknięcia booking-panel za pomocą przycisku w prawym górnym rogu panelu.
+- [ ] Chcę by booking-panel się zamykał po akcji kliknięcia w zajętą cabanę sam po 3 sekundach
+- [ ] Chcę by booking-panel się zamykał po akcji zarezerwowania cabany sam po 3 sekundach
 
-## Consider a Resort Map Class
+## Links
 
-The current map model is a plain object with a `tiles` array. Code that needs a
-specific tile or cabana has to search through that array directly, for example:
-
-```ts
-getMapWithAvailability(map).tiles[0];
-```
-
-Consider turning the parsed resort map, or the public map with availability, into
-a class with lookup methods. That would allow call sites to express intent more
-clearly:
-
-```ts
-getMapWithAvailability(map).getTile(tileId);
-getMapWithAvailability(map).getCabana(cabanaId);
-```
-
-This could also centralize tile/cabana validation and reduce repeated
-array-search logic as the API and frontend grow.
+- <https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/forms_and_events/>

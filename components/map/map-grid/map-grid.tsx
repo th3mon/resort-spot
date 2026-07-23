@@ -1,19 +1,22 @@
 import { MapTile } from "@/components/map/map-tile";
 import { pathTileAssetFor } from "@/components/map/map-tile/map-tile-style";
-import type { PublicResortMap } from "@/domain/reservations";
+import type {
+  PublicResortMap,
+  PublicResortMapTile,
+} from "@/domain/reservations";
 
 import { pathConnectionsFor, tilesByCoordinateFor } from "./map-grid-helpers";
 
 type MapGridProps = {
   map: PublicResortMap;
   selectedCabanaId: string | null;
-  onSelectCabana: (cabanaId: string) => void;
+  onCabanaClick: (tile: PublicResortMapTile) => void;
 };
 
 export function MapGrid({
   map,
   selectedCabanaId,
-  onSelectCabana,
+  onCabanaClick,
 }: MapGridProps) {
   const tilesByCoordinate = tilesByCoordinateFor(map.tiles);
   const tileSize = "2.5rem";
@@ -23,8 +26,11 @@ export function MapGrid({
   };
 
   return (
-    <div className="overflow-auto rounded border border-[#c9d5ca] bg-[#e3eadf] p-3 shadow-sm justify-items-center">
-      <div className="grid min-w-max gap-1" style={mapGridStyle}>
+    <div className="map-grid overflow-auto rounded border border-[#c9d5ca] bg-[#e3eadf] p-3 shadow-sm justify-items-center">
+      <div
+        className="map-grid__tiles grid min-w-max gap-1"
+        style={mapGridStyle}
+      >
         {map.tiles.map(tile => (
           <MapTile
             key={tile.id}
@@ -35,7 +41,7 @@ export function MapGrid({
                 : null
             }
             isSelected={selectedCabanaId === tile.id}
-            onSelectCabana={onSelectCabana}
+            onCabanaClick={onCabanaClick}
           />
         ))}
       </div>
