@@ -1,5 +1,12 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { act } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { PublicResortMap } from "@/domain/reservations";
@@ -9,6 +16,7 @@ import { ResortMapClient } from "./resort-map-client";
 describe("ResortMapClient", () => {
   afterEach(() => {
     cleanup();
+    vi.useRealTimers();
     vi.unstubAllGlobals();
   });
 
@@ -201,6 +209,75 @@ describe("ResortMapClient", () => {
     expect(
       screen.getByText("cabana-1-1 is already booked. Choose another cabana."),
     ).toBeInTheDocument();
+  });
+
+  it("auto-closes the unavailable cabana message after three seconds", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(mapFixture));
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<ResortMapClient />);
+
+    const reservedCabana = await screen.findByRole("button", {
+      name: "cabana-1-1, reserved",
+    });
+    vi.useFakeTimers();
+
+    fireEvent.click(reservedCabana);
+
+    expect(
+      screen.getByText("cabana-1-1 is already booked. Choose another cabana."),
+    ).toBeInTheDocument();
+
+    act(() => {
+      vi.advanceTimersByTime(3_000);
+    });
+
+    expect(
+      screen.queryByText(
+        "cabana-1-1 is already booked. Choose another cabana.",
+      ),
+    ).not.toBeInTheDocument();
+  });
+
+  it("auto-closes the successful booking message after three seconds", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse(mapFixture))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          reservation: {
+            cabanaId: "cabana-0-0",
+            availability: "reserved",
+          },
+        }),
+      )
+      .mockResolvedValueOnce(jsonResponse(bookedMapFixture));
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<ResortMapClient />);
+
+    const cabana = await screen.findByRole("button", {
+      name: "cabana-0-0, available",
+    });
+
+    await user.click(cabana);
+    await user.type(screen.getByLabelText("Room number"), "101");
+    await user.type(screen.getByLabelText("Guest name"), "Alice Smith");
+    await user.click(screen.getByRole("button", { name: "Book cabana" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("cabana-0-0 is booked.")).toBeInTheDocument();
+    });
+
+    await waitFor(
+      () => {
+        expect(
+          screen.queryByText("cabana-0-0 is booked."),
+        ).not.toBeInTheDocument();
+      },
+      { timeout: 3_500 },
+    );
   });
 
   it("shows a readable API error message", async () => {

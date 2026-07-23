@@ -7,8 +7,8 @@
 ## Mozliwosc zamkniecia BookingPanel
 
 - [x] Chcę by była możliwość zamknięcia booking-panel za pomocą przycisku w prawym górnym rogu panelu.
-- [ ] Chcę by booking-panel się zamykał po akcji kliknięcia w zajętą cabanę sam po 3 sekundach
-- [ ] Chcę by booking-panel się zamykał po akcji zarezerwowania cabany sam po 3 sekundach
+- [x] Chcę by booking-panel się zamykał po akcji kliknięcia w zajętą cabanę sam po 3 sekundach
+- [x] Chcę by booking-panel się zamykał po akcji zarezerwowania cabany sam po 3 sekundach
 
 ## Links
 

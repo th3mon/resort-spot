@@ -24,12 +24,19 @@ type MapState =
   | { status: "ready"; map: PublicResortMap }
   | { status: "error"; message: string };
 
+const BOOKING_PANEL_AUTO_CLOSE_DELAY_MS = 3_000;
+
 export function ResortMapClient() {
   const [mapState, setMapState] = useState<MapState>({ status: "loading" });
   const [selectedCabanaId, setSelectedCabanaId] = useState<string | null>(null);
   const [bookingState, setBookingState] = useState<BookingState>({
     status: "idle",
   });
+
+  const handleBookingClose = (): void => {
+    setSelectedCabanaId(null);
+    setBookingState({ status: "idle" });
+  };
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -54,6 +61,23 @@ export function ResortMapClient() {
     };
   }, []);
 
+  useEffect(() => {
+    if (
+      bookingState.status !== "success" &&
+      bookingState.status !== "unavailable"
+    ) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      handleBookingClose();
+    }, BOOKING_PANEL_AUTO_CLOSE_DELAY_MS);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [bookingState.status]);
+
   const handleCabanaClick = (tile: PublicResortMapTile): void => {
     if (tile.availability !== "available") {
       setSelectedCabanaId(null);
@@ -66,11 +90,6 @@ export function ResortMapClient() {
     }
 
     setSelectedCabanaId(tile.id);
-    setBookingState({ status: "idle" });
-  };
-
-  const handleBookingClose = (): void => {
-    setSelectedCabanaId(null);
     setBookingState({ status: "idle" });
   };
 
