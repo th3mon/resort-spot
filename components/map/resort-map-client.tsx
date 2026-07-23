@@ -83,12 +83,16 @@ export function ResortMapClient() {
     });
 
     if (!validationResult.success) {
-      const errorTree = z.treeifyError(validationResult.error);
-      const toMessage = (value: { errors: string[] } | undefined): string =>
-        value?.errors[0] ?? "";
+      const {
+        fieldErrors: {
+          room: roomErrorMessages = [],
+          guestName: guestNameErrorMessages = [],
+        },
+      } = z.flattenError(validationResult.error);
+
       const errors: BookingFormData = {
-        room: toMessage(errorTree.properties?.room),
-        guestName: toMessage(errorTree.properties?.guestName),
+        room: roomErrorMessages.join(","),
+        guestName: guestNameErrorMessages.join(","),
       };
 
       setBookingState({
