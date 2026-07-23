@@ -1,21 +1,22 @@
 import { MapTile } from "@/components/map/map-tile";
 import { pathTileAssetFor } from "@/components/map/map-tile/map-tile-style";
-import type { PublicResortMap } from "@/domain/reservations";
+import type {
+  PublicResortMap,
+  PublicResortMapTile,
+} from "@/domain/reservations";
 
 import { pathConnectionsFor, tilesByCoordinateFor } from "./map-grid-helpers";
 
 type MapGridProps = {
   map: PublicResortMap;
   selectedCabanaId: string | null;
-  onSelectCabana: (cabanaId: string) => void;
-  onUnavailableCabana: (cabanaId: string) => void;
+  onCabanaClick: (tile: PublicResortMapTile) => void;
 };
 
 export function MapGrid({
   map,
   selectedCabanaId,
-  onSelectCabana,
-  onUnavailableCabana,
+  onCabanaClick,
 }: MapGridProps) {
   const tilesByCoordinate = tilesByCoordinateFor(map.tiles);
   const tileSize = "2.5rem";
@@ -40,8 +41,7 @@ export function MapGrid({
                 : null
             }
             isSelected={selectedCabanaId === tile.id}
-            onSelectCabana={onSelectCabana}
-            onUnavailableCabana={onUnavailableCabana}
+            onCabanaClick={onCabanaClick}
           />
         ))}
       </div>

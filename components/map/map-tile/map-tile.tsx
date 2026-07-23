@@ -12,16 +12,14 @@ type MapTileProps = {
   tile: PublicResortMapTile;
   pathAsset: PathTileAsset | null;
   isSelected: boolean;
-  onSelectCabana: (cabanaId: string) => void;
-  onUnavailableCabana: (cabanaId: string) => void;
+  onCabanaClick: (tile: PublicResortMapTile) => void;
 };
 
 export function MapTile({
   tile,
   pathAsset,
   isSelected,
-  onSelectCabana,
-  onUnavailableCabana,
+  onCabanaClick,
 }: MapTileProps) {
   const asset = pathAsset ?? TILE_ASSETS[tile.type];
   const label = tileLabel(tile);
@@ -32,8 +30,7 @@ export function MapTile({
       assetSrc={asset.src}
       isSelected={isSelected}
       label={label}
-      onSelectCabana={onSelectCabana}
-      onUnavailableCabana={onUnavailableCabana}
+      onCabanaClick={onCabanaClick}
     />
   ) : (
     <StaticMapTile
@@ -50,8 +47,7 @@ type CabanaTileProps = {
   assetSrc: string;
   isSelected: boolean;
   label: string;
-  onSelectCabana: (cabanaId: string) => void;
-  onUnavailableCabana: (cabanaId: string) => void;
+  onCabanaClick: (tile: PublicResortMapTile) => void;
 };
 
 function CabanaTile({
@@ -59,19 +55,10 @@ function CabanaTile({
   assetSrc,
   isSelected,
   label,
-  onSelectCabana,
-  onUnavailableCabana,
+  onCabanaClick,
 }: CabanaTileProps) {
   const isAvailable = tile.availability === "available";
-  const handleClick = (): void => {
-    if (!isAvailable) {
-      onUnavailableCabana(tile.id);
-
-      return;
-    }
-
-    onSelectCabana(tile.id);
-  };
+  const handleClick = (): void => onCabanaClick(tile);
 
   return (
     <button

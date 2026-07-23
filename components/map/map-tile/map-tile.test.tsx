@@ -10,15 +10,14 @@ import type { PathTileAsset } from "./map-tile-style";
 describe("MapTile", () => {
   it("renders an available cabana as a selectable button", async () => {
     const user = userEvent.setup();
-    const onSelectCabana = vi.fn();
+    const onCabanaClick = vi.fn();
 
     render(
       <MapTile
         tile={availableCabanaTile}
         pathAsset={null}
         isSelected={true}
-        onSelectCabana={onSelectCabana}
-        onUnavailableCabana={vi.fn()}
+        onCabanaClick={onCabanaClick}
       />,
     );
 
@@ -32,22 +31,20 @@ describe("MapTile", () => {
 
     await user.click(cabana);
 
-    expect(onSelectCabana).toHaveBeenCalledTimes(1);
-    expect(onSelectCabana).toHaveBeenCalledWith("cabana-2-3");
+    expect(onCabanaClick).toHaveBeenCalledTimes(1);
+    expect(onCabanaClick).toHaveBeenCalledWith(availableCabanaTile);
   });
 
-  it("reports a reserved cabana without selecting it", async () => {
+  it("reports a reserved cabana click", async () => {
     const user = userEvent.setup();
-    const onSelectCabana = vi.fn();
-    const onUnavailableCabana = vi.fn();
+    const onCabanaClick = vi.fn();
 
     render(
       <MapTile
         tile={reservedCabanaTile}
         pathAsset={null}
         isSelected={false}
-        onSelectCabana={onSelectCabana}
-        onUnavailableCabana={onUnavailableCabana}
+        onCabanaClick={onCabanaClick}
       />,
     );
 
@@ -61,8 +58,7 @@ describe("MapTile", () => {
 
     await user.click(cabana);
 
-    expect(onSelectCabana).not.toHaveBeenCalled();
-    expect(onUnavailableCabana).toHaveBeenCalledWith("cabana-4-1");
+    expect(onCabanaClick).toHaveBeenCalledWith(reservedCabanaTile);
   });
 
   it("renders non-cabana tiles with coordinate labels and path asset rotation", () => {
@@ -71,8 +67,7 @@ describe("MapTile", () => {
         tile={pathTile}
         pathAsset={rotatedPathAsset}
         isSelected={false}
-        onSelectCabana={vi.fn()}
-        onUnavailableCabana={vi.fn()}
+        onCabanaClick={vi.fn()}
       />,
     );
 
@@ -89,8 +84,7 @@ describe("MapTile", () => {
         tile={emptyTile}
         pathAsset={null}
         isSelected={false}
-        onSelectCabana={vi.fn()}
-        onUnavailableCabana={vi.fn()}
+        onCabanaClick={vi.fn()}
       />,
     );
 

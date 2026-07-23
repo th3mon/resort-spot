@@ -10,7 +10,11 @@ import {
 import { MapErrorState } from "@/components/map/map-error-state";
 import { MapGrid } from "@/components/map/map-grid";
 import { MapLoadingState } from "@/components/map/map-loading-state";
-import type { CabanaReservation, PublicResortMap } from "@/domain/reservations";
+import type {
+  CabanaReservation,
+  PublicResortMap,
+  PublicResortMapTile,
+} from "@/domain/reservations";
 
 type MapState =
   | { status: "loading" }
@@ -56,17 +60,19 @@ export function ResortMapClient() {
     };
   }, []);
 
-  const handleSelectCabana = (cabanaId: string): void => {
-    setSelectedCabanaId(cabanaId);
-    setBookingState({ status: "idle" });
-  };
+  const handleCabanaClick = (tile: PublicResortMapTile): void => {
+    if (tile.availability !== "available") {
+      setSelectedCabanaId(null);
+      setBookingState({
+        status: "unavailable",
+        message: `${tile.id} is already booked. Choose another cabana.`,
+      });
 
-  const handleUnavailableCabana = (cabanaId: string): void => {
-    setSelectedCabanaId(null);
-    setBookingState({
-      status: "unavailable",
-      message: `${cabanaId} is already booked. Choose another cabana.`,
-    });
+      return;
+    }
+
+    setSelectedCabanaId(tile.id);
+    setBookingState({ status: "idle" });
   };
 
   const handleBookingSubmit: BookingSubmitHandler = async event => {
@@ -128,8 +134,7 @@ export function ResortMapClient() {
         <MapGrid
           map={mapState.map}
           selectedCabanaId={selectedCabanaId}
-          onSelectCabana={handleSelectCabana}
-          onUnavailableCabana={handleUnavailableCabana}
+          onCabanaClick={handleCabanaClick}
         />
       ) : null}
     </div>
