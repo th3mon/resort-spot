@@ -26,7 +26,10 @@ export function BookingPanel({
 
   return (
     <section className="booking-panel relative mb-4 rounded border border-[#c9d5ca] bg-white p-4 pr-12 text-sm text-[#28382d] shadow-sm">
-      <BookingPanelCloseButton onClose={onClose} />
+      <BookingPanelCloseButton
+        disabled={bookingState.status === "submitting"}
+        onClose={onClose}
+      />
 
       {selectedCabanaId ? (
         <BookingPanelForm
