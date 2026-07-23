@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+import type { SubmitEventHandler } from "react";
 
 export type BookingState =
   | { status: "idle" }
@@ -7,10 +7,12 @@ export type BookingState =
   | { status: "error"; message: string }
   | { status: "unavailable"; message: string };
 
+export type BookingSubmitHandler = SubmitEventHandler<HTMLFormElement>;
+
 type BookingPanelProps = {
   selectedCabanaId: string | null;
   bookingState: BookingState;
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onSubmit: BookingSubmitHandler;
 };
 
 export function BookingPanel({

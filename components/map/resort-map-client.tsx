@@ -1,11 +1,11 @@
 "use client";
 
-import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
 
 import {
   BookingPanel,
   type BookingState,
+  type BookingSubmitHandler,
 } from "@/components/map/booking-panel";
 import { MapErrorState } from "@/components/map/map-error-state";
 import { MapGrid } from "@/components/map/map-grid";
@@ -69,9 +69,7 @@ export function ResortMapClient() {
     });
   };
 
-  const handleBookingSubmit = async (
-    event: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
+  const handleBookingSubmit: BookingSubmitHandler = async event => {
     event.preventDefault();
 
     if (!selectedCabanaId) {
