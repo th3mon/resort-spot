@@ -1,3 +1,4 @@
+export * from "./booking-panel";
 export * from "./map-error-state";
 export * from "./map-grid";
 export * from "./map-loading-state";
