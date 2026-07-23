@@ -117,7 +117,7 @@ export function ResortMapClient() {
   };
 
   return (
-    <div className="min-w-0 flex-1">
+    <div className="resort-map-client min-w-0 flex-1">
       <BookingPanel
         selectedCabanaId={selectedCabanaId}
         bookingState={bookingState}
@@ -156,36 +156,44 @@ function BookingPanel({
   }
 
   return (
-    <section className="mb-4 rounded border border-[#c9d5ca] bg-white p-4 text-sm text-[#28382d] shadow-sm">
+    <section className="booking-panel mb-4 rounded border border-[#c9d5ca] bg-white p-4 text-sm text-[#28382d] shadow-sm">
       {selectedCabanaId ? (
-        <form className="grid gap-3 sm:max-w-xl" onSubmit={onSubmit}>
-          <div>
-            <h2 className="text-base font-semibold">Book {selectedCabanaId}</h2>
+        <form
+          className="booking-panel__form grid gap-3 sm:max-w-xl"
+          onSubmit={onSubmit}
+        >
+          <div className="booking-panel__header">
+            <h2 className="booking-panel__title text-base font-semibold">
+              Book {selectedCabanaId}
+            </h2>
           </div>
-          <label className="grid gap-1 font-medium">
+          <label className="booking-panel__field grid gap-1 font-medium">
             Room number
             <input
               name="room"
-              className="rounded border border-[#b8c9b6] px-3 py-2 font-normal"
+              className="booking-panel__input rounded border border-[#b8c9b6] px-3 py-2 font-normal"
               autoComplete="off"
             />
           </label>
-          <label className="grid gap-1 font-medium">
+          <label className="booking-panel__field grid gap-1 font-medium">
             Guest name
             <input
               name="guestName"
-              className="rounded border border-[#b8c9b6] px-3 py-2 font-normal"
+              className="booking-panel__input rounded border border-[#b8c9b6] px-3 py-2 font-normal"
               autoComplete="name"
             />
           </label>
           {bookingState.status === "error" ? (
-            <p className="text-[#6d2c21]" role="alert">
+            <p
+              className="booking-panel__message booking-panel__message--error text-[#6d2c21]"
+              role="alert"
+            >
               {bookingState.message}
             </p>
           ) : null}
           <button
             type="submit"
-            className="w-fit rounded border border-[#235c37] bg-[#235c37] px-4 py-2 font-semibold text-white disabled:opacity-70"
+            className="booking-panel__action w-fit rounded border border-[#235c37] bg-[#235c37] px-4 py-2 font-semibold text-white disabled:opacity-70"
             disabled={bookingState.status === "submitting"}
           >
             {bookingState.status === "submitting"
@@ -200,8 +208,8 @@ function BookingPanel({
         <p
           className={
             bookingState.status === "success"
-              ? "text-[#235c37]"
-              : "text-[#6d2c21]"
+              ? "booking-panel__message booking-panel__message--success text-[#235c37]"
+              : "booking-panel__message booking-panel__message--unavailable text-[#6d2c21]"
           }
           role={bookingState.status === "unavailable" ? "alert" : "status"}
         >

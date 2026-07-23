@@ -25,8 +25,11 @@ export function MapGrid({
   };
 
   return (
-    <div className="overflow-auto rounded border border-[#c9d5ca] bg-[#e3eadf] p-3 shadow-sm justify-items-center">
-      <div className="grid min-w-max gap-1" style={mapGridStyle}>
+    <div className="map-grid overflow-auto rounded border border-[#c9d5ca] bg-[#e3eadf] p-3 shadow-sm justify-items-center">
+      <div
+        className="map-grid__tiles grid min-w-max gap-1"
+        style={mapGridStyle}
+      >
         {map.tiles.map(tile => (
           <MapTile
             key={tile.id}

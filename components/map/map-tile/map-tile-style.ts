@@ -112,8 +112,8 @@ export function tileClassName(
   tile: PublicResortMapTile,
   isSelected: boolean,
 ): string {
-  const baseTileClassName =
-    "grid aspect-square h-10 w-10 place-items-center rounded border transition";
+  const baseBemClassName = `map-tile map-tile--${tile.type}`;
+  const baseTileClassName = `${baseBemClassName} grid aspect-square h-10 w-10 place-items-center rounded border transition`;
 
   if (tile.type !== "cabana") {
     const nonCabanaTileClassName = `${baseTileClassName} ${tileSurfaceClassName(
@@ -124,12 +124,12 @@ export function tileClassName(
   }
 
   if (tile.availability === "reserved") {
-    const reservedCabanaTileClassName = `${baseTileClassName} cursor-not-allowed ${TILE_COLOR_CLASS_NAMES.reservedCabana.border} ${TILE_COLOR_CLASS_NAMES.reservedCabana.background} opacity-75 grayscale`;
+    const reservedCabanaTileClassName = `${baseTileClassName} map-tile--reserved cursor-not-allowed ${TILE_COLOR_CLASS_NAMES.reservedCabana.border} ${TILE_COLOR_CLASS_NAMES.reservedCabana.background} opacity-75 grayscale`;
 
     return reservedCabanaTileClassName;
   }
 
-  const availableCabanaTileClassName = `${baseTileClassName} ${TILE_COLOR_CLASS_NAMES.availableCabana.border} ${TILE_COLOR_CLASS_NAMES.availableCabana.background} ${TILE_COLOR_CLASS_NAMES.availableCabana.hoverBorder} ${TILE_COLOR_CLASS_NAMES.availableCabana.hoverBackground} focus:outline-none focus:ring-2 ${TILE_COLOR_CLASS_NAMES.availableCabana.focusRing} ${
+  const availableCabanaTileClassName = `${baseTileClassName} map-tile--available ${TILE_COLOR_CLASS_NAMES.availableCabana.border} ${TILE_COLOR_CLASS_NAMES.availableCabana.background} ${TILE_COLOR_CLASS_NAMES.availableCabana.hoverBorder} ${TILE_COLOR_CLASS_NAMES.availableCabana.hoverBackground} focus:outline-none focus:ring-2 ${TILE_COLOR_CLASS_NAMES.availableCabana.focusRing} ${
     isSelected
       ? `ring-2 ${TILE_COLOR_CLASS_NAMES.availableCabana.selectedRing}`
       : ""
@@ -141,7 +141,7 @@ export function tileClassName(
 export function tileImageClassName(
   tile: PublicResortMapTile | LegendTile,
 ): string {
-  const baseImageClassName = "object-cover";
+  const baseImageClassName = "map-tile__image object-cover";
 
   if (tile.type === "pool") {
     return `h-8 w-9 ${baseImageClassName} sm:h-9 sm:w-10`;
