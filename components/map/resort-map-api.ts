@@ -81,5 +81,6 @@ function bookingErrorMessageFrom(
 }
 
 const hasReservation = (
-  value: BookingResponseBody,
-): value is { reservation: CabanaReservation } => "reservation" in value;
+  value: unknown,
+): value is { reservation: CabanaReservation } =>
+  typeof value === "object" && value !== null && "reservation" in value;
