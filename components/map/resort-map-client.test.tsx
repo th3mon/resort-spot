@@ -113,6 +113,32 @@ describe("ResortMapClient", () => {
     ).toBeInTheDocument();
   });
 
+  it("validates required booking fields before sending a booking request", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(mapFixture));
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<ResortMapClient />);
+
+    await user.click(
+      await screen.findByRole("button", {
+        name: "cabana-0-0, available",
+      }),
+    );
+    await user.click(screen.getByRole("button", { name: "Book cabana" }));
+
+    expect(await screen.findByText("Enter a room number.")).toBeInTheDocument();
+    expect(screen.getByText("Enter a guest name.")).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/map",
+      expect.objectContaining({
+        cache: "no-store",
+        signal: expect.any(AbortSignal),
+      }),
+    );
+  });
+
   it("shows an availability message when the user clicks an unavailable cabana", async () => {
     const user = userEvent.setup();
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse(mapFixture));
