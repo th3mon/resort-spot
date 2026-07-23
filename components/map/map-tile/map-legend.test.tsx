@@ -9,8 +9,8 @@ describe("MapLegend", () => {
 
     const legend = screen.getByRole("complementary");
 
-    expect(within(legend).getByText("Available cabana")).toBeInTheDocument();
-    expect(within(legend).getByText("Booked cabana")).toBeInTheDocument();
+    expect(within(legend).getByText("Available")).toBeInTheDocument();
+    expect(within(legend).getByText("Booked")).toBeInTheDocument();
     expect(within(legend).getByText("Pool")).toBeInTheDocument();
     expect(within(legend).getByText("Path")).toBeInTheDocument();
     expect(within(legend).getByText("Chalet")).toBeInTheDocument();

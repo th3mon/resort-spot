@@ -113,7 +113,7 @@ export function tileClassName(
   isSelected: boolean,
 ): string {
   const baseBemClassName = `map-tile map-tile--${tile.type}`;
-  const baseTileClassName = `${baseBemClassName} grid aspect-square h-10 w-10 place-items-center rounded border transition`;
+  const baseTileClassName = `${baseBemClassName} grid aspect-square h-10 w-10 place-items-center rounded border shadow-sm`;
 
   if (tile.type !== "cabana") {
     const nonCabanaTileClassName = `${baseTileClassName} ${tileSurfaceClassName(
@@ -129,9 +129,9 @@ export function tileClassName(
     return reservedCabanaTileClassName;
   }
 
-  const availableCabanaTileClassName = `${baseTileClassName} map-tile--available ${TILE_COLOR_CLASS_NAMES.availableCabana.border} ${TILE_COLOR_CLASS_NAMES.availableCabana.background} ${TILE_COLOR_CLASS_NAMES.availableCabana.hoverBorder} ${TILE_COLOR_CLASS_NAMES.availableCabana.hoverBackground} focus:outline-none focus:ring-2 ${TILE_COLOR_CLASS_NAMES.availableCabana.focusRing} ${
+  const availableCabanaTileClassName = `${baseTileClassName} map-tile--available ${TILE_COLOR_CLASS_NAMES.availableCabana.border} ${TILE_COLOR_CLASS_NAMES.availableCabana.background} ${TILE_COLOR_CLASS_NAMES.availableCabana.hoverBorder} ${TILE_COLOR_CLASS_NAMES.availableCabana.hoverBackground} focus:outline-none focus:ring-2 focus:ring-offset-1 ${TILE_COLOR_CLASS_NAMES.availableCabana.focusRing} ${
     isSelected
-      ? `ring-2 ${TILE_COLOR_CLASS_NAMES.availableCabana.selectedRing}`
+      ? `ring-2 ring-offset-1 ${TILE_COLOR_CLASS_NAMES.availableCabana.selectedRing}`
       : ""
   }`;
 

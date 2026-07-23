@@ -18,8 +18,8 @@ export type LegendTile = Pick<PublicResortMapTile, "availability" | "type"> & {
 };
 
 const LEGEND_TILES: LegendTile[] = [
-  { label: "Available cabana", type: "cabana", availability: "available" },
-  { label: "Booked cabana", type: "cabana", availability: "reserved" },
+  { label: "Available", type: "cabana", availability: "available" },
+  { label: "Booked", type: "cabana", availability: "reserved" },
   { label: "Pool", type: "pool" },
   { label: "Path", type: "path" },
   { label: "Chalet", type: "chalet" },
@@ -41,7 +41,7 @@ const LEGEND_COLOR_CLASS_NAMES = {
 export function MapLegend() {
   return (
     <aside
-      className={`map-legend shrink-0 border-t ${LEGEND_COLOR_CLASS_NAMES.container.border} pt-4 lg:w-64 lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0`}
+      className={`map-legend ui-enter shrink-0 border-t ${LEGEND_COLOR_CLASS_NAMES.container.border} bg-[#eef3ed] pt-4 lg:sticky lg:top-4 lg:self-start lg:rounded lg:border lg:bg-white lg:p-4 lg:shadow-sm`}
     >
       <h2
         className={`map-legend__title text-sm font-semibold uppercase ${LEGEND_COLOR_CLASS_NAMES.heading.text}`}
@@ -55,7 +55,7 @@ export function MapLegend() {
           return (
             <li
               key={`${tile.type}-${tile.availability ?? "default"}`}
-              className={`map-legend__item map-legend__item--${tile.type} flex items-center gap-3 text-sm ${LEGEND_COLOR_CLASS_NAMES.item.text}`}
+              className={`map-legend__item map-legend__item--${tile.type} flex items-center gap-3 rounded px-1 py-1 text-sm ${LEGEND_COLOR_CLASS_NAMES.item.text}`}
             >
               <span
                 className={`map-legend__tile ${tileLegendClassName(

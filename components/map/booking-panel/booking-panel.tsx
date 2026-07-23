@@ -25,12 +25,7 @@ export function BookingPanel({
   }
 
   return (
-    <section className="booking-panel relative mb-4 rounded border border-[#c9d5ca] bg-white p-4 pr-12 text-sm text-[#28382d] shadow-sm">
-      <BookingPanelCloseButton
-        disabled={bookingState.status === "submitting"}
-        onClose={onClose}
-      />
-
+    <section className="booking-panel ui-enter sticky top-4 z-10 mb-4 rounded border border-[#b8c9b6] bg-white p-4  text-sm text-[#28382d] shadow-md shadow-[#172018]/10">
       {selectedCabanaId ? (
         <BookingPanelForm
           selectedCabanaId={selectedCabanaId}
@@ -42,6 +37,11 @@ export function BookingPanel({
       {hasSuccessOrUnavailable(bookingState) ? (
         <BookingPanelFeedback bookingState={bookingState} />
       ) : null}
+
+      <BookingPanelCloseButton
+        disabled={bookingState.status === "submitting"}
+        onClose={onClose}
+      />
     </section>
   );
 }

@@ -17,3 +17,70 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes ui-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-pulse-soft {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.ui-enter {
+  animation: ui-enter 180ms ease-out both;
+}
+
+.ui-pulse-soft {
+  animation: ui-pulse-soft 1.4s ease-in-out infinite;
+}
+
+.map-tile {
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+.map-tile--available:hover {
+  transform: translateY(-1px);
+}
+
+.map-tile--available:active {
+  transform: translateY(0);
+}
+
+.map-tile__image {
+  transition: transform 140ms ease;
+}
+
+.map-tile--available:hover .map-tile__image {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-enter,
+  .ui-pulse-soft {
+    animation: none;
+  }
+
+  .map-tile,
+  .map-tile__image {
+    transition: none;
+  }
+}
