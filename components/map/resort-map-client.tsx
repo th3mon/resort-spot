@@ -15,6 +15,7 @@ import type {
   PublicResortMap,
   PublicResortMapTile,
 } from "@/domain/reservations";
+import { getTrimmedOrEmptyString } from "@/types/utils";
 
 type MapState =
   | { status: "loading" }
@@ -83,8 +84,8 @@ export function ResortMapClient() {
     }
 
     const formData = new FormData(event.currentTarget);
-    const room = String(formData.get("room") ?? "").trim();
-    const guestName = String(formData.get("guestName") ?? "").trim();
+    const room = getTrimmedOrEmptyString(formData.get("room"));
+    const guestName = getTrimmedOrEmptyString(formData.get("guestName"));
 
     if (!room || !guestName) {
       setBookingState({
