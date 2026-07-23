@@ -5,8 +5,8 @@ type TypedHeaders =
   | Record<string, string>;
 
 type PreparedHeaders = Partial<{
-  "Content-Type": MimeType;
-  Accept: MimeType;
+  "Content-Type": MimeTypeLocal;
+  Accept: MimeTypeLocal;
   Authorization: `Bearer ${string}`;
 }>;
 
@@ -42,7 +42,7 @@ declare function fetch<ResponseType = unknown>(
   init?: TypedRequestInit,
 ): Promise<TypedResponse<ResponseType>>;
 
-type MimeType =
+type MimeTypeLocal =
   | ".jpg"
   | ".midi"
   | "XML"
