@@ -15,7 +15,6 @@ import type {
   PublicResortMap,
   PublicResortMapTile,
 } from "@/domain/reservations";
-import { getTrimmedOrEmptyString } from "@/utils";
 import { BookingFormData, bookingFormSchema } from "./booking-form-schema";
 import z from "zod";
 
