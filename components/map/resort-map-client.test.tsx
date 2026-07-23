@@ -168,9 +168,11 @@ describe("ResortMapClient", () => {
       screen.getByRole("button", { name: "Close booking panel" }),
     );
 
-    expect(
-      screen.queryByRole("heading", { name: "Book cabana-0-0" }),
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.queryByRole("heading", { name: "Book cabana-0-0" }),
+      ).not.toBeInTheDocument();
+    });
   });
 
   it("closes the booking panel when canceled", async () => {
@@ -188,9 +190,11 @@ describe("ResortMapClient", () => {
 
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
-    expect(
-      screen.queryByRole("heading", { name: "Book cabana-0-0" }),
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.queryByRole("heading", { name: "Book cabana-0-0" }),
+      ).not.toBeInTheDocument();
+    });
   });
 
   it("shows an availability message when the user clicks an unavailable cabana", async () => {
@@ -222,7 +226,9 @@ describe("ResortMapClient", () => {
     });
     vi.useFakeTimers();
 
-    fireEvent.click(reservedCabana);
+    act(() => {
+      fireEvent.click(reservedCabana);
+    });
 
     expect(
       screen.getByText("cabana-1-1 is already booked. Choose another cabana."),
@@ -230,6 +236,10 @@ describe("ResortMapClient", () => {
 
     act(() => {
       vi.advanceTimersByTime(3_000);
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(220);
     });
 
     expect(

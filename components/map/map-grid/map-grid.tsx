@@ -26,7 +26,7 @@ export function MapGrid({
   };
 
   return (
-    <div className="map-grid ui-enter justify-items-center overflow-auto rounded border border-[#c9d5ca] bg-[#e3eadf] p-4 shadow-md shadow-[#172018]/10">
+    <div className="map-grid ui-enter justify-items-center rounded border border-[#c9d5ca] bg-[#e3eadf] p-4 shadow-md shadow-[#172018]/10">
       <div
         className="map-grid__tiles grid min-w-max gap-1.5"
         style={mapGridStyle}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import z from "zod";
 
 import {
@@ -24,7 +24,13 @@ type MapState =
   | { status: "ready"; map: PublicResortMap }
   | { status: "error"; message: string };
 
+type RenderedBookingPanel = {
+  selectedCabanaId: string | null;
+  bookingState: BookingState;
+};
+
 const BOOKING_PANEL_AUTO_CLOSE_DELAY_MS = 3_000;
+const BOOKING_PANEL_EXIT_ANIMATION_MS = 220;
 
 export function ResortMapClient() {
   const [mapState, setMapState] = useState<MapState>({ status: "loading" });
@@ -32,11 +38,20 @@ export function ResortMapClient() {
   const [bookingState, setBookingState] = useState<BookingState>({
     status: "idle",
   });
+  const [renderedBookingPanel, setRenderedBookingPanel] =
+    useState<RenderedBookingPanel | null>(null);
 
-  const handleBookingClose = (): void => {
+  const shouldShowBookingPanel =
+    selectedCabanaId !== null || bookingState.status !== "idle";
+  const displayedBookingPanel = shouldShowBookingPanel
+    ? { selectedCabanaId, bookingState }
+    : renderedBookingPanel;
+
+  const handleBookingClose = useCallback((): void => {
+    setRenderedBookingPanel({ selectedCabanaId, bookingState });
     setSelectedCabanaId(null);
     setBookingState({ status: "idle" });
-  };
+  }, [bookingState, selectedCabanaId]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -62,6 +77,20 @@ export function ResortMapClient() {
   }, []);
 
   useEffect(() => {
+    if (shouldShowBookingPanel || !renderedBookingPanel) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setRenderedBookingPanel(null);
+    }, BOOKING_PANEL_EXIT_ANIMATION_MS);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [shouldShowBookingPanel, renderedBookingPanel]);
+
+  useEffect(() => {
     if (
       bookingState.status !== "success" &&
       bookingState.status !== "unavailable"
@@ -76,7 +105,7 @@ export function ResortMapClient() {
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [bookingState.status]);
+  }, [bookingState.status, handleBookingClose]);
 
   const handleCabanaClick = (tile: PublicResortMapTile): void => {
     if (tile.availability !== "available") {
@@ -155,12 +184,24 @@ export function ResortMapClient() {
 
   return (
     <div className="resort-map-client min-w-0 flex-1">
-      <BookingPanel
-        selectedCabanaId={selectedCabanaId}
-        bookingState={bookingState}
-        onClose={handleBookingClose}
-        onSubmit={handleBookingSubmit}
-      />
+      <div
+        className={
+          shouldShowBookingPanel
+            ? "booking-panel-slot booking-panel-slot--open"
+            : "booking-panel-slot"
+        }
+      >
+        <div className="booking-panel-slot__content">
+          {displayedBookingPanel ? (
+            <BookingPanel
+              selectedCabanaId={displayedBookingPanel.selectedCabanaId}
+              bookingState={displayedBookingPanel.bookingState}
+              onClose={handleBookingClose}
+              onSubmit={handleBookingSubmit}
+            />
+          ) : null}
+        </div>
+      </div>
 
       {mapState.status === "loading" ? <MapLoadingState /> : null}
       {mapState.status === "error" ? (

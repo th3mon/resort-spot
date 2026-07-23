@@ -49,6 +49,34 @@ body {
   animation: ui-pulse-soft 1.4s ease-in-out infinite;
 }
 
+.booking-panel-slot {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-bottom: 0;
+  transition:
+    grid-template-rows 220ms ease,
+    margin-bottom 220ms ease;
+}
+
+.booking-panel-slot--open {
+  grid-template-rows: 1fr;
+  margin-bottom: 1rem;
+}
+
+.booking-panel-slot__content {
+  min-height: 0;
+  opacity: 0;
+  transform: translateY(-0.35rem);
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.booking-panel-slot--open .booking-panel-slot__content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .map-tile {
   transition:
     background-color 140ms ease,
@@ -77,6 +105,11 @@ body {
   .ui-enter,
   .ui-pulse-soft {
     animation: none;
+  }
+
+  .booking-panel-slot,
+  .booking-panel-slot__content {
+    transition: none;
   }
 
   .map-tile,
