@@ -33,6 +33,7 @@ describe("BookingPanel", () => {
       screen.getByRole("button", { name: "Close booking panel" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Book cabana" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeEnabled();
   });
 
   it("calls the close handler when the close button is clicked", async () => {
@@ -48,6 +49,21 @@ describe("BookingPanel", () => {
     await user.click(
       screen.getByRole("button", { name: "Close booking panel" }),
     );
+
+    expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("calls the close handler when the cancel button is clicked", async () => {
+    const user = userEvent.setup();
+    const handleClose = vi.fn();
+
+    renderPanel({
+      selectedCabanaId: "cabana-0-0",
+      bookingState: { status: "idle" },
+      onClose: handleClose,
+    });
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
 
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
@@ -76,6 +92,7 @@ describe("BookingPanel", () => {
     });
 
     expect(screen.getByRole("button", { name: "Booking..." })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled();
   });
 
   it("disables the close button while booking is submitting", async () => {

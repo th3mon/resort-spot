@@ -165,6 +165,7 @@ Scope:
 
 - Look for good UI/UX solutions and UI libraries
 - Level up UI/UX
+- Add proper animations
 
 ### `0.7.0` - End-To-End Tests And Stabilization
 

@@ -1,0 +1,35 @@
+:root {
+  --color-page-background: #eef3ed;
+  --color-page-foreground: #172018;
+  --color-surface-panel: #ffffff;
+  --color-surface-header: #f8faf6;
+  --color-surface-map: #e3eadf;
+  --color-surface-muted: #f4f7f2;
+  --color-border-muted: #c9d5ca;
+  --color-border-subtle: #d5dfd6;
+  --color-border-control: #b8c9b6;
+  --color-text-muted: #54705d;
+  --color-text-body: #28382d;
+  --color-action: #235c37;
+  --color-action-hover: #1d4d2f;
+  --color-action-soft: #dff2e3;
+  --color-action-focus: rgb(35 92 55 / 20%);
+  --color-on-action: #ffffff;
+  --color-success-surface: #edf8ee;
+  --color-success-border: #b7d5bd;
+  --color-danger-text: #6d2c21;
+  --color-danger-border: #d7aaa1;
+  --color-danger-surface: #fff7f4;
+  --color-cabana-available-border: #4d8d63;
+  --color-cabana-reserved-border: #9c8075;
+  --color-cabana-reserved-surface: #d7c5bc;
+  --color-pool-border: #6fa8bd;
+  --color-pool-surface: #cfeaf1;
+  --color-path-border: #d5c28a;
+  --color-path-surface: #f4e8bb;
+  --color-chalet-border: #b58d6c;
+  --color-chalet-surface: #f1dfcd;
+  --color-empty-border: #d8dfd3;
+  --color-empty-surface: #f7f4df;
+  --color-shadow-soft: rgb(23 32 24 / 10%);
+}
