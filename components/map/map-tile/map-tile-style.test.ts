@@ -175,7 +175,7 @@ describe("map tile style helpers", () => {
     expect(tileClassName(availableCabana, true)).toContain("ring-2");
     expect(tileClassName(availableCabana, true)).toContain("ring-offset-1");
     expect(tileClassName(availableCabana, true)).toContain(
-      "ring-[var(--color-action)]",
+      "ring-(--color-action)",
     );
     expect(tileClassName(reservedCabana, false)).toContain(
       "cursor-not-allowed",
