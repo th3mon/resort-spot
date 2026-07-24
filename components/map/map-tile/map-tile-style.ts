@@ -91,13 +91,13 @@ export function tileClassName(
   }
 
   if (tile.availability === "reserved") {
-    const reservedCabanaTileClassName = `${baseTileClassName} map-tile--reserved cursor-not-allowed border-[var(--color-cabana-reserved-border)] bg-[var(--color-cabana-reserved-surface)] opacity-75 grayscale`;
+    const reservedCabanaTileClassName = `${baseTileClassName} map-tile--reserved cursor-not-allowed border-(--color-cabana-reserved-border) bg-(--color-cabana-reserved-surface) opacity-75 grayscale`;
 
     return reservedCabanaTileClassName;
   }
 
-  const availableCabanaTileClassName = `${baseTileClassName} map-tile--available border-[var(--color-cabana-available-border)] bg-[var(--color-success-surface)] hover:border-[var(--color-action)] hover:bg-[var(--color-action-soft)] focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-[var(--color-action)] ${
-    isSelected ? "ring-2 ring-offset-1 ring-[var(--color-action)]" : ""
+  const availableCabanaTileClassName = `${baseTileClassName} map-tile--available border-(--color-cabana-available-border) bg-(--color-success-surface) hover:border-(--color-action) hover:bg-(--color-action-soft) focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-(--color-action) ${
+    isSelected ? "ring-2 ring-offset-1 ring-(--color-action)" : ""
   }`;
 
   return availableCabanaTileClassName;
@@ -200,16 +200,16 @@ function pathSplitRotationClassName(connections: PathConnections): string {
 
 function tileSurfaceClassName(type: ResortMapTileType): string {
   if (type === "pool") {
-    return "border-[var(--color-pool-border)] bg-[var(--color-pool-surface)]";
+    return "border-(--color-pool-border) bg-(--color-pool-surface)";
   }
 
   if (type === "path") {
-    return "border-[var(--color-path-border)] bg-[var(--color-path-surface)]";
+    return "border-(--color-path-border) bg-(--color-path-surface)";
   }
 
   if (type === "chalet") {
-    return "border-[var(--color-chalet-border)] bg-[var(--color-chalet-surface)]";
+    return "border-(--color-chalet-border) bg-(--color-chalet-surface)";
   }
 
-  return "border-[var(--color-empty-border)] bg-[var(--color-empty-surface)]";
+  return "border-(--color-empty-border) bg-(--color-empty-surface)";
 }

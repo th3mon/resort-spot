@@ -28,8 +28,8 @@ const LEGEND_TILES: LegendTile[] = [
 
 export function MapLegend() {
   return (
-    <aside className="map-legend ui-enter shrink-0 border-t border-[var(--color-border-subtle)] bg-[var(--color-page-background)] pt-4 lg:sticky lg:top-4 lg:self-start lg:rounded lg:border lg:bg-[var(--color-surface-panel)] lg:p-4 lg:shadow-sm">
-      <h2 className="map-legend__title text-sm font-semibold uppercase text-[var(--color-text-muted)]">
+    <aside className="map-legend ui-enter shrink-0 border-t border-(--color-border-subtle) bg-background pt-4 lg:sticky lg:top-4 lg:self-start lg:rounded lg:border lg:bg-(--color-surface-panel) lg:p-4 lg:shadow-sm">
+      <h2 className="map-legend__title text-sm font-semibold uppercase text-(--color-text-muted)">
         Legend
       </h2>
       <ul className="map-legend__list mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
@@ -39,7 +39,7 @@ export function MapLegend() {
           return (
             <li
               key={`${tile.type}-${tile.availability ?? "default"}`}
-              className={`map-legend__item map-legend__item--${tile.type} flex items-center gap-3 rounded px-1 py-1 text-sm text-[var(--color-text-body)]`}
+              className={`map-legend__item map-legend__item--${tile.type} flex items-center gap-3 rounded px-1 py-1 text-sm text-(--color-text-body)`}
             >
               <span
                 className={`map-legend__tile ${tileLegendClassName(

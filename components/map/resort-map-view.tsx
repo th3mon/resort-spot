@@ -4,12 +4,12 @@ import { ResortMapClient } from "@/components/map/resort-map-client";
 export function ResortMapView() {
   return (
     <section className="resort-map-view flex min-h-0 flex-1 flex-col gap-5">
-      <header className="resort-map-view__header border-b border-[var(--color-border-subtle)] bg-[var(--color-surface-header)] px-5 py-5 shadow-sm sm:px-8">
+      <header className="resort-map-view__header border-b border-(--color-border-subtle) bg-(--color-surface-header) px-5 py-5 shadow-sm sm:px-8">
         <div className="resort-map-view__heading-group">
-          <p className="resort-map-view__eyebrow text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+          <p className="resort-map-view__eyebrow text-xs font-semibold uppercase tracking-wide text-(--color-text-muted)">
             Resort Spot
           </p>
-          <h1 className="resort-map-view__title mt-1 text-2xl font-semibold text-[var(--color-page-foreground)] sm:text-3xl">
+          <h1 className="resort-map-view__title mt-1 text-2xl font-semibold text-foreground sm:text-3xl">
             Cabana Map
           </h1>
         </div>

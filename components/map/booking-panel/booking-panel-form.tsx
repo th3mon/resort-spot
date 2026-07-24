@@ -53,7 +53,7 @@ export const BookingPanelForm = ({
       <div className="booking-panel__actions flex flex-wrap gap-2">
         <button
           type="submit"
-          className="booking-panel__action booking-panel__action--submit w-fit rounded border border-[var(--color-action)] bg-[var(--color-action)] px-4 py-2 font-semibold text-[var(--color-on-action)] shadow-sm transition hover:bg-[var(--color-action-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action)] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
+          className="booking-panel__action booking-panel__action--submit w-fit rounded border border-(--color-action) bg-(--color-action) px-4 py-2 font-semibold text-(--color-on-action) shadow-sm transition hover:bg-(--color-action-hover) focus:outline-none focus:ring-2 focus:ring-(--color-action) focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
           disabled={bookingState.status === "submitting"}
         >
           {bookingState.status === "submitting" ? "Booking..." : "Book cabana"}
@@ -61,7 +61,7 @@ export const BookingPanelForm = ({
 
         <button
           type="button"
-          className="booking-panel__action booking-panel__action--cancel w-fit rounded border border-[var(--color-border-control)] bg-[var(--color-surface-panel)] px-4 py-2 font-semibold text-[var(--color-text-body)] shadow-sm transition hover:border-[var(--color-text-muted)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action)] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="booking-panel__action booking-panel__action--cancel w-fit rounded border border-(--color-border-control) bg-(--color-surface-panel) px-4 py-2 font-semibold text-(--color-text-body) shadow-sm transition hover:border-(--color-text-muted) hover:bg-(--color-surface-muted) focus:outline-none focus:ring-2 focus:ring-(--color-action) focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={bookingState.status === "submitting"}
           onClick={onCancel}
         >

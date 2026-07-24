@@ -20,7 +20,7 @@ export const BookingPanelField = ({
     {label}
     <input
       name={name}
-      className="booking-panel__input rounded border border-[var(--color-border-control)] px-3 py-2 font-normal transition focus:border-[var(--color-action)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action-focus)]"
+      className="booking-panel__input rounded border border-(--color-border-control) px-3 py-2 font-normal transition focus:border-(--color-action) focus:outline-none focus:ring-2 focus:ring-(--color-action-focus)"
       autoComplete={autoComplete}
     />
     <BookingPanelFieldMessage
