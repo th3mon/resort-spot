@@ -28,7 +28,7 @@ const LEGEND_TILES: LegendTile[] = [
 
 export function MapLegend() {
   return (
-    <aside className="map-legend ui-enter shrink-0 border-t border-(--color-border-subtle) bg-background pt-4 lg:sticky lg:top-4 lg:self-start lg:rounded lg:border lg:bg-(--color-surface-panel) lg:p-4 lg:shadow-sm">
+    <aside className="map-legend ui-enter shrink-0 rounded border border-(--color-border-subtle) pt-4 bg-(--color-surface-panel) p-4 shadow-sm lg:sticky lg:top-4 lg:self-start">
       <h2 className="map-legend__title text-sm font-semibold uppercase text-(--color-text-muted)">
         Legend
       </h2>
