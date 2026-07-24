@@ -223,6 +223,41 @@ describe("ResortMapClient", () => {
     expect(scrollIntoViewMock).not.toHaveBeenCalled();
   });
 
+  it("scrolls again when another cabana is selected while the booking panel is open", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(jsonResponse(mapWithTwoAvailableCabanasFixture));
+    const scrollIntoViewMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    vi.stubGlobal("innerHeight", 800);
+    mockBookingPanelVisibility({
+      isVisible: false,
+      scrollIntoViewMock,
+    });
+
+    render(<ResortMapClient />);
+
+    await user.click(
+      await screen.findByRole("button", {
+        name: "cabana-0-0, available",
+      }),
+    );
+
+    expect(scrollIntoViewMock).toHaveBeenCalledTimes(1);
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "cabana-1-0, available",
+      }),
+    );
+
+    expect(scrollIntoViewMock).toHaveBeenCalledTimes(2);
+    expect(
+      screen.getByRole("heading", { name: "Book cabana-1-0" }),
+    ).toBeInTheDocument();
+  });
+
   it("closes the booking panel when canceled", async () => {
     const user = userEvent.setup();
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse(mapFixture));
@@ -409,6 +444,22 @@ const bookedMapFixture: PublicResortMap = {
       ? {
           ...tile,
           availability: "reserved",
+        }
+      : tile,
+  ),
+};
+
+const mapWithTwoAvailableCabanasFixture: PublicResortMap = {
+  ...mapFixture,
+  tiles: mapFixture.tiles.map(tile =>
+    tile.id === "tile-1-0"
+      ? {
+          id: "cabana-1-0",
+          x: 1,
+          y: 0,
+          symbol: "W",
+          type: "cabana",
+          availability: "available",
         }
       : tile,
   ),

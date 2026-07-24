@@ -41,13 +41,17 @@ export function ResortMapClient() {
   const [renderedBookingPanel, setRenderedBookingPanel] =
     useState<RenderedBookingPanel | null>(null);
   const bookingPanelScrollTargetRef = useRef<HTMLDivElement>(null);
-  const wasBookingPanelShownRef = useRef(false);
+  const lastBookingPanelScrollKeyRef = useRef<string | null>(null);
 
   const shouldShowBookingPanel =
     selectedCabanaId !== null || bookingState.status !== "idle";
   const displayedBookingPanel = shouldShowBookingPanel
     ? { selectedCabanaId, bookingState }
     : renderedBookingPanel;
+  const bookingPanelScrollKey = scrollKeyForBookingPanel(
+    selectedCabanaId,
+    bookingState,
+  );
 
   const handleBookingClose = useCallback((): void => {
     setRenderedBookingPanel({ selectedCabanaId, bookingState });
@@ -94,16 +98,16 @@ export function ResortMapClient() {
 
   useEffect(() => {
     if (!shouldShowBookingPanel) {
-      wasBookingPanelShownRef.current = false;
+      lastBookingPanelScrollKeyRef.current = null;
 
       return;
     }
 
-    if (wasBookingPanelShownRef.current) {
+    if (lastBookingPanelScrollKeyRef.current === bookingPanelScrollKey) {
       return;
     }
 
-    wasBookingPanelShownRef.current = true;
+    lastBookingPanelScrollKeyRef.current = bookingPanelScrollKey;
 
     const scrollTarget = bookingPanelScrollTargetRef.current;
 
@@ -115,7 +119,7 @@ export function ResortMapClient() {
       behavior: "smooth",
       block: "start",
     });
-  }, [shouldShowBookingPanel]);
+  }, [bookingPanelScrollKey, shouldShowBookingPanel]);
 
   useEffect(() => {
     if (
@@ -252,4 +256,19 @@ const isElementFullyVisible = (element: HTMLElement): boolean => {
   const { bottom, top } = element.getBoundingClientRect();
 
   return top >= 0 && bottom <= window.innerHeight;
+};
+
+const scrollKeyForBookingPanel = (
+  selectedCabanaId: string | null,
+  bookingState: BookingState,
+): string | null => {
+  if (selectedCabanaId) {
+    return selectedCabanaId;
+  }
+
+  if (bookingState.status !== "idle") {
+    return bookingState.status;
+  }
+
+  return null;
 };
