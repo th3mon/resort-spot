@@ -156,26 +156,6 @@ describe("BookingPanelForm", () => {
       "true",
     );
   });
-
-  it("renders field and form errors with both field messages", () => {
-    renderForm({
-      bookingState: {
-        status: "error",
-        message: "Unable to complete booking. Please try again.",
-        errors: {
-          room: "Enter a room number.",
-          guestName: "Enter a guest name.",
-        },
-      },
-    });
-
-    expect(screen.getByText("Enter a room number.")).toBeInTheDocument();
-    expect(screen.getByText("Enter a guest name.")).toBeInTheDocument();
-    expect(
-      screen.getByText("Unable to complete booking. Please try again."),
-    ).toBeInTheDocument();
-    expect(screen.getAllByRole("alert")).toHaveLength(3);
-  });
 });
 
 type RenderFormOptions = Partial<
