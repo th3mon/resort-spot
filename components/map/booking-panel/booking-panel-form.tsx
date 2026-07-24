@@ -33,8 +33,14 @@ export const BookingPanelForm = ({
           autoComplete="off"
         />
         {bookingState.status === "error" && bookingState.errors?.room ? (
-          <BookingPanelErrorMessage message={bookingState.errors.room} />
-        ) : null}
+          <div className="mt-2">
+            <BookingPanelErrorMessage message={bookingState.errors.room} />
+          </div>
+        ) : (
+          <BookingPanelMessagePlaceholder
+            shouldRender={shouldRender(bookingState)}
+          />
+        )}
       </label>
 
       <label className="booking-panel__field grid gap-1 font-medium">
@@ -45,14 +51,27 @@ export const BookingPanelForm = ({
           autoComplete="name"
         />
         {bookingState.status === "error" && bookingState.errors?.guestName ? (
-          <BookingPanelErrorMessage message={bookingState.errors.guestName} />
-        ) : null}
+          <div className="mt-2">
+            <BookingPanelErrorMessage message={bookingState.errors.guestName} />
+          </div>
+        ) : (
+          <BookingPanelMessagePlaceholder
+            shouldRender={shouldRender(bookingState)}
+          />
+        )}
       </label>
-    </div>
 
-    {bookingState.status === "error" && bookingState.message ? (
-      <BookingPanelErrorMessage message={bookingState.message} />
-    ) : null}
+      {bookingState.status === "error" && bookingState.message ? (
+        <div className="col-span-2">
+          <BookingPanelErrorMessage message={bookingState.message} />
+        </div>
+      ) : null}
+
+      {bookingState.status === "submitting" ||
+      bookingState.status === "idle" ? (
+        <div className="h-4 w-auto"></div>
+      ) : null}
+    </div>
 
     <div className="booking-panel__actions flex flex-wrap gap-2">
       <button
@@ -74,3 +93,16 @@ export const BookingPanelForm = ({
     </div>
   </form>
 );
+
+const shouldRender = (bookingState: BookingPanelFormProps["bookingState"]) =>
+  bookingState.status === "error" && !bookingState.message;
+
+const BookingPanelMessagePlaceholder = ({
+  shouldRender,
+}: {
+  shouldRender: boolean;
+}) => {
+  return shouldRender ? (
+    <div className="booking-panel__message--placeholder h-4 mt-2 w-auto"></div>
+  ) : null;
+};
