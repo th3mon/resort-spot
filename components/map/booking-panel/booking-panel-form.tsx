@@ -1,4 +1,5 @@
 import { BookingPanelErrorMessage } from "./booking-panel-error-message";
+import { BookingPanelField } from "./booking-panel-field";
 import type { BookingState, BookingSubmitHandler } from "./booking-panel-types";
 
 type BookingPanelFormProps = {
@@ -13,96 +14,93 @@ export const BookingPanelForm = ({
   bookingState,
   onCancel,
   onSubmit,
-}: BookingPanelFormProps) => (
-  <form
-    className="booking-panel__form grid gap-4 sm:max-w-2xl"
-    onSubmit={onSubmit}
-  >
-    <div className="booking-panel__header">
-      <h2 className="booking-panel__title text-base font-semibold">
-        Book {selectedCabanaId}
-      </h2>
-    </div>
+}: BookingPanelFormProps) => {
+  const fieldErrors = errorsFor(bookingState);
+  const shouldReserveFieldMessageSpace =
+    shouldReserveMessageSpaceFor(bookingState);
 
-    <div className="booking-panel__fields grid gap-3 sm:grid-cols-2">
-      <label className="booking-panel__field grid gap-1 font-medium">
-        Room number
-        <input
+  return (
+    <form
+      className="booking-panel__form grid gap-4 sm:max-w-2xl"
+      onSubmit={onSubmit}
+    >
+      <div className="booking-panel__header">
+        <h2 className="booking-panel__title text-base font-semibold">
+          Book {selectedCabanaId}
+        </h2>
+      </div>
+
+      <div className="booking-panel__fields grid gap-3 sm:grid-cols-2">
+        <BookingPanelField
+          label="Room number"
           name="room"
-          className="booking-panel__input rounded border border-[var(--color-border-control)] px-3 py-2 font-normal transition focus:border-[var(--color-action)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action-focus)]"
           autoComplete="off"
+          error={fieldErrors?.room}
+          shouldReserveMessageSpace={shouldReserveFieldMessageSpace}
         />
-        {bookingState.status === "error" && bookingState.errors?.room ? (
-          <div className="mt-2">
-            <BookingPanelErrorMessage message={bookingState.errors.room} />
-          </div>
-        ) : (
-          <BookingPanelMessagePlaceholder
-            shouldRender={shouldRender(bookingState)}
-          />
-        )}
-      </label>
 
-      <label className="booking-panel__field grid gap-1 font-medium">
-        Guest name
-        <input
+        <BookingPanelField
+          label="Guest name"
           name="guestName"
-          className="booking-panel__input rounded border border-[var(--color-border-control)] px-3 py-2 font-normal transition focus:border-[var(--color-action)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action-focus)]"
           autoComplete="name"
+          error={fieldErrors?.guestName}
+          shouldReserveMessageSpace={shouldReserveFieldMessageSpace}
         />
-        {bookingState.status === "error" && bookingState.errors?.guestName ? (
-          <div className="mt-2">
-            <BookingPanelErrorMessage message={bookingState.errors.guestName} />
-          </div>
-        ) : (
-          <BookingPanelMessagePlaceholder
-            shouldRender={shouldRender(bookingState)}
-          />
-        )}
-      </label>
 
-      {bookingState.status === "error" && bookingState.message ? (
-        <div className="col-span-2">
-          <BookingPanelErrorMessage message={bookingState.message} />
-        </div>
-      ) : null}
+        <BookingPanelFormMessage bookingState={bookingState} />
+      </div>
 
-      {bookingState.status === "submitting" ||
-      bookingState.status === "idle" ? (
-        <div className="h-4 w-auto"></div>
-      ) : null}
-    </div>
+      <div className="booking-panel__actions flex flex-wrap gap-2">
+        <button
+          type="submit"
+          className="booking-panel__action booking-panel__action--submit w-fit rounded border border-[var(--color-action)] bg-[var(--color-action)] px-4 py-2 font-semibold text-[var(--color-on-action)] shadow-sm transition hover:bg-[var(--color-action-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action)] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
+          disabled={bookingState.status === "submitting"}
+        >
+          {bookingState.status === "submitting" ? "Booking..." : "Book cabana"}
+        </button>
 
-    <div className="booking-panel__actions flex flex-wrap gap-2">
-      <button
-        type="submit"
-        className="booking-panel__action booking-panel__action--submit w-fit rounded border border-[var(--color-action)] bg-[var(--color-action)] px-4 py-2 font-semibold text-[var(--color-on-action)] shadow-sm transition hover:bg-[var(--color-action-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action)] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
-        disabled={bookingState.status === "submitting"}
-      >
-        {bookingState.status === "submitting" ? "Booking..." : "Book cabana"}
-      </button>
+        <button
+          type="button"
+          className="booking-panel__action booking-panel__action--cancel w-fit rounded border border-[var(--color-border-control)] bg-[var(--color-surface-panel)] px-4 py-2 font-semibold text-[var(--color-text-body)] shadow-sm transition hover:border-[var(--color-text-muted)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action)] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={bookingState.status === "submitting"}
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+};
 
-      <button
-        type="button"
-        className="booking-panel__action booking-panel__action--cancel w-fit rounded border border-[var(--color-border-control)] bg-[var(--color-surface-panel)] px-4 py-2 font-semibold text-[var(--color-text-body)] shadow-sm transition hover:border-[var(--color-text-muted)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action)] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-        disabled={bookingState.status === "submitting"}
-        onClick={onCancel}
-      >
-        Cancel
-      </button>
-    </div>
-  </form>
-);
+const errorsFor = (bookingState: BookingState) =>
+  bookingState.status === "error" ? bookingState.errors : null;
 
-const shouldRender = (bookingState: BookingPanelFormProps["bookingState"]) =>
+const shouldReserveMessageSpaceFor = (bookingState: BookingState) =>
   bookingState.status === "error" && !bookingState.message;
 
-const BookingPanelMessagePlaceholder = ({
-  shouldRender,
-}: {
-  shouldRender: boolean;
-}) => {
-  return shouldRender ? (
-    <div className="booking-panel__message--placeholder h-4 mt-2 w-auto"></div>
-  ) : null;
+type BookingPanelFormMessageProps = {
+  bookingState: BookingState;
+};
+
+const BookingPanelFormMessage = ({
+  bookingState,
+}: BookingPanelFormMessageProps) => {
+  if (bookingState.status === "error" && bookingState.message) {
+    return (
+      <div className="booking-panel__form-message col-span-2">
+        <BookingPanelErrorMessage message={bookingState.message} />
+      </div>
+    );
+  }
+
+  if (bookingState.status === "submitting" || bookingState.status === "idle") {
+    return (
+      <div
+        className="booking-panel__message-placeholder h-4 w-auto"
+        aria-hidden="true"
+      />
+    );
+  }
+
+  return null;
 };
