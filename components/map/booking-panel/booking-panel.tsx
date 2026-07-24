@@ -25,7 +25,7 @@ export function BookingPanel({
   }
 
   return (
-    <section className="booking-panel ui-enter sticky top-4 z-10 rounded border border-[#b8c9b6] bg-white p-4 text-sm text-[#28382d] shadow-md shadow-[#172018]/10">
+    <section className="booking-panel ui-enter sticky top-4 z-10 rounded border border-[var(--color-border-control)] bg-[var(--color-surface-panel)] p-4 text-sm text-[var(--color-text-body)] shadow-md shadow-[color:var(--color-shadow-soft)]">
       {selectedCabanaId ? (
         <BookingPanelForm
           selectedCabanaId={selectedCabanaId}

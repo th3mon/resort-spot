@@ -29,7 +29,7 @@ export const BookingPanelForm = ({
         Room number
         <input
           name="room"
-          className="booking-panel__input rounded border border-[#b8c9b6] px-3 py-2 font-normal transition focus:border-[#235c37] focus:outline-none focus:ring-2 focus:ring-[#235c37]/20"
+          className="booking-panel__input rounded border border-[var(--color-border-control)] px-3 py-2 font-normal transition focus:border-[var(--color-action)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action-focus)]"
           autoComplete="off"
         />
         {bookingState.status === "error" && bookingState.errors?.room ? (
@@ -41,7 +41,7 @@ export const BookingPanelForm = ({
         Guest name
         <input
           name="guestName"
-          className="booking-panel__input rounded border border-[#b8c9b6] px-3 py-2 font-normal transition focus:border-[#235c37] focus:outline-none focus:ring-2 focus:ring-[#235c37]/20"
+          className="booking-panel__input rounded border border-[var(--color-border-control)] px-3 py-2 font-normal transition focus:border-[var(--color-action)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action-focus)]"
           autoComplete="name"
         />
         {bookingState.status === "error" && bookingState.errors?.guestName ? (
@@ -57,7 +57,7 @@ export const BookingPanelForm = ({
     <div className="booking-panel__actions flex flex-wrap gap-2">
       <button
         type="submit"
-        className="booking-panel__action booking-panel__action--submit w-fit rounded border border-[#235c37] bg-[#235c37] px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-[#1d4d2f] focus:outline-none focus:ring-2 focus:ring-[#235c37] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
+        className="booking-panel__action booking-panel__action--submit w-fit rounded border border-[var(--color-action)] bg-[var(--color-action)] px-4 py-2 font-semibold text-[var(--color-on-action)] shadow-sm transition hover:bg-[var(--color-action-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action)] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
         disabled={bookingState.status === "submitting"}
       >
         {bookingState.status === "submitting" ? "Booking..." : "Book cabana"}
@@ -65,7 +65,7 @@ export const BookingPanelForm = ({
 
       <button
         type="button"
-        className="booking-panel__action booking-panel__action--cancel w-fit rounded border border-[#b8c9b6] bg-white px-4 py-2 font-semibold text-[#28382d] shadow-sm transition hover:border-[#54705d] hover:bg-[#f4f7f2] focus:outline-none focus:ring-2 focus:ring-[#235c37] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        className="booking-panel__action booking-panel__action--cancel w-fit rounded border border-[var(--color-border-control)] bg-[var(--color-surface-panel)] px-4 py-2 font-semibold text-[var(--color-text-body)] shadow-sm transition hover:border-[var(--color-text-muted)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-action)] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         disabled={bookingState.status === "submitting"}
         onClick={onCancel}
       >

@@ -6,7 +6,7 @@ export function MapLoadingState() {
   return (
     <div
       style={mapLoadingStyles}
-      className="map-loading grid min-h-svh place-items-center rounded border border-[#c9d5ca] bg-white text-sm font-medium text-[#54705d] shadow-sm"
+      className="map-loading grid min-h-svh place-items-center rounded border border-[var(--color-border-muted)] bg-[var(--color-surface-panel)] text-sm font-medium text-[var(--color-text-muted)] shadow-sm"
     >
       <span className="map-loading__label ui-pulse-soft">Loading map</span>
     </div>
