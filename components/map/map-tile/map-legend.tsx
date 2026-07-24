@@ -64,6 +64,7 @@ export function MapLegend() {
                 )}`}
               >
                 <Image
+                  priority
                   src={asset.src}
                   alt=""
                   width={32}
