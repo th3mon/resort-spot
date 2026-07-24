@@ -18,6 +18,7 @@ describe("ResortMapClient", () => {
     cleanup();
     vi.useRealTimers();
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
   it("shows the loading state while the map request is pending", () => {
@@ -173,6 +174,53 @@ describe("ResortMapClient", () => {
         screen.queryByRole("heading", { name: "Book cabana-0-0" }),
       ).not.toBeInTheDocument();
     });
+  });
+
+  it("scrolls to the booking panel when it opens outside the viewport", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(mapFixture));
+    const scrollIntoViewMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    vi.stubGlobal("innerHeight", 800);
+    mockBookingPanelVisibility({
+      isVisible: false,
+      scrollIntoViewMock,
+    });
+
+    render(<ResortMapClient />);
+
+    await user.click(
+      await screen.findByRole("button", {
+        name: "cabana-0-0, available",
+      }),
+    );
+
+    expect(scrollIntoViewMock).toHaveBeenCalledWith({
+      behavior: "smooth",
+      block: "start",
+    });
+  });
+
+  it("does not scroll when the opened booking panel is already visible", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(mapFixture));
+    const scrollIntoViewMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    vi.stubGlobal("innerHeight", 800);
+    mockBookingPanelVisibility({
+      isVisible: true,
+      scrollIntoViewMock,
+    });
+
+    render(<ResortMapClient />);
+
+    await user.click(
+      await screen.findByRole("button", {
+        name: "cabana-0-0, available",
+      }),
+    );
+
+    expect(scrollIntoViewMock).not.toHaveBeenCalled();
   });
 
   it("closes the booking panel when canceled", async () => {
@@ -364,4 +412,45 @@ const bookedMapFixture: PublicResortMap = {
         }
       : tile,
   ),
+};
+
+type MockBookingPanelVisibilityOptions = {
+  isVisible: boolean;
+  scrollIntoViewMock: ReturnType<typeof vi.fn>;
+};
+
+const mockBookingPanelVisibility = ({
+  isVisible,
+  scrollIntoViewMock,
+}: MockBookingPanelVisibilityOptions) => {
+  Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
+    configurable: true,
+    value: scrollIntoViewMock,
+  });
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+    function getBoundingClientRect() {
+      if (this.classList.contains("booking-panel-slot__content")) {
+        return rectForVisibility(isVisible);
+      }
+
+      return rectForVisibility(true);
+    },
+  );
+};
+
+const rectForVisibility = (isVisible: boolean): DOMRect => {
+  const top = isVisible ? 20 : 900;
+  const bottom = isVisible ? 200 : 1_100;
+
+  return {
+    bottom,
+    height: bottom - top,
+    left: 0,
+    right: 200,
+    top,
+    width: 200,
+    x: 0,
+    y: top,
+    toJSON: () => ({}),
+  };
 };

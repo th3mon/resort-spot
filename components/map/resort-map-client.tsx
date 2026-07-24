@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import z from "zod";
 
 import {
@@ -40,6 +40,8 @@ export function ResortMapClient() {
   });
   const [renderedBookingPanel, setRenderedBookingPanel] =
     useState<RenderedBookingPanel | null>(null);
+  const bookingPanelScrollTargetRef = useRef<HTMLDivElement>(null);
+  const wasBookingPanelShownRef = useRef(false);
 
   const shouldShowBookingPanel =
     selectedCabanaId !== null || bookingState.status !== "idle";
@@ -89,6 +91,31 @@ export function ResortMapClient() {
       window.clearTimeout(timeoutId);
     };
   }, [shouldShowBookingPanel, renderedBookingPanel]);
+
+  useEffect(() => {
+    if (!shouldShowBookingPanel) {
+      wasBookingPanelShownRef.current = false;
+
+      return;
+    }
+
+    if (wasBookingPanelShownRef.current) {
+      return;
+    }
+
+    wasBookingPanelShownRef.current = true;
+
+    const scrollTarget = bookingPanelScrollTargetRef.current;
+
+    if (!scrollTarget || isElementFullyVisible(scrollTarget)) {
+      return;
+    }
+
+    scrollTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [shouldShowBookingPanel]);
 
   useEffect(() => {
     if (
@@ -191,7 +218,10 @@ export function ResortMapClient() {
             : "booking-panel-slot"
         }
       >
-        <div className="booking-panel-slot__content">
+        <div
+          className="booking-panel-slot__content"
+          ref={bookingPanelScrollTargetRef}
+        >
           {displayedBookingPanel ? (
             <BookingPanel
               selectedCabanaId={displayedBookingPanel.selectedCabanaId}
@@ -217,3 +247,9 @@ export function ResortMapClient() {
     </div>
   );
 }
+
+const isElementFullyVisible = (element: HTMLElement): boolean => {
+  const { bottom, top } = element.getBoundingClientRect();
+
+  return top >= 0 && bottom <= window.innerHeight;
+};
