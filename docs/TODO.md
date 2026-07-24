@@ -4,7 +4,7 @@
 
 - [ ] Nie wiem jak jeszcze zrobić układ w UI
 
-## Mozliwosc zamkniecia BookingPanel
+## Możliwość zamknięcia BookingPanel
 
 - [x] Chcę by była możliwość zamknięcia booking-panel za pomocą przycisku w prawym górnym rogu panelu.
 - [x] Chcę by booking-panel się zamykał po akcji kliknięcia w zajętą cabanę sam po 3 sekundach
