@@ -10,6 +10,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "version:bump": "npm version --no-git-tag-version",
+    "playwright:install": "npx playwright install chromium",
     "test": "vitest",
     "test:ci": "vitest run",
     "check:all": "npm run lint && npm run format && npm run test:ci && npm run build"
