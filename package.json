@@ -1,6 +1,6 @@
 {
   "name": "resort-spot",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "scripts": {
     "dev": "node scripts/start.mjs",
@@ -10,9 +10,13 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "version:bump": "npm version --no-git-tag-version",
+    "playwright:install": "npx playwright install chromium",
     "test": "vitest",
     "test:ci": "vitest run",
-    "check:all": "npm run lint && npm run format && npm run test:ci && npm run build"
+    "test:e2e": "npm run build && playwright test && playwright test --config playwright.alternative.config.ts",
+    "test:e2e:alternative": "npm run build && playwright test --config playwright.alternative.config.ts",
+    "test:e2e:ui": "playwright test --ui",
+    "check:all": "npm run lint && npm run format:check && npm run test:ci && npm run build"
   },
   "dependencies": {
     "lodash": "^4.18.1",
@@ -22,6 +26,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -37,5 +42,11 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.5"
+  },
+  "allowScripts": {
+    "fsevents@2.3.3": true,
+    "sharp@0.34.5": true,
+    "unrs-resolver@1.11.1": true,
+    "fsevents@2.3.2": true
   }
 }
