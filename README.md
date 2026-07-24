@@ -2,7 +2,7 @@
 
 Resort Spot is a Next.js + TypeScript code test project for an interactive resort map and cabana booking flow.
 
-The app will render a resort map from REST API data, let guests book available cabanas, validate guests against the provided bookings file, and keep reservation state in memory.
+The app renders a resort map from REST API data, lets guests book available cabanas, validates guests against the provided bookings file, and keeps reservation state in memory.
 
 ## Source Materials
 
@@ -16,8 +16,7 @@ public/assets/
 
 ## Current Status
 
-The project has a Next.js + TypeScript skeleton, basic lint/test scripts, and
-a CLI-aware start layer for the input file paths required by the code test.
+The project has a Next.js + TypeScript implementation with API routes, domain parsing and booking logic, frontend map rendering, unit/component tests, and Playwright end-to-end tests.
 
 See [docs/road-map.md](docs/road-map.md) for the implementation roadmap, Semantic Versioning plan, and Git Flow notes.
 
@@ -36,6 +35,12 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+Run the development server with explicit input files:
+
+```bash
+npm run dev -- --map data/map.ascii --bookings data/bookings.json
+```
 
 ## Run Contract
 
@@ -90,7 +95,7 @@ Content-Type: application/json
 
 Reservations are kept in memory and reset when the app process restarts.
 
-## Planned Architecture
+## Project Structure
 
 ```text
 app/
@@ -98,11 +103,15 @@ app/
     map/route.ts
     cabanas/[id]/book/route.ts
 components/
+  map/
 domain/
   bookings.ts
   resort-map.ts
   reservations.ts
 docs/
+e2e/
+  fixtures/
+utils/
 ```
 
 Route Handlers should stay thin and delegate domain behavior to `domain/`.
@@ -116,10 +125,27 @@ npm run start
 npm run lint
 npm run format
 npm run format:check
+npm run playwright:install
 npm run version:bump -- patch
 npm run version:bump -- 0.1.1
 npm run test
 npm run test:ci
+npm run test:e2e
+npm run test:e2e:alternative
+npm run test:e2e:ui
+npm run check:all
+```
+
+Install the Playwright Chromium browser before running E2E tests for the first time:
+
+```bash
+npm run playwright:install
+```
+
+Run all automated checks:
+
+```bash
+npm run check:all
 ```
 
 Use `npm run version:bump -- <version-or-semver-step>` instead of calling
@@ -127,3 +153,41 @@ Use `npm run version:bump -- <version-or-semver-step>` instead of calling
 Git Flow owns release commits and tags. In this project, npm should only update
 the version fields in `package.json` and `package-lock.json`; the release tag is
 created later by `git flow release finish`.
+
+## End-To-End Tests
+
+Playwright tests live in `e2e/`.
+
+Default E2E tests start the production Next.js server with default input files:
+
+```bash
+npm run test:e2e
+```
+
+Alternative input coverage uses:
+
+```text
+e2e/fixtures/map.ascii
+e2e/fixtures/bookings.json
+```
+
+Run only the alternative input E2E test:
+
+```bash
+npm run test:e2e:alternative
+```
+
+Open the Playwright UI runner:
+
+```bash
+npm run test:e2e:ui
+```
+
+## Trade-Offs And Limitations
+
+- Reservations are stored in memory and reset when the app process restarts.
+- There is no database or persistent storage.
+- There is no authentication; room number and guest name are enough for this code test.
+- Runtime input paths are provided through CLI arguments and exposed to Route Handlers through environment variables.
+- The frontend renders the map from API data and does not hardcode the map layout.
+- E2E tests cover the most important browser-level flows; domain logic and Route Handlers remain covered by Vitest.
