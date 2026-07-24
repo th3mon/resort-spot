@@ -50,7 +50,7 @@ export const BookingPanelForm = ({
         <BookingPanelFormMessage bookingState={bookingState} />
       </div>
 
-      <div className="booking-panel__actions flex flex-wrap gap-2">
+      <div className="booking-panel__actions flex flex-wrap gap-3">
         <button
           type="submit"
           className="booking-panel__action booking-panel__action--submit w-fit rounded border border-(--color-action) bg-(--color-action) px-4 py-2 font-semibold text-(--color-on-action) shadow-sm transition hover:bg-(--color-action-hover) focus:outline-none focus:ring-2 focus:ring-(--color-action) focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
