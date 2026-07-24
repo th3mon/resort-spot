@@ -112,6 +112,7 @@ type TileImageProps = {
 function TileImage({ src, tile, rotationClassName = "" }: TileImageProps) {
   return (
     <Image
+      priority
       src={src}
       alt=""
       width={64}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import z from "zod";
 
 import {
@@ -24,12 +24,40 @@ type MapState =
   | { status: "ready"; map: PublicResortMap }
   | { status: "error"; message: string };
 
+type RenderedBookingPanel = {
+  selectedCabanaId: string | null;
+  bookingState: BookingState;
+};
+
+const BOOKING_PANEL_AUTO_CLOSE_DELAY_MS = 3_000;
+const BOOKING_PANEL_EXIT_ANIMATION_MS = 220;
+
 export function ResortMapClient() {
   const [mapState, setMapState] = useState<MapState>({ status: "loading" });
   const [selectedCabanaId, setSelectedCabanaId] = useState<string | null>(null);
   const [bookingState, setBookingState] = useState<BookingState>({
     status: "idle",
   });
+  const [renderedBookingPanel, setRenderedBookingPanel] =
+    useState<RenderedBookingPanel | null>(null);
+  const bookingPanelScrollTargetRef = useRef<HTMLDivElement>(null);
+  const lastBookingPanelScrollKeyRef = useRef<string | null>(null);
+
+  const shouldShowBookingPanel =
+    selectedCabanaId !== null || bookingState.status !== "idle";
+  const displayedBookingPanel = shouldShowBookingPanel
+    ? { selectedCabanaId, bookingState }
+    : renderedBookingPanel;
+  const bookingPanelScrollKey = scrollKeyForBookingPanel(
+    selectedCabanaId,
+    bookingState,
+  );
+
+  const handleBookingClose = useCallback((): void => {
+    setRenderedBookingPanel({ selectedCabanaId, bookingState });
+    setSelectedCabanaId(null);
+    setBookingState({ status: "idle" });
+  }, [bookingState, selectedCabanaId]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -54,6 +82,62 @@ export function ResortMapClient() {
     };
   }, []);
 
+  useEffect(() => {
+    if (shouldShowBookingPanel || !renderedBookingPanel) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setRenderedBookingPanel(null);
+    }, BOOKING_PANEL_EXIT_ANIMATION_MS);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [shouldShowBookingPanel, renderedBookingPanel]);
+
+  useEffect(() => {
+    if (!shouldShowBookingPanel) {
+      lastBookingPanelScrollKeyRef.current = null;
+
+      return;
+    }
+
+    if (lastBookingPanelScrollKeyRef.current === bookingPanelScrollKey) {
+      return;
+    }
+
+    lastBookingPanelScrollKeyRef.current = bookingPanelScrollKey;
+
+    const scrollTarget = bookingPanelScrollTargetRef.current;
+
+    if (!scrollTarget || isElementFullyVisible(scrollTarget)) {
+      return;
+    }
+
+    scrollTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [bookingPanelScrollKey, shouldShowBookingPanel]);
+
+  useEffect(() => {
+    if (
+      bookingState.status !== "success" &&
+      bookingState.status !== "unavailable"
+    ) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      handleBookingClose();
+    }, BOOKING_PANEL_AUTO_CLOSE_DELAY_MS);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [bookingState.status, handleBookingClose]);
+
   const handleCabanaClick = (tile: PublicResortMapTile): void => {
     if (tile.availability !== "available") {
       setSelectedCabanaId(null);
@@ -66,11 +150,6 @@ export function ResortMapClient() {
     }
 
     setSelectedCabanaId(tile.id);
-    setBookingState({ status: "idle" });
-  };
-
-  const handleBookingClose = (): void => {
-    setSelectedCabanaId(null);
     setBookingState({ status: "idle" });
   };
 
@@ -136,12 +215,27 @@ export function ResortMapClient() {
 
   return (
     <div className="resort-map-client min-w-0 flex-1">
-      <BookingPanel
-        selectedCabanaId={selectedCabanaId}
-        bookingState={bookingState}
-        onClose={handleBookingClose}
-        onSubmit={handleBookingSubmit}
-      />
+      <div
+        className={
+          shouldShowBookingPanel
+            ? "booking-panel-slot booking-panel-slot--open"
+            : "booking-panel-slot"
+        }
+      >
+        <div
+          className="booking-panel-slot__content"
+          ref={bookingPanelScrollTargetRef}
+        >
+          {displayedBookingPanel ? (
+            <BookingPanel
+              selectedCabanaId={displayedBookingPanel.selectedCabanaId}
+              bookingState={displayedBookingPanel.bookingState}
+              onClose={handleBookingClose}
+              onSubmit={handleBookingSubmit}
+            />
+          ) : null}
+        </div>
+      </div>
 
       {mapState.status === "loading" ? <MapLoadingState /> : null}
       {mapState.status === "error" ? (
@@ -157,3 +251,24 @@ export function ResortMapClient() {
     </div>
   );
 }
+
+const isElementFullyVisible = (element: HTMLElement): boolean => {
+  const { bottom, top } = element.getBoundingClientRect();
+
+  return top >= 0 && bottom <= window.innerHeight;
+};
+
+const scrollKeyForBookingPanel = (
+  selectedCabanaId: string | null,
+  bookingState: BookingState,
+): string | null => {
+  if (selectedCabanaId) {
+    return selectedCabanaId;
+  }
+
+  if (bookingState.status !== "idle") {
+    return bookingState.status;
+  }
+
+  return null;
+};
