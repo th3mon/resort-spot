@@ -87,7 +87,7 @@ const BookingPanelFormMessage = ({
 }: BookingPanelFormMessageProps) => {
   if (bookingState.status === "error" && bookingState.message) {
     return (
-      <div className="booking-panel__form-message col-span-2">
+      <div className="booking-panel__form-message md:col-span-2">
         <BookingPanelErrorMessage message={bookingState.message} />
       </div>
     );
