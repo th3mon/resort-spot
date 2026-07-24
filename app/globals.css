@@ -33,7 +33,7 @@ body {
 @keyframes ui-pulse-soft {
   0%,
   100% {
-    opacity: 0.72;
+    opacity: 0.4;
   }
 
   50% {
