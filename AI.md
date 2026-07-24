@@ -10,8 +10,8 @@ readable changes over broad abstractions.
 Work was organized around roadmap milestones and Git Flow:
 
 - `develop` was used as the integration branch.
-- Feature work was started with `git flow feature start <name> develop`.
-- Releases were created with `git flow release start <version> develop`.
+- Feature work was started with `git flow feature start <name>`.
+- Releases were created with `git flow release start <version>`.
 - Version bumps were kept on release branches rather than feature branches.
 - Release tagging was left to Git Flow instead of `npm version`.
 
@@ -19,7 +19,7 @@ The user reviewed implementation details throughout the process and corrected
 project preferences when needed. Those preferences were then added to
 `AGENTS.md` so future work can follow the same conventions.
 
-## AI Contributions So Far
+## AI Contributions
 
 The assistant helped implement the initial project skeleton for `0.1.0`:
 
@@ -77,6 +77,40 @@ reserved. It does not store or expose who reserved a cabana yet; adding that
 would require changing the in-memory state from a set of cabana IDs to a
 reservation record map.
 
+The assistant helped implement the frontend map and booking flow milestones:
+
+- Rendered the interactive resort map from `GET /api/map` data.
+- Used visual assets from `public/assets/` for cabanas, paths, pools, chalets,
+  and empty tiles.
+- Added a map legend and clear visual states for available and reserved cabanas.
+- Added the booking panel, booking form validation, confirmation feedback, and
+  unavailable cabana feedback.
+- Refined UI behavior with close and cancel actions, auto-close feedback, scroll
+  handling on small screens, and entry/exit animations.
+- Moved map-related components into `components/map/` and booking panel files
+  into `components/map/booking-panel/`.
+- Added BEM-style class names for easier component inspection.
+
+The assistant helped add testing and stabilization work for `0.7.0`:
+
+- Installed and configured Vitest, React Testing Library, and Playwright.
+- Added unit tests for domain functions, utilities, API helpers, and map
+  components.
+- Added component tests for the booking panel and resort map client.
+- Added Route Handler tests for core API behavior.
+- Added Playwright E2E coverage for startup, booking flow, mobile behavior, and
+  alternative input files.
+- Kept E2E tests outside `npm run check:all` because browser tests are slower
+  and require Playwright browser installation.
+
+The assistant helped prepare submission documentation for `0.8.0`:
+
+- Updated README instructions for setup, startup, tests, trade-offs, and
+  submission checks.
+- Maintained this `AI.md` file with the tools, prompts, process, and human
+  oversight used during development.
+- Generated `screenshot.png` from the running application.
+
 ## Project Conventions Captured During AI Work
 
 The user clarified several preferences during implementation:
@@ -112,10 +146,20 @@ from older versions.
 The assistant regularly verified changes with:
 
 ```bash
-npm run format:check
-npm run lint
-npm run test:ci
-npm run build
+npm run check:all
+```
+
+That command runs:
+
+- linting,
+- formatting checks,
+- Vitest tests,
+- a production build.
+
+End-to-end tests were run separately with:
+
+```bash
+npm run test:e2e
 ```
 
 For runtime validation, the assistant also started the app and queried
@@ -127,16 +171,29 @@ For the booking API feature, the assistant also smoke-tested:
 - `POST /api/cabanas/:id/book`
 - a follow-up `GET /api/map` confirming the booked cabana became unavailable
 
-The final booking API review was checked with the full verification set:
-
-```bash
-npm run format:check
-npm run lint
-npm run test:ci
-npm run build
-```
+The final booking API review was checked with the full verification set that
+later became `npm run check:all`.
 
 At that point, the suite passed with 6 test files and 31 tests.
+
+By the documentation milestone, Vitest covered more than 100 unit, component,
+API, and domain tests. Playwright E2E tests were run separately because they
+require a browser and a running production build.
+
+## Prompting Pattern
+
+The work was driven by short, concrete prompts from the project owner. Common
+prompt types included:
+
+- Implement a roadmap milestone from `docs/road-map.md`.
+- Move code into a clearer folder structure and update imports.
+- Add tests for a specific component, utility, or API helper.
+- Review the current branch and write findings to `Code_Review.md`.
+- Explain a specific TypeScript, React, testing, or architectural trade-off.
+- Apply a naming or style convention consistently across the codebase.
+
+The assistant responded by reading the relevant files first, making scoped
+changes, running the project checks, and summarizing the result.
 
 ## Human Oversight
 
@@ -158,6 +215,8 @@ The user made or requested several corrections that shaped the final direction:
   and the current API error model before the final submission.
 - Asked to document a future refactor toward a richer Resort Map class with
   lookup APIs such as `getTile()` or `getCabana()`.
+- Asked to point out typos in proposed file, class, variable, and other code
+  names.
 
 The AI assistance was therefore used as an implementation accelerator, while the
 project owner retained architectural and process control.
