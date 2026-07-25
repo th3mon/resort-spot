@@ -285,17 +285,17 @@ The structure can be simplified if the implementation stays small. The priority 
 
 ## Final Checklist
 
-- [ ] One start command launches the Next.js app with frontend and API.
-- [ ] The start command accepts `--map` and `--bookings`.
-- [ ] Route Handlers read the ASCII map from a file.
-- [ ] Route Handlers read the guest list from a JSON file.
-- [ ] REST API returns map data and cabana availability.
-- [ ] REST API handles cabana booking.
-- [ ] Frontend renders the map from API data.
-- [ ] Frontend allows booking an available cabana.
-- [ ] Frontend shows unavailable state for booked cabanas.
-- [ ] API layer tests cover parsing, guest validation, and booking.
-- [ ] Frontend tests cover the core user flow.
-- [ ] README documents running, testing, decisions, and trade-offs.
-- [ ] `AI.md` describes the AI-assisted workflow.
-- [ ] `screenshot.png` shows the running map view.
+- [x] One start command launches the Next.js app with frontend and API.
+- [x] The start command accepts `--map` and `--bookings`.
+- [x] Route Handlers read the ASCII map from a file.
+- [x] Route Handlers read the guest list from a JSON file.
+- [x] REST API returns map data and cabana availability.
+- [x] REST API handles cabana booking.
+- [x] Frontend renders the map from API data.
+- [x] Frontend allows booking an available cabana.
+- [x] Frontend shows unavailable state for booked cabanas.
+- [x] API layer tests cover parsing, guest validation, and booking.
+- [x] Frontend tests cover the core user flow.
+- [x] README documents running, testing, decisions, and trade-offs.
+- [x] `AI.md` describes the AI-assisted workflow.
+- [x] `screenshot.png` shows the running map view.

@@ -59,7 +59,7 @@ export function ResortMapClient() {
     setBookingState({ status: "idle" });
   }, [bookingState, selectedCabanaId]);
 
-  useEffect(() => {
+  const loadInitialMap = (): (() => void) => {
     const abortController = new AbortController();
 
     loadMap(abortController.signal)
@@ -80,9 +80,11 @@ export function ResortMapClient() {
     return () => {
       abortController.abort();
     };
-  }, []);
+  };
 
-  useEffect(() => {
+  useEffect(loadInitialMap, []);
+
+  const scheduleBookingPanelUnmount = (): (() => void) | undefined => {
     if (shouldShowBookingPanel || !renderedBookingPanel) {
       return;
     }
@@ -94,9 +96,14 @@ export function ResortMapClient() {
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [shouldShowBookingPanel, renderedBookingPanel]);
+  };
 
-  useEffect(() => {
+  useEffect(scheduleBookingPanelUnmount, [
+    shouldShowBookingPanel,
+    renderedBookingPanel,
+  ]);
+
+  const scrollBookingPanelIntoView = (): void => {
     if (!shouldShowBookingPanel) {
       lastBookingPanelScrollKeyRef.current = null;
 
@@ -119,9 +126,14 @@ export function ResortMapClient() {
       behavior: "smooth",
       block: "start",
     });
-  }, [bookingPanelScrollKey, shouldShowBookingPanel]);
+  };
 
-  useEffect(() => {
+  useEffect(scrollBookingPanelIntoView, [
+    bookingPanelScrollKey,
+    shouldShowBookingPanel,
+  ]);
+
+  const scheduleBookingPanelAutoClose = (): (() => void) | undefined => {
     if (
       bookingState.status !== "success" &&
       bookingState.status !== "unavailable"
@@ -136,7 +148,12 @@ export function ResortMapClient() {
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [bookingState.status, handleBookingClose]);
+  };
+
+  useEffect(scheduleBookingPanelAutoClose, [
+    bookingState.status,
+    handleBookingClose,
+  ]);
 
   const handleCabanaClick = (tile: PublicResortMapTile): void => {
     if (tile.availability !== "available") {

@@ -42,6 +42,18 @@ Run the development server with explicit input files:
 npm run dev -- --map data/map.ascii --bookings data/bookings.json
 ```
 
+## Submission Run
+
+From the project root, build and start the full frontend and backend with one
+runtime command:
+
+```bash
+npm run build
+npm run start -- --map data/map.ascii --bookings data/bookings.json
+```
+
+Then open [http://localhost:3000](http://localhost:3000).
+
 ## Run Contract
 
 The app provides one root-level start command. It accepts map and bookings file
@@ -142,10 +154,16 @@ Install the Playwright Chromium browser before running E2E tests for the first t
 npm run playwright:install
 ```
 
-Run all automated checks:
+Run all unit, component, API, and build checks:
 
 ```bash
 npm run check:all
+```
+
+Run browser-level E2E checks separately:
+
+```bash
+npm run test:e2e
 ```
 
 Use `npm run version:bump -- <version-or-semver-step>` instead of calling
@@ -190,4 +208,16 @@ npm run test:e2e:ui
 - There is no authentication; room number and guest name are enough for this code test.
 - Runtime input paths are provided through CLI arguments and exposed to Route Handlers through environment variables.
 - The frontend renders the map from API data and does not hardcode the map layout.
+- The booking flow does not use a global store library. The current UI state is local to the map experience, so React state keeps the implementation smaller than adding Redux, Zustand, Jotai, or a similar dependency.
+- The UI does not use a component library. The interface is small and domain-specific, so Tailwind CSS and focused local components keep the bundle and implementation lighter than adding a full UI kit.
 - E2E tests cover the most important browser-level flows; domain logic and Route Handlers remain covered by Vitest.
+- The project keeps the API small: `GET /api/map` and `POST /api/cabanas/:id/book` cover the required flow.
+- E2E tests are intentionally run separately from `npm run check:all` because they are slower and require browser setup.
+
+## Submission Checklist
+
+- Source code is in this repository.
+- `AI.md` documents the AI-assisted workflow.
+- `screenshot.png` shows the running map view.
+- `npm run start -- --map <path> --bookings <path>` starts the full app after build.
+- Automated tests cover domain logic, API behavior, UI behavior, and key E2E flows.
