@@ -4,7 +4,8 @@
 
 The current API and domain code uses `try`/`catch` blocks and thrown exceptions
 for file loading, parsing, validation, and booking failures. This works for the
-current roadmap stage, but it should be revisited before the final submission.
+submission-ready version, but it is worth revisiting as a post-submission
+refactor.
 
 Things to evaluate:
 

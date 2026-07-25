@@ -16,7 +16,7 @@ public/assets/
 
 ## Current Status
 
-The project has a Next.js + TypeScript implementation with API routes, domain parsing and booking logic, frontend map rendering, unit/component tests, and Playwright end-to-end tests.
+The project is a `1.0.0` submission-ready recruitment task solution. It has a Next.js + TypeScript implementation with API routes, domain parsing and booking logic, frontend map rendering, unit/component tests, and Playwright end-to-end tests.
 
 See [docs/road-map.md](docs/road-map.md) for the implementation roadmap, Semantic Versioning plan, and Git Flow notes.
 

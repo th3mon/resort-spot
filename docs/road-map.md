@@ -204,20 +204,20 @@ Acceptance criteria:
 
 Scope:
 
-- Freeze the API contract for the code test solution.
-- Complete the final requirements checklist.
-- Remove unnecessary code, temporary files, and dead dependencies.
-- Mark the project as a complete recruitment task solution.
+- [x] Freeze the API contract for the code test solution.
+- [x] Complete the final requirements checklist.
+- [x] Remove unnecessary code, temporary files, and dead dependencies.
+- [x] Mark the project as a complete recruitment task solution.
 
 Acceptance criteria:
 
-- The app meets all functional requirements from `../ResortMapCodeTest/README.md`.
-- The project starts with one command from the project root.
-- The startup layer supports `--map` and `--bookings`.
-- The frontend renders the map from API data.
-- Cabana booking works and updates the map.
-- Automated tests pass.
-- README, `AI.md`, and `screenshot.png` are present.
+- [x] The app meets all functional requirements from `../ResortMapCodeTest/README.md`.
+- [x] The project starts with one command from the project root.
+- [x] The startup layer supports `--map` and `--bookings`.
+- [x] The frontend renders the map from API data.
+- [x] Cabana booking works and updates the map.
+- [x] Automated tests pass.
+- [x] README, `AI.md`, and `screenshot.png` are present.
 
 ## Possible Post-Submission Versions
 
