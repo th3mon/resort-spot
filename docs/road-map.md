@@ -234,6 +234,151 @@ Acceptance criteria:
 - Local demo endpoint for resetting reservation state.
 - More explicit frontend-facing error codes.
 
+### `1.3.0` - Database Persistence With Prisma
+
+Goal:
+
+Introduce a database-backed persistence layer with Prisma while keeping the
+current public guest-facing API contract stable where possible.
+
+Recommended technology:
+
+- Prisma ORM for schema, migrations, and typed database access.
+- SQLite for local development and code-test-friendly setup.
+- PostgreSQL as the likely production-ready option if the project grows beyond
+  local/demo usage.
+
+Scope:
+
+- Add Prisma and initial `prisma/schema.prisma`.
+- Model core entities:
+  - `ResortMap` for named/imported maps.
+  - `MapTile` for parsed tile data and coordinates.
+  - `Guest` for room number and guest name records.
+  - `CabanaReservation` for cabana booking state.
+- Add migration scripts and Prisma Client generation.
+- Seed the database from the existing `data/map.ascii` and
+  `data/bookings.json` files.
+- Replace in-memory reservation state with database-backed reservation state.
+- Keep file parsing code as an import/seed boundary instead of removing it
+  immediately.
+- Add database access helpers under a focused server-side module, for example
+  `domain/database` or `domain/repositories`.
+- Update API Route Handlers to read map, guest, and reservation data through the
+  Prisma-backed domain layer.
+- Update tests to cover repository behavior and preserve existing API behavior.
+- Document local database setup, migration, seed, and reset commands in README.
+
+Acceptance criteria:
+
+- The app can be started locally after running migrations and seed data.
+- Existing `GET /api/map` and `POST /api/cabanas/:id/book` behavior still works.
+- Reservations persist across app restarts.
+- Guest validation reads from the database.
+- Tests cover the Prisma-backed booking flow.
+- README documents Prisma setup and database reset workflow.
+
+Trade-offs:
+
+- Database persistence adds setup cost compared with the current in-memory
+  implementation.
+- SQLite keeps local setup simple, but PostgreSQL should be considered before a
+  real deployment.
+- Moving from files to database records should be done as an additive step first,
+  so reviewers can still understand how the original input files map into the
+  database.
+
+### `1.4.0` - Admin Panel In The Current App With react-admin
+
+Decision:
+
+Build the admin panel inside the existing Next.js application under `/admin`
+instead of creating a separate service. Use `react-admin` as the admin UI
+framework once Prisma-backed persistence from `1.3.0` is available.
+
+Decision record:
+
+- See `docs/admin-panel-react-admin.md`.
+
+Recommended technology:
+
+- `react-admin` for resource-based admin screens.
+- A custom `react-admin` Data Provider that calls `/api/admin/*` endpoints.
+- Existing Next.js App Router for hosting `/admin`.
+- Prisma-backed data from `1.3.0`.
+
+Reasoning:
+
+- The current project is small and already combines frontend, Route Handlers,
+  domain logic, and tests in one repository.
+- The admin panel needs the same map, guest, and reservation concepts as the
+  guest-facing app.
+- Reusing the current Next.js + TypeScript stack avoids extra deployment,
+  duplicated types, and cross-service API design too early.
+- `react-admin` fits the planned admin resources: maps, guests, reservations,
+  cabanas, imports, and validation results.
+- Building the admin panel after Prisma avoids creating admin workflows around
+  temporary file-backed and in-memory state.
+- A separate admin service can still be extracted later if security, team
+  ownership, deployment cadence, or operational complexity justify it.
+
+Scope:
+
+- Add an `/admin` route group or route namespace.
+- Load the admin module as a client-side app where needed, keeping it isolated
+  from the guest-facing map UI.
+- Add a custom `react-admin` Data Provider for admin REST endpoints.
+- Add admin navigation for maps, guests, and reservations.
+- Add a dashboard with key counts:
+  - total maps,
+  - total guests,
+  - total cabanas,
+  - available and reserved cabanas.
+- Add map management:
+  - list maps,
+  - view parsed map details,
+  - import or validate a new ASCII map.
+- Add guest management:
+  - list guests,
+  - inspect guest records,
+  - import or validate a bookings JSON file.
+- Add reservation management:
+  - list current cabana reservations,
+  - reset demo reservations,
+  - optionally mark a cabana as reserved or available.
+- Add admin-only API routes under `/api/admin/*`.
+- Keep admin UI components separate from guest-facing map components where their
+  workflows differ.
+- Add tests for admin data loading, validation errors, and reset behavior.
+
+Acceptance criteria:
+
+- Admin routes are available inside the same Next.js app.
+- Admin views use Prisma-backed data once `1.3.0` is complete.
+- `react-admin` resources are backed by a project-owned Data Provider.
+- The guest-facing booking flow keeps working unchanged.
+- Admin operations have clear confirmation and error states.
+- Tests cover the most important admin workflows.
+
+Trade-offs:
+
+- `react-admin` introduces a larger admin-specific UI ecosystem than the current
+  guest-facing Tailwind components.
+- This is acceptable if `react-admin` stays isolated to `/admin` and does not
+  drive the public map UI.
+- The public app can still avoid a component library while the admin panel uses
+  one for CRUD-heavy workflows.
+
+Future extraction criteria:
+
+Consider splitting the admin panel into a separate service only if:
+
+- it needs separate authentication and authorization boundaries,
+- it requires independent deployment,
+- it grows into a larger operational product,
+- it needs a different frontend stack,
+- or it must be isolated from the public guest-facing app for security reasons.
+
 ### `2.0.0` - Incompatible Changes
 
 Examples of changes that require a major version:
